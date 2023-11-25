@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>퇴근 시간을 알려주는 고양이</title>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta property="og:description" name="description" content="집에 가고싶다 증후군에 걸린 직장인들을 위하여... 주요 증상: 강력한 귀소 본능을 느낌 (심한 경우 집에서도 환상통을 겪음)" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/pages.css">
+  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
+  <script type="text/javascript" src="js/clipboard.min.js" defer></script>
+  <script type="text/javascript" src="js/type-hangul.bundle.js" defer></script>
+  <script type="text/javascript" src="js/tag.js" defer></script>
+  <script type="text/javascript" src="js/pages.js" defer></script>
+  <script type="text/javascript" src="js/main.js" defer></script>
+  <!-- <script type="text/javascript" src="js/script_prettify.js"></script> -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SF40SJ437M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-SF40SJ437M', {
+      'page_title': '퇴근 시간을 알려주는 고양이' // D-day 날짜가 계속 바뀌니깐 지정 제목으로 전송
+    });
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <!-- adsense -->
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-8175591114279139",
+      enable_page_level_ads: true
+    });
+  </script>
+
+</head>
+
+<body>
+  <header>
+    <h1>퇴근 시간을 알려주는 고양이</h1>
+    <h1 id="type">#</span></h1>
+
+    <!-- <div class="copyright">
+      © 2023 - <span id="year"></span> </script> C3VA <br>
+    </div> -->
+  </header>
+
+  <div id="inside_page"><span class="tag">#퇴근_시간을_알려주는_고양이</span></div>
+
+  <div id="cat">
+    <img src="https://4.bp.blogspot.com/-TrlsvANHeZI/XAY5oZqGBlI/AAAAAAABQdE/1QGQOH4ePggONMdsQiKpEpHb7R-1ucWfwCLcBGAs/s800/cat04_moyou_black_moyou_white.png" alt="">
+  </div>
+
+  <section id="book">
+    <div id="page_1" class="pages">
+      <h2><span class="msg"></span><span class="dday"></span></h2>
+      <span id="setting_bt" class="material-symbols-outlined">tune</span>
+      <div class="countdown"><span class="numbox numh">00</span>:<span class="numbox numm">00</span>:<span class="numbox nums">00</span>:<span class="numbox numc">00</span></div>
+      <section id="setting">
+        <div style="font-weight:bold;">
+          <span>출근 <input type="time" id="work_start" value="08:30" required /> </span>
+          <span>퇴근 <input type="time" id="work_final" value="17:30" required /> </span>
+          <span>월급날 <input type="date" id="payday" required /> </span>
+        </div>
+        <div>
+          테스트 버튼
+          <button class="material-symbols-outlined" title="퇴근 4 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 4)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_frustrated</button>
+          <button class="material-symbols-outlined" title="퇴근 1 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_satisfied</button>
+          <button class="material-symbols-outlined" title="퇴근이면 정말 좋겠네" onclick="p.set('work_final', `${('0' + (new Date().getHours() - 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_excited</button> /
+          <button class="material-symbols-outlined" title="월급 1 일 전" onclick="p.set('payday', `${('0' + (new Date().getDate() + 1)).slice(-2)}`); p.set_push();">sentiment_very_satisfied</button>
+          <button class="material-symbols-outlined" title="월급날" onclick="p.set('payday', `${('0' + (new Date().getDate())).slice(-2)}`); p.set_push();">sentiment_excited</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <footer>
+    special thanks to...
+    <img src="img\enf_union__k.png" alt="2023-on @enf union" onclick="p.set('work_start', '08:30'); p.set('work_final', '17:30'); p.set('payday', '25'); p.set_push();">
+    <img src="img\tk_syndicate__k.png" alt="2021-2023 @tki syndicate" onclick="p.set('work_start', '08:30'); p.set('work_final', '17:30'); p.set('payday', '25'); p.set_push();">
+    <img src="img\jw_cartel__k.png" alt="2019-2021 @jw cartel" onclick="p.set('work_start', '08:00'); p.set('work_final', '17:00'); p.set('payday', '25'); p.set_push();">
+  </footer>
+
+</body>
+
+</html>
