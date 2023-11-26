@@ -94,7 +94,7 @@ body:not(:hover) .pages {
   font-size: 20px;
 }
 
-#setting button:nth-child(3) {
+#setting button.split {
   margin-right: .5em;
 }
 
