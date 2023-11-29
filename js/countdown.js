@@ -1,7 +1,7 @@
 function $(selector) { return document.querySelectorAll(selector).length == 1 ? document.querySelector(selector) : document.querySelectorAll(selector); }
 
 let p = {
-    id: 'page_1',
+    id: '#page_1',
     date: { yyyy: new Date().getFullYear(), mm: new Date().getMonth(), dd: new Date().getDate() },
 
     get: (para) => { return new URLSearchParams(window.location.search).get(para) },
@@ -37,7 +37,15 @@ $('#setting input#work_start').value = p.work_start;
 $('#setting input#work_final').value = p.work_final;
 $('#setting input#payday').value = `${p.date.yyyy}-${p.date.mm + 1}-${p.payday}`;
 
-$('#setting_bt').addEventListener("click", (e) => { $('#setting').classList.toggle('on'); $('#setting_bt').classList.toggle('on') });
+$('#setting_bt').addEventListener("click", (e) => {
+    const s = $('#setting');
+    console.log(s.scrollHeight);
+    s.style.height = !s.classList.contains('on') ? `${s.scrollHeight}px` : 0;
+    console.log(s.scrollHeight);
+    // s.style.height = 0; 
+    s.classList.toggle('on');
+    $('#setting_bt').classList.toggle('on');
+});
 $('#setting input').forEach((e) => {
     e.addEventListener("change", (e) => {
         p.set('work_start', $('#setting input#work_start').value);
@@ -69,7 +77,7 @@ function countdown(p) {
     const IS_AFTER_WORK = TIME__NOW > TIME__WORK_FINAL ? true : false;
     const DATE__WEEKEND = new Date(yyyy, mm, dd + 6 - new Date().getDay()).getTime();
     const DATE__PAYDAY = new Date(yyyy, mm, p.payday).getTime();
-    const IS_PAYDAY_COME_BEFORE_WEEKEND = DATE__PAYDAY < DATE__WEEKEND ? true : false;
+    const IS_PAYDAY_COME_BEFORE_WEEKEND = TIME__NOW < DATE__PAYDAY && DATE__PAYDAY < DATE__WEEKEND ? true : false;
     // const IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
 
     const hour = IS_BEFORE_WORK ? p.work_start.substring(0, 2) : p.work_final.substring(0, 2);
@@ -79,11 +87,17 @@ function countdown(p) {
 
     dday = time_end - TIME__NOW;
 
+    // 카운트다운 생성
+    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numh' }));
+    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numm' }));
+    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox nums' }));
+    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numc' }));
+
     if (IS_WEEKDAYS) {
         $('h2 .msg').innerText = IS_BEFORE_WORK ? '출근까지 남은 시간' : !IS_AFTER_WORK ? '퇴근까지 남은 시간' : '퇴근 시간이다옹!';
         $('h2 .msg').innerText += dday < 60 * 60 * 1000 ? '🔥' : '';
         $('h2 .dday').innerText = IS_PAYDAY_COME_BEFORE_WEEKEND ? `월급일까지 D-${D(DATE__PAYDAY - TIME__NOW) + 1}` : `주말까지 D-${D(DATE__WEEKEND - TIME__NOW) + 1}`
-        $('h2 .dday').innerText += D(DATE__PAYDAY - TIME__NOW) <= 0 ? '💰' : '';
+        $('h2 .dday').innerText += TIME__NOW < DATE__PAYDAY && D(DATE__PAYDAY - TIME__NOW) <= 0 ? '💰' : '';
         $('h2 .dday').innerText += D(DATE__WEEKEND - TIME__NOW) <= 0 ? '🔥' : '';
     } else {
         $('h2 .msg').innerText = '주말이다냥💖';
@@ -98,10 +112,10 @@ function countdown(p) {
 
         var count_list = [
             // [`#${id} .numd`, days],
-            [`#${id} .numh`, hours],
-            [`#${id} .numm`, minutes],
-            [`#${id} .nums`, seconds],
-            [`#${id} .numc`, centiseconds]
+            [`${id} .numh`, hours],
+            [`${id} .numm`, minutes],
+            [`${id} .nums`, seconds],
+            [`${id} .numc`, centiseconds]
         ];
         for (i = 0; i < count_list.length; i++) {
             let num = $(count_list[i][0]);
@@ -118,7 +132,7 @@ function countdown(p) {
         $('body').classList.add('on');
         setTimeout(countdown, 10, p);
     } else {
-        $(`#${id} .countdown`).innerHTML = '<span class="numbox numh">00</span>:<span class="numbox numm">00</span>:<span class="numbox nums">00</span>:<span class="numbox numc">00</span>';
+        $(`${id} .countdown`).innerHTML = '<span class="numbox numh">00</span><span class="numbox numm">00</span><span class="numbox nums">00</span><span class="numbox numc">00</span>';
         document.title = `UwU [ 00:00:00 ]`;
         $('body').classList.remove('on');
 

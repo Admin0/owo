@@ -69,13 +69,14 @@ body:not(:hover) .pages {
   opacity: 0;
   transition: .5s;
   overflow: hidden;
+  visibility: hidden;
 }
 
 #setting.on {
   display: inherit;
-  height: 5.5em;
   opacity: 1;
   border-top: 1px solid #ddd;
+  visibility: visible;
 }
 
 #setting input {
@@ -109,11 +110,11 @@ body:not(:hover) .pages {
 }
 
 .numbox:hover {
-  transition: background .25s;
+  /* transition: background .25s;
   background: #FF8A80;
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
 }
 
 .numd {
@@ -129,6 +130,10 @@ body:not(:hover) .pages {
 .numbox.on {
   animation-name: time_on;
   animation-duration: .75s;
+}
+
+.numbox:not(:last-of-type)::after {
+  content: ':';
 }
 
 #outbox {
@@ -238,13 +243,4 @@ body:not(:hover) .pages {
   .pages {
     font-size: .65em;
   }
-
-  #setting.on {
-    height: 9em;
-  }
 }
-
-@media only screen and (max-width:320px) {
-  #setting.on {
-    height: 14em;
-  }}

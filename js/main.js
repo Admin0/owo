@@ -1,4 +1,4 @@
-// Project owo (off work on) 
+// Project owo (off work on-time) 
 // A cat that tells you when to leave work
 
 const time = {};
@@ -67,33 +67,4 @@ TypeHangul.type("#type", {
   humanize: 0.25,
 });
 
-// 당신이 카운터를 보지 않는 순간에도, 카운터는 당신을 주시한다.
-document.onmousemove = (event) => {
-  if (window.innerWidth > 715) {
-    document.querySelectorAll(".pages").forEach((element) => {
-      const a = 15;
-      const x0 = element.getBoundingClientRect().y + element.offsetHeight / 2;
-      const x = ((x0 - event.pageY) / window.innerHeight) * 2;
-      // const x = (.5 - event.pageY / window.innerHeight) * 2; // not using x0
-      const y0 = element.getBoundingClientRect().x + element.offsetWidth / 2;
-      const y = ((event.pageX - y0) / window.innerWidth) * 2;
-      // const y = (-.5 + event.pageX / window.innerWidth) * 2; // not using y0
-      const z = 0;
-      element.style.transform = `rotate3d(${x}, ${y}, ${z}, ${a * (x ** 2 + y ** 2)
-        }deg)`;
-      // console.log([event.pageY, x1]);
-
-      // Another code
-      // const rotateX = `calc((90deg - 180 * ${event.pageY / window.innerHeight}deg)/5)`;
-      // const rotateY = `calc((-90deg + 180 * ${event.pageX / window.innerWidth}deg)/5)`;
-      // const rotateZ = 0;
-      // element.style.transform = `rotateX(${rotateX}) rotateY(${rotateY}) rotateZ(${rotateZ})`;
-    });
-  } else {
-    document.querySelectorAll(".pages").forEach((element) => {
-      element.style.transform = `rotate3d(0, 0, 0, 0)`;
-    });
-  }
-};
-
-// window.onload = console.table(time);
+new stare('#page_1');

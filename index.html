@@ -13,7 +13,8 @@
   <script type="text/javascript" src="js/clipboard.min.js" defer></script>
   <script type="text/javascript" src="js/type-hangul.bundle.js" defer></script>
   <script type="text/javascript" src="js/tag.js" defer></script>
-  <script type="text/javascript" src="js/pages.js" defer></script>
+  <script type="text/javascript" src="js/countdown.js" defer></script>
+  <script type="text/javascript" src="js/stare.js" defer></script>
   <script type="text/javascript" src="js/main.js" defer></script>
   <!-- <script type="text/javascript" src="js/script_prettify.js"></script> -->
 
@@ -58,8 +59,11 @@
   <section id="book">
     <div id="page_1" class="pages">
       <h2><span class="msg"></span><span class="dday"></span></h2>
+      
       <span id="setting_bt" class="material-symbols-outlined">tune</span>
-      <div class="countdown"><span class="numbox numh">00</span>:<span class="numbox numm">00</span>:<span class="numbox nums">00</span>:<span class="numbox numc">00</span></div>
+
+      <div class="countdown"></div>
+
       <section id="setting">
         <div style="font-weight:bold;">
           <span>출근 <input type="time" id="work_start" value="08:30" required /> </span>
