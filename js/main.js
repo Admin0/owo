@@ -68,3 +68,6 @@ TypeHangul.type("#type", {
 });
 
 new stare('#page_1');
+
+// 카운트다운 생성
+const cd = new countdown().set('.countdown').start();

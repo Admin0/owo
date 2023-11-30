@@ -1,3 +1,32 @@
+class countdown {
+    constructor (target = '.countdown', options) {
+        this.target = document.querySelector(target);
+        return this;
+    }
+
+    set (target, options) {
+        if (target != null) this.target = document.querySelector(target);
+
+        function addElement(e, n, c) {
+            e.appendChild(Object.assign(document.createElement(n), { className: c }));
+        }
+        addElement(this.target, 'span', 'numbox numh');
+        addElement(this.target, 'span', 'numbox numm');
+        addElement(this.target, 'span', 'numbox nums');
+        addElement(this.target, 'span', 'numbox numc');
+
+        return this;
+    }
+
+    target (querySelector) {
+        this.target = document.querySelector(querySelector);
+        return this;
+    }
+
+    start(obj) {countdown_function(p); return this;}
+    stop(obj) {return this;}
+}
+
 function $(selector) { return document.querySelectorAll(selector).length == 1 ? document.querySelector(selector) : document.querySelectorAll(selector); }
 
 let p = {
@@ -12,8 +41,8 @@ let p = {
         $('#setting input#work_final').value = this.work_final;
         $('#setting input#payday').value = `${this.date.yyyy}-${this.date.mm + 1}-${this.payday}`;
         history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.work_start}&work_final=${this.work_final}&payday=${this.payday}`);
-        clearTimeout(countdown);
-        countdown(this);
+        clearTimeout(countdown_function);
+        countdown_function(this);
     },
 
     work_start: function () { return this.has('work_start') ? this.get('work_start') : S('work_start') != null ? S('work_start') : '08:30' },
@@ -53,13 +82,12 @@ $('#setting input').forEach((e) => {
         p.set('payday', $('#setting input#payday').value.substring(8, 10));
         p.set_push();
     });
-})
+});
 
 
 let IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
-countdown(p);
 
-function countdown(p) {
+function countdown_function(p) {
 
     id = p.id;
     yyyy = p.date.yyyy;
@@ -87,11 +115,6 @@ function countdown(p) {
 
     dday = time_end - TIME__NOW;
 
-    // 카운트다운 생성
-    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numh' }));
-    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numm' }));
-    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox nums' }));
-    document.querySelector('.countdown').appendChild(Object.assign(document.createElement('span'), { className: 'numbox numc' }));
 
     if (IS_WEEKDAYS) {
         $('h2 .msg').innerText = IS_BEFORE_WORK ? '출근까지 남은 시간' : !IS_AFTER_WORK ? '퇴근까지 남은 시간' : '퇴근 시간이다옹!';
@@ -130,7 +153,7 @@ function countdown(p) {
         }
         // $(`#${id} .dday`).innerText = `${yyyy}.${mm + 1}.${dd}. / D-${days + 1}`;
         $('body').classList.add('on');
-        setTimeout(countdown, 10, p);
+        setTimeout(countdown_function, 10, p);
     } else {
         $(`${id} .countdown`).innerHTML = '<span class="numbox numh">00</span><span class="numbox numm">00</span><span class="numbox nums">00</span><span class="numbox numc">00</span>';
         document.title = `UwU [ 00:00:00 ]`;
@@ -142,7 +165,7 @@ function countdown(p) {
         } else {
             // $(`#${id} .dday`).innerHTML = `${yy}.${mm + 1}.${dd}. / D+${days}`;
         }
-        clearTimeout(countdown);
+        clearTimeout(countdown_function);
     }
 }
 
