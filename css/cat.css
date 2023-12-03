@@ -1,0 +1,34 @@
+#cat {
+    width: fit-content;
+    z-index: 5;
+    margin: 3em auto 0;
+    position: relative;
+}
+
+#cat img {
+    display: none;
+    width: 100%;
+}
+
+#cat #tail {
+    position: absolute;
+    right: -1em;
+    /* top: -1em; */
+    animation: vibration 3s infinite;
+    transform-origin: 50% 100%;
+}
+
+
+@keyframes vibration {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}

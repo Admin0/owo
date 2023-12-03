@@ -101,12 +101,12 @@ body:not(:hover) .pages {
 
 .numbox {
   /* width: 0.9em; */
-  display: inline-block;
+  /* display: inline-block;
   text-align: left;
-  transition: background .5s;
-  background-clip: text;
+  transition: background .5s; */
+  /* background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
 }
 
 .numbox:hover {

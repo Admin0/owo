@@ -9,12 +9,14 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
   <link rel="stylesheet" type="text/css" media="screen" href="css/pages.css">
-  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
-  <script type="text/javascript" src="js/clipboard.min.js" defer></script>
+  <link rel="stylesheet" type="text/css" media="screen" href="css/cat.css">
+  <script type="text/javascript" src="js/sub_time.js" defer></script>
+  <script type="text/javascript" src="js/sub_splash.js" defer></script>
   <script type="text/javascript" src="js/type-hangul.bundle.js" defer></script>
-  <script type="text/javascript" src="js/tag.js" defer></script>
-  <script type="text/javascript" src="js/countdown.js" defer></script>
-  <script type="text/javascript" src="js/stare.js" defer></script>
+  <script type="text/javascript" src="js/sub_tag.js" defer></script>
+  <script type="text/javascript" src="js/sub_stare.js" defer></script>
+  <script type="text/javascript" src="js/main_cat.js" defer></script>
+  <script type="text/javascript" src="js/main_countdown.js" defer></script>
   <script type="text/javascript" src="js/main.js" defer></script>
   <!-- <script type="text/javascript" src="js/script_prettify.js"></script> -->
 
@@ -49,6 +51,8 @@
       © 2023 - <span id="year"></span> </script> C3VA <br>
     </div> -->
   </header>
+  
+  <section id="splash"></section>
 
   <div id="inside_page"><span class="tag">#퇴근_시간을_알려주는_고양이</span></div>
 
@@ -59,7 +63,7 @@
   <section id="book">
     <div id="page_1" class="pages">
       <h2><span class="msg"></span><span class="dday"></span></h2>
-      
+
       <span id="setting_bt" class="material-symbols-outlined">tune</span>
 
       <div class="countdown"></div>

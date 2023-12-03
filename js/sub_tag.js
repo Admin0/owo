@@ -57,3 +57,54 @@ var tag = [
   "카페인_중독자의_일상", "오늘도_재택근무의_유혹", "내일은_쉴까",
   "오늘도_나는_일하는_중", "금요일에는_정말_일_안_하고_싶다", "일은_나를_미치게_만든다", "여긴어디_나는누구?",
 ];
+
+function dice(n, s, b) {
+  var out = 0;
+  for (let i = 0; i < n; i++) {
+    out += Math.ceil(Math.random() * s);
+  }
+  return out + b;
+}
+
+function tag_manager(target, times) {
+  var t;
+  for (var i = 0; i < times; i++) {
+    let n = dice(1, tag.length, -1);
+    let tag_msg = document.createElement("span");
+    tag_msg.classList.add("tag");
+    tag_msg.innerHTML = "#" + tag[n];
+    target.appendChild(tag_msg);
+  }
+}
+
+// type tag
+const $target = document.getElementById("type");
+$target.addEventListener("th.endType", function (e) {
+  setTimeout(() => {
+    let i = $target.innerText.length;
+    function backspace(msg) {
+      // console.log(msg);
+      if (i > 0) {
+        $target.innerText = `${msg.substring(0, i)}`;
+        i--;
+        setTimeout(backspace, dice(3, 5, 20), msg);
+      } else {
+        setTimeout(() => {
+          TypeHangul.type("#type", {
+            text: tag[dice(1, tag.length, -1)],
+            append: true,
+            intervalType: 65,
+            humanize: 0.25,
+          });
+        }, 500);
+      }
+    }
+    backspace($target.innerText);
+  }, 3000);
+});
+TypeHangul.type("#type", {
+  text: tag[dice(1, tag.length, -1)],
+  append: true,
+  intervalType: 65,
+  humanize: 0.25,
+});
