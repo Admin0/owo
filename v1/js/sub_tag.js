@@ -76,3 +76,35 @@ function tag_manager(target, times) {
     target.appendChild(tag_msg);
   }
 }
+
+// type tag
+const $target = document.getElementById("type");
+$target.addEventListener("th.endType", function (e) {
+  setTimeout(() => {
+    let i = $target.innerText.length;
+    function backspace(msg) {
+      // console.log(msg);
+      if (i > 0) {
+        $target.innerText = `${msg.substring(0, i)}`;
+        i--;
+        setTimeout(backspace, dice(3, 5, 20), msg);
+      } else {
+        setTimeout(() => {
+          TypeHangul.type("#type", {
+            text: tag[dice(1, tag.length, -1)],
+            append: true,
+            intervalType: 65,
+            humanize: 0.25,
+          });
+        }, 500);
+      }
+    }
+    backspace($target.innerText);
+  }, 3000);
+});
+TypeHangul.type("#type", {
+  text: tag[dice(1, tag.length, -1)],
+  append: true,
+  intervalType: 65,
+  humanize: 0.25,
+});

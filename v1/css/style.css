@@ -23,8 +23,7 @@ body {
   font-family: 'Noto Sans KR';
   margin: 0;
   background: linear-gradient(to bottom, rgba(256, 256, 256, .5) 0%, transparent 10%, transparent 100%);
-  height: calc(100vh - 0em);
-  overflow: hidden;
+  height: calc(100vh - 5em);
 }
 
 header {
@@ -32,7 +31,7 @@ header {
   width: fit-content;
   z-index: 2;
   position: relative;
-  margin: 0;
+  margin: 5em auto 5em 5em;
 }
 
 header h1 {
@@ -98,7 +97,7 @@ header #type {
 }
 
 #inside_page {
-  font-size: .5em;
+  font-size: 1em;
   font-weight: bold;
   color: rgba(125, 125, 125, .125);
   position: absolute;
@@ -114,7 +113,7 @@ header #type {
 
 #inside_page .tag {
   margin: 0 .25em;
-  transition: color .125s;
+  transition: color .125s, transform .25s;
 }
 
 #inside_page .tag::selection {

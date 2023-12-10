@@ -8,7 +8,7 @@ tag_manager(document.querySelector("#inside_page"), 2013);
 // time.log("set_tags");
 
 // 바라보기 생성
-// const st = new Stare('.cat');
+const st = new Stare('.cat');
 
 // 카운트다운 생성
 const cd = new Countdown()
@@ -48,6 +48,48 @@ p.payday = p.payday();
 let IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
 let engine_timeout;
 
+function engine(p) {
+
+  id = p.id;
+  yyyy = p.date.yyyy;
+  mm = p.date.mm;
+  dd = p.date.dd;
+
+  function M(n) { return Math.floor(n / 1000); }
+  function D(d) { return M(d / 24 / 60 / 60); }
+
+  const TIME__NOW = new Date().getTime();
+
+  const TIME__WORK_START = new Date(yyyy, mm, dd, p.work_start.substring(0, 2), p.work_start.substring(3, 5)).getTime();
+  const TIME__WORK_FINAL = new Date(yyyy, mm, dd, p.work_final.substring(0, 2), p.work_final.substring(3, 5)).getTime();
+  const IS_BEFORE_WORK = TIME__NOW > TIME__WORK_START ? false : true;
+  const IS_AFTER_WORK = TIME__NOW > TIME__WORK_FINAL ? true : false;
+  const DATE__WEEKEND = new Date(yyyy, mm, dd + 6 - new Date().getDay()).getTime();
+  const DATE__PAYDAY = new Date(yyyy, mm, p.payday).getTime();
+  const IS_PAYDAY_COME_BEFORE_WEEKEND = TIME__NOW < DATE__PAYDAY && DATE__PAYDAY < DATE__WEEKEND ? true : false;
+  // const IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
+
+  const hour = IS_BEFORE_WORK ? p.work_start.substring(0, 2) : p.work_final.substring(0, 2);
+  const min = IS_BEFORE_WORK ? p.work_start.substring(3, 5) : p.work_final.substring(3, 5);
+  const time_end = new Date(yyyy, mm, dd, hour, min).getTime();
+
+  if (IS_WEEKDAYS) {
+    $('h2 .msg').innerText = IS_BEFORE_WORK ? '출근까지 남은 시간' : !IS_AFTER_WORK ? '퇴근까지 남은 시간' : '퇴근 시간이다옹!';
+    $('h2 .msg').innerText += cd.time_fragment.STD < 60 * 60 * 1000 ? '🔥' : '';
+    $('h2 .dday').innerText = IS_PAYDAY_COME_BEFORE_WEEKEND ? `월급날까지 D-${D(DATE__PAYDAY - TIME__NOW) + 1}` : `주말까지 D-${D(DATE__WEEKEND - TIME__NOW) + 1}`
+    $('h2 .dday').innerText += TIME__NOW > DATE__PAYDAY - 24 * 60 * 60 * 1000 ? '💰' : '';
+    $('h2 .dday').innerText += D(DATE__WEEKEND - TIME__NOW) <= 0 ? '🔥' : '';
+  } else {
+    $('h2 .msg').innerText = '주말이다냥💖';
+  }
+
+  if (!cd.isIgnited()) {
+    document.title = `OwO [ ${cd.getHours()}:${cd.getMins()}:${cd.getSecs()} ]`;
+  } else {
+    document.title = `UwU [ 00:00:00 ]`;
+  }
+  engine_timeout = setTimeout(() => engine(p), 500);
+}
 
 /**
  * SETTINGS
@@ -74,26 +116,5 @@ $('#setting input').forEach((e) => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const cat0 = new Cat();
-  const cat1 = new Cat();
-  const cat2 = new Cat();
-  const cat3 = new Cat();
-  const cat4 = new Cat();
-  const cat5 = new Cat();
-  const cat6 = new Cat();
-});
-
-document.addEventListener('mousedown', (event) => {
-  const catElements = document.querySelectorAll('.cat');
-  // 클릭된 요소가 고양이 객체인지 확인
-  const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
-  // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작
-  if (!isClickedOnCat) {
-    new Cat();
-  }
-});
-
-
-
+engine(p);
 time.log('activated');

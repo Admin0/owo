@@ -1,34 +1,265 @@
-#cat {
-    width: fit-content;
-    z-index: 5;
-    margin: 3em auto 0;
-    position: relative;
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+::selection {
+    background: transparent;
 }
 
-#cat img {
-    display: none;
-    width: 100%;
-}
-
-#cat #tail {
+.cat {
+    width: 32px;
+    height: 32px;
+    background: url('../img/cat_skin_0.png');
     position: absolute;
-    right: -1em;
-    /* top: -1em; */
-    animation: vibration 3s infinite;
-    transform-origin: 50% 100%;
+
+    z-index: 10;
+    animation: stop__left .5s steps(4) infinite;
+
+    cursor: pointer;
+}
+
+.cat.left {
+    animation: stop__left .5s steps(4) infinite;
+}
+
+.cat.right {
+    animation: stop__right .5s steps(4) infinite;
+}
+
+.cat.walk.left {
+    animation: walk__left 1s steps(8) infinite;
+}
+
+.cat.walk.right {
+    animation: walk__right 1s steps(8) infinite;
 }
 
 
-@keyframes vibration {
-    0% {
-        transform: rotate(0deg);
+.cat.run.left {
+    animation: run__left 1s steps(8) infinite;
+}
+
+.cat.run.right {
+    animation: run__right 1s steps(8) infinite;
+}
+
+.cat.left.wash {
+    animation: wash__left .5s steps(4) infinite;
+}
+
+.cat.right.wash {
+    animation: wash__right .5s steps(4) infinite;
+}
+
+.cat.left.watch {
+    animation: watch__left .5s steps(4) infinite;
+}
+
+.cat.right.watch {
+    animation: watch__right .5s steps(4) infinite;
+}
+
+.cat.left.lick {
+    animation: lick__left .5s steps(4) infinite;
+}
+
+.cat.right.lick {
+    animation: lick__right .5s steps(4) infinite;
+}
+
+.cat.left.point {
+    animation: point__left .5s steps(4) infinite;
+}
+
+.cat.right.point {
+    animation: point__right .5s steps(4) infinite;
+}
+
+.cat.drag {
+}
+
+.cat.left.drag {
+    animation: drag__left .5s steps(4) infinite;
+}
+
+.cat.right.drag {
+    animation: drag__right .5s steps(4) infinite;
+}
+
+@keyframes stop__left {
+    from {
+        background-position: calc(4 * -32px) 0;
     }
 
-    50% {
-        transform: rotate(-10deg);
+    to {
+        background-position: calc(8 * -32px) 0;
+    }
+}
+
+@keyframes stop__right {
+    from {
+        background-position: calc(0 * -32px) 0;
     }
 
-    100% {
-        transform: rotate(0deg);
+    to {
+        background-position: calc(4 * -32px) 0;
     }
+}
+
+@keyframes walk__left {
+    from {
+        background-position: 0 calc(2 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(2 * -32px);
+    }
+}
+
+@keyframes walk__right {
+    from {
+        background-position: 0px calc(1 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(1 * -32px);
+    }
+}
+
+@keyframes run__left {
+    from {
+        background-position: 0px calc(4 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(4 * -32px);
+    }
+}
+
+@keyframes run__right {
+    from {
+        background-position: 0px calc(3 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(3 * -32px);
+    }
+}
+
+@keyframes wash__left {
+    from {
+        background-position: calc(4 * -32px) calc(7 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(7 * -32px);
+    }
+}
+
+@keyframes wash__right {
+    from {
+        background-position: calc(0 * -32px) calc(7 * -32px);
+    }
+
+    to {
+        background-position: calc(4 * -32px) calc(7 * -32px);
+    }
+}
+
+@keyframes watch__left {
+    from {
+        background-position: calc(4 * -32px) calc(5 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(5 * -32px);
+    }
+}
+
+@keyframes watch__right {
+    from {
+        background-position: calc(0 * -32px) calc(5 * -32px);
+    }
+
+    to {
+        background-position: calc(4 * -32px) calc(5 * -32px);
+    }
+}
+
+@keyframes lick__left {
+    from {
+        background-position: calc(4 * -32px) calc(6 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(6 * -32px);
+    }
+}
+
+@keyframes lick__right {
+    from {
+        background-position: calc(0 * -32px) calc(6 * -32px);
+    }
+
+    to {
+        background-position: calc(4 * -32px) calc(6 * -32px);
+    }
+}
+
+@keyframes point__left {
+    from {
+        background-position: calc(4 * -32px) 0;
+    }
+
+    to {
+        background-position: calc(8 * -32px) 0;
+    }
+}
+
+@keyframes point__right {
+    from {
+        background-position: calc(0 * -32px) 0;
+    }
+
+    to {
+        background-position: calc(4 * -32px) 0;
+    }
+}
+
+@keyframes drag__left {
+    from {
+        background-position: calc(4 * -32px) calc(8 * -32px);
+    }
+
+    to {
+        background-position: calc(8 * -32px) calc(8 * -32px);
+    }
+}
+
+@keyframes drag__right {
+    from {
+        background-position: calc(0 * -32px) calc(8 * -32px);
+    }
+
+    to {
+        background-position: calc(4 * -32px) calc(8 * -32px);
+    }
+}
+
+.info-window {
+    font-family: 'Pixelify Sans', sans-serif;
+    position: absolute;
+    background-color: #fff;
+    font-size: 8px;
+    margin-left: 12px;
+    display: none;
+}
+
+.info-window table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.info-window table th,
+.info-window table td {
+    border: 1px solid #000;
+    padding: 2px 4px;
 }

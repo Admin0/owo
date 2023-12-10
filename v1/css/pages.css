@@ -42,7 +42,7 @@ body:not(:hover) .pages {
 }
 
 #setting_bt {
-  right: 1em;
+  float: right;
   color: rgba(0, 0, 0, .25);
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   cursor: pointer;
@@ -50,11 +50,15 @@ body:not(:hover) .pages {
   margin: -0.25em;
   border-radius: 50%;
   transition: .5s;
-  position: absolute;
 }
 
 #setting_bt.on {
-  color: #212121;
+  color: rgb(183, 28, 28);
+  background: rgb(183, 28, 28);
+  background: linear-gradient(90deg, rgba(183, 28, 28, 1) 0%, rgba(244, 67, 54, 1) 50%, rgba(63, 81, 181, 1) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   box-shadow: inset 0px 2px 5px 0px rgba(0, 0, 0, .25);
 }
 
@@ -144,7 +148,7 @@ body:not(:hover) .pages {
 
 .countdown {
   clear: both;
-  font-size: 2em;
+  font-size: 8em;
   font-family: 'Share Tech Mono', monospace;
 
   text-align: center;
@@ -153,7 +157,12 @@ body:not(:hover) .pages {
   cursor: default;
   white-space: nowrap;
 
-  color: #212121;
+  color: rgb(183, 28, 28);
+  background: rgb(183, 28, 28);
+  background: linear-gradient(90deg, rgba(183, 28, 28, 1) 0%, rgba(244, 67, 54, 1) 50%, rgba(63, 81, 181, 1) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 #info {
