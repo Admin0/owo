@@ -9,7 +9,7 @@ class Cat {
         this.infoWindow.className = 'info-window';
         document.body.appendChild(this.infoWindow);
         const skins = ['흰냥이', '깜냥이', '치즈', '고등어', '젖소', '턱시도'];
-        this.element.style.backgroundImage = `url('../img/cat_skin_${skins[Math.floor(Math.random() * skins.length)]}.png')`;
+        this.element.style.backgroundImage = `url('./img/cat_skin_${skins[Math.floor(Math.random() * skins.length)]}.png')`;
 
         this.isMoving = Math.random() > 0.5; // 50% 확률로 초기 움직임 설정
 
