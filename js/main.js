@@ -74,15 +74,8 @@ $('#setting input').forEach((e) => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const cat0 = new Cat();
-  const cat1 = new Cat();
-  const cat2 = new Cat();
-  const cat3 = new Cat();
-  const cat4 = new Cat();
-  const cat5 = new Cat();
-  const cat6 = new Cat();
-});
+const cats = [new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
+
 
 document.addEventListener('mousedown', (event) => {
   const catElements = document.querySelectorAll('.cat');
@@ -90,7 +83,8 @@ document.addEventListener('mousedown', (event) => {
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작
   if (!isClickedOnCat) {
-    new Cat();
+    // new Cat({ x: event.pageX - 64 + 64 * Math.random(), y: event.pageY - 86 + 64 * Math.random() });
+    new Fish({ x: event.pageX - 64 + 64 * Math.random(), y: event.pageY - 86 + 64 * Math.random() });
   }
 });
 

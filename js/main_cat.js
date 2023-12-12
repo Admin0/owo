@@ -1,5 +1,5 @@
 class Cat {
-    constructor() {
+    constructor(position) {
         this.element = document.createElement('div');
         this.element.className = 'cat';
         document.body.appendChild(this.element);
@@ -8,13 +8,11 @@ class Cat {
         this.infoWindow = document.createElement('div');
         this.infoWindow.className = 'info-window';
         document.body.appendChild(this.infoWindow);
-        const skins = ['흰냥이', '깜냥이', '치즈', '고등어', '젖소', '턱시도'];
-        this.element.style.backgroundImage = `url('./img/cat_skin_${skins[Math.floor(Math.random() * skins.length)]}.png')`;
 
         this.isMoving = Math.random() > 0.5; // 50% 확률로 초기 움직임 설정
 
         // 초기화 메서드 호출
-        this.initialize();
+        this.initialize(position);
 
         // 드래그 앤 드롭 관련 속성 추가
         this.isDragging = false;
@@ -25,14 +23,13 @@ class Cat {
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
         document.addEventListener('mouseup', () => this.stopDragging());
+
+        return this;
     }
 
-    initialize() {
+    initialize(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 64) + 32 }) {
         // 초기 위치 랜덤 설정
-        this.position = {
-            x: Math.random() * (window.innerWidth - 64) + 32,
-            y: Math.random() * (window.innerHeight - 64) + 32
-        };
+        this.position = pos;
 
         // 초기 위치 스타일 적용
         this.element.style.left = `${this.position.x}px`;
@@ -41,6 +38,12 @@ class Cat {
         // 초기 각도 및 속도 랜덤 설정
         this.angle = Math.random() * 2 * Math.PI;
         this.speed = Math.random() * 5 + 1;
+
+        // 고양이 색깔 지정
+        const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도'];
+        const skin_index = Math.floor(Math.random() * skins.length);
+        this.element.classList.add(skins[skin_index]);
+        this.element.style.backgroundImage = `url('./img/cat_skin_${skins[skin_index]}.png')`;
 
         // 초기 이동 시작
         this.startMoving();
@@ -89,11 +92,11 @@ class Cat {
 
     }
 
-    toggleMovement() {
+    toggleMovement(action) {
         this.isMoving = !this.isMoving;
 
         // 이동 관련 클래스 삭제
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'point', 'watch');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch');
 
         if (this.isMoving) {
             // 이동 중일 때, 랜덤한 방향과 속도 설정
@@ -103,12 +106,16 @@ class Cat {
             // 방향성 애니메이션 클래스 삭제
             this.element.classList.remove('left', 'right');
         } else {
-            // 이동이 정지되었을 때, 랜덤한 클래스 추가
-            const randomClasses = ['cat', 'cat', 'cat', 'wash', 'lick', 'point', 'watch'];
-            const randomClassIndex = Math.floor(Math.random() * randomClasses.length);
-            const randomClass = randomClasses[randomClassIndex];
-
-            this.element.classList.add(randomClass);
+            if (action == undefined) {
+                // 이동이 정지되었을 때, 랜덤한 클래스 추가
+                const randomClasses = ['cat', 'cat', 'cat', 'wash', 'lick', 'yarn', 'watch'];
+                const randomClassIndex = Math.floor(Math.random() * randomClasses.length);
+                const randomClass = randomClasses[randomClassIndex];
+                this.element.classList.add(randomClass);
+            } else {
+                const randomClass = action;
+                this.element.classList.add(action);
+            }
         }
 
         // 고양이 정보 창 업데이트
@@ -138,7 +145,7 @@ class Cat {
         this.dragOffsetY = event.clientY - rect.top;
 
         // 이동 관련 클래스 삭제 및 이동 중지
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'point', 'watch');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch');
         this.stopMoving();
 
         // 드래그 클래스 추가
@@ -167,7 +174,7 @@ class Cat {
             this.position.y = Math.max(0, Math.min(newY, maxY));
 
             this.element.style.left = `${this.position.x}px`;
-            this.element.style.top = `${this.position.y + 32}px`;
+            this.element.style.top = `${this.position.y}px`;
 
             // 정보 창 업데이트
             this.updateInfoWindow();
@@ -211,5 +218,91 @@ class Cat {
 
         // 정보 창에 HTML 설정
         this.infoWindow.innerHTML = tableHTML;
+    }
+
+}
+
+class Fish {
+    constructor(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 62) + 32 }) {
+        this.element = document.createElement('div');
+        const types = ['fish', 'cucumber'];
+        this.type = types[Math.floor(Math.random() * types.length)];
+        this.element.className = this.type;
+
+        const fishPosition = pos;
+
+        this.element.style.left = `${fishPosition.x}px`;
+        this.element.style.top = `${fishPosition.y}px`;
+
+        document.body.appendChild(this.element);
+
+        this.activateInterval = setInterval(() => this.activate(cats), 100);
+    }
+
+    getPosition() {
+        const rect = this.element.getBoundingClientRect();
+        return {
+            x: rect.left,
+            y: rect.top,
+        };
+    }
+
+    remove() {
+        this.element.remove();
+    }
+
+    // Cat 객체를 전달받아 activate 메서드 호출
+    activate(cats) {
+        cats.forEach(cat => {
+            const catPosition = { x: cat.element.getBoundingClientRect().left, y: cat.element.getBoundingClientRect().top }
+            const distance = this.calculateDistance(this.getPosition(), catPosition);
+
+            // 생선과의 거리가 일정 이내일 경우 동작을 수행
+            // 고양이를 옮길때는 이벤트 제외
+
+            if (distance < 32 && !cat.element.classList.contains('drag')) {
+                if (this.type == 'fish') {
+                    // 생선을 먹는 움직임
+                    cat.toggleMovement('lick');
+
+                    // 야옹거리는 동작
+                    cat.meow = document.createElement('div');
+                    cat.meow.className = 'meow';
+                    document.body.appendChild(cat.meow);
+                    cat.meow.innerHTML = 'Meow ♥️';
+                    cat.meow.style.left = `${cat.element.getBoundingClientRect().left}px`;
+                    cat.meow.style.top = `${cat.element.getBoundingClientRect().top}px`;
+                    setInterval(() => { cat.meow.remove() }, 2000);
+
+                    // 생선 객체 삭제
+                    this.remove();
+                } else if (this.type == 'cucumber') {
+
+                    if (distance < 32 && !cat.element.classList.contains('drag')) {
+                        // 오이를 먹는 움직임
+                        cat.toggleMovement('lick');
+
+                        // 야옹거리는 동작
+                        cat.meow = document.createElement('div');
+                        cat.meow.className = 'meow';
+                        document.body.appendChild(cat.meow);
+                        cat.meow.innerHTML = 'Ughhh!';
+                        cat.meow.style.left = `${cat.element.getBoundingClientRect().left}px`;
+                        cat.meow.style.top = `${cat.element.getBoundingClientRect().top}px`;
+                        setInterval(() => { cat.meow.remove() }, 2000);
+
+                        // 오이 객체 삭제
+                        this.remove();
+                    }
+                }
+            }
+        });
+    }
+
+    // 생선과의 거리를 계산하는 유틸리티 메서드
+    calculateDistance(point1, point2) {
+        const deltaX = point1.x - point2.x;
+        const deltaY = point1.y - point2.y;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 }
