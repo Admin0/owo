@@ -96,7 +96,7 @@ class Cat {
         this.isMoving = !this.isMoving;
 
         // 이동 관련 클래스 삭제
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch', 'suprise');
 
         if (this.isMoving) {
             // 이동 중일 때, 랜덤한 방향과 속도 설정
@@ -145,7 +145,7 @@ class Cat {
         this.dragOffsetY = event.clientY - rect.top;
 
         // 이동 관련 클래스 삭제 및 이동 중지
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'yarn', 'watch', 'suprise');
         this.stopMoving();
 
         // 드래그 클래스 추가
@@ -277,23 +277,20 @@ class Fish {
                     // 생선 객체 삭제
                     this.remove();
                 } else if (this.type == 'cucumber') {
+                    // 오이를 먹는 움직임
+                    cat.toggleMovement('surprise');
 
-                    if (distance < 32 && !cat.element.classList.contains('drag')) {
-                        // 오이를 먹는 움직임
-                        cat.toggleMovement('lick');
+                    // 야옹거리는 동작
+                    cat.meow = document.createElement('div');
+                    cat.meow.className = 'meow';
+                    document.body.appendChild(cat.meow);
+                    cat.meow.innerHTML = 'Ughhh!';
+                    cat.meow.style.left = `${cat.element.getBoundingClientRect().left}px`;
+                    cat.meow.style.top = `${cat.element.getBoundingClientRect().top}px`;
+                    setInterval(() => { cat.meow.remove() }, 2000);
 
-                        // 야옹거리는 동작
-                        cat.meow = document.createElement('div');
-                        cat.meow.className = 'meow';
-                        document.body.appendChild(cat.meow);
-                        cat.meow.innerHTML = 'Ughhh!';
-                        cat.meow.style.left = `${cat.element.getBoundingClientRect().left}px`;
-                        cat.meow.style.top = `${cat.element.getBoundingClientRect().top}px`;
-                        setInterval(() => { cat.meow.remove() }, 2000);
-
-                        // 오이 객체 삭제
-                        this.remove();
-                    }
+                    // 오이 객체 삭제
+                    this.remove();
                 }
             }
         });

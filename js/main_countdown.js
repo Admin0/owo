@@ -39,7 +39,9 @@ class Countdown {
      */
     setTime(time = 1) {
         const d = new Date();
-        if (typeof (time) == 'number') {
+        if (time == null) {
+            this.time = d.setHours(d.getHours() + 1);
+        } else if (typeof time == 'number') {
             this.time = d.setHours(d.getHours() + time);
             return this;
         } else {

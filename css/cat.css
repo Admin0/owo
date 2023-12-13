@@ -39,6 +39,8 @@
     --sprite-block-size: 64px;
 }
 
+.outlined {border: 2px dashed #0f0;}
+
 .cat.left {
     transform: scaleX(-1);
 }
@@ -69,6 +71,10 @@
 
 .cat.yarn {
     animation: yarn 1s steps(8) 1;
+}
+
+.cat.suprise {
+    animation: suprise 1s steps(8) 1;
 }
 
 .cat.drag {
@@ -150,6 +156,16 @@
     }
 }
 
+
+@keyframes surprise {
+    from {
+        background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -6);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -6);
+    }
+}
 
 @keyframes drag {
     from {
