@@ -8,26 +8,34 @@
     font-family: 'Pixelify Sans', sans-serif;
     position: absolute;
     background-color: #fff;
-    font-size: 8px;
-    margin-left: 12px;
+    color: #4caf50;
+    font-size: 10px;
+    margin-left: 8px;
+    margin-top: -2px;
     display: none;
+    font-weight: bold;
 }
 
 .info-window table {
     border-collapse: collapse;
     border-spacing: 0;
+    width: 150px;
 }
 
 .info-window table th,
 .info-window table td {
-    border: 1px solid #000;
+    border: 2px dashed #4caf50;
     padding: 2px 4px;
+}
+
+.info-window table th:nth-child(1) {
+    width: 50px;
 }
 
 .cat {
     width: var(--sprite-block-size);
     height: var(--sprite-block-size);
-    background: url('../img/cat_skin_흰냥이.png');
+    background: url('../img/cat_skin_우유.png');
     background-size: calc(8 * var(--sprite-block-size)) calc(8 * var(--sprite-block-size));
     image-rendering: pixelated;
     position: absolute;
@@ -39,7 +47,10 @@
     --sprite-block-size: 64px;
 }
 
-.outlined {border: 2px dashed #0f0;}
+.outlined {
+    outline: 2px dashed #4caf50;
+    border-radius: 4px;
+}
 
 .cat.left {
     transform: scaleX(-1);
@@ -69,12 +80,12 @@
 }
 
 
-.cat.yarn {
-    animation: yarn 1s steps(8) 1;
+.cat.stretch {
+    animation: stretch 1s steps(8) 1;
 }
 
-.cat.suprise {
-    animation: suprise 1s steps(8) 1;
+.cat.surprise {
+    animation: surprise 1s steps(8) 1;
 }
 
 .cat.drag {
@@ -146,7 +157,7 @@
 }
 
 
-@keyframes yarn {
+@keyframes stretch {
     from {
         background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -5);
     }
@@ -188,15 +199,25 @@
     z-index: 10;
     cursor: pointer;
 
-    background-size: calc(4 * var(--sprite-block-size)) calc(1 * var(--sprite-block-size));
+    background-size: calc(4 * var(--sprite-block-size)) calc(4 * var(--sprite-block-size));
     background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * 0);
     image-rendering: pixelated;
     position: absolute;
     --sprite-block-size: 64px;
 }
 
+.fish.drag {
+    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * 0);
+
+}
+
 .cucumber {
-    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
+    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -1);
+
+}
+
+.cucumber.drag {
+    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -1);
 
 }
 

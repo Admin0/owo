@@ -74,15 +74,21 @@ $('#setting input').forEach((e) => {
   });
 });
 
-const cats = [new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
+// 컨텍스트 메뉴 제거
+document.addEventListener('contextmenu', (e) => { e.preventDefault(); }, false);
+
+// 고양이 객체 생성
+const cats = [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
 
 cats.forEach(cat => {
-  cat.element.classList.add('outlined');
-  cat.infoWindow.style.display = 'block';
+  if (S('dev_mode') == 'true') {
+    cat.element.classList.add('outlined');
+    cat.infoWindow.style.display = 'block';
+  }
 });
 
 document.addEventListener('mousedown', (event) => {
-  const catElements = document.querySelectorAll('.cat, .fish, .cucumber');
+  const catElements = document.querySelectorAll('.cat, .fish, .cucumber, #book');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작
@@ -92,8 +98,11 @@ document.addEventListener('mousedown', (event) => {
       y: event.pageY - 86 + 64 * Math.random()
     }
     // new Cat(pos);
-    new Fish(pos)
-      .element.classList.add('outlined');
+    if (S('dev_mode') == 'true') {
+      new Fish(pos).element.classList.add('outlined');
+    } else {
+      new Fish(pos);
+    }
   }
 });
 
