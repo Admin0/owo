@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
 
 ::selection {
-    background: transparent;
+    /* background: transparent; */
 }
 
 .info-window {
@@ -47,9 +47,17 @@
     --sprite-block-size: 64px;
 }
 
-.outlined {
-    outline: 2px dashed #4caf50;
+body.dev_mode .cat,
+body.dev_mode .fish,
+body.dev_mode .goldfish,
+body.dev_mode .cucumber,
+body.dev_mode .mineral {
+    outline: 2px dashed #FFC107;
     border-radius: 4px;
+}
+
+body.dev_mode .cat {
+    outline-color: #4caf50;
 }
 
 .cat.left {
@@ -191,7 +199,10 @@
 
 
 .fish,
-.cucumber {
+.goldfish,
+.cucumber,
+.mineral,
+.random {
     background: url('../img/fish.png');
     position: absolute;
     width: var(--sprite-block-size);
@@ -202,12 +213,21 @@
     background-size: calc(4 * var(--sprite-block-size)) calc(4 * var(--sprite-block-size));
     background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * 0);
     image-rendering: pixelated;
-    position: absolute;
     --sprite-block-size: 64px;
 }
 
 .fish.drag {
     background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * 0);
+
+}
+
+.goldfish {
+    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
+
+}
+
+.goldfish.drag {
+    background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * 0);
 
 }
 
@@ -221,22 +241,55 @@
 
 }
 
+.mineral {
+    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -1);
+
+}
+
+.mineral.drag {
+    background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * -1);
+
+}
+
 .meow {
     font-family: 'Pixelify Sans', sans-serif;
     position: absolute;
     background-color: #fff;
     font-size: 12px;
     animation: meow 2s;
+    padding: 4px;
+    border: 2px solid #777;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.meow::before,
+.meow::after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    top: 100%;
+    left: calc(50% - 6px);
+    border: 6px solid;
+    border-color: #777 transparent transparent transparent;
+}
+
+.meow::after {
+    margin-top: -3px;
+    border-color: #fff transparent transparent transparent;
 }
 
 @keyframes meow {
     from {
         opacity: 1;
+        visibility: visible;
         margin-top: 0;
     }
 
     to {
         opacity: 0;
+        visibility: hidden;
         margin-top: -32px;
     }
 }

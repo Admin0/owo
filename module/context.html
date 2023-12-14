@@ -1,0 +1,68 @@
+<div class="">
+  <div class="dev_mode" onclick="context.setDevMode(true)">
+    <span class="material-symbols-outlined">developer_mode</span><span>개발자 모드</span>
+    <span class="shortcut">D</span>
+  </div>
+  <div class="disabled" onclick="$('#setting, #setting_bg').toggleClass('on');$('#setting').css({ 'top': $('#context').offset().top - pageYOffset, 'left': $('#context_menu').offset().left});$('#context_menu').removeClass('on');">
+    <span class="material-symbols-outlined">settings</span><span>설정</span>
+    <span class="shortcut">S</span>
+  </div>
+</div>
+<div class="skill_wrap">
+  <div class="skill cat" onclick="context.setSkill('cat')"><span>냥이</span></div>
+  <div class="skill fish" onclick="context.setSkill('fish')"><span>생선</span></div>
+  <div class="skill cucumber" onclick="context.setSkill('cucumber')"><span>오이</span></div>
+  <div class="skill mineral" onclick="context.setSkill('mineral')"><span>미네랄</span></div>
+  <div class="skill random" onclick="context.setSkill('random')"><span>랜덤</span></div>
+</div>
+<div>
+  <div class="" onclick='context.skill.summonMassiveCats(10);'>
+    <span class="material-symbols-outlined">local_fire_department</span><span>냥이 대량 소환</span>
+    <span class="shortcut">C</span>
+  </div>
+  <div class="" onclick='context.skill.summonMassiveFishs(100);'>
+    <span class="material-symbols-outlined"></span><span>생선 대량 소환</span>
+    <span class="shortcut">F</span>
+  </div>
+  <div class="" onclick='context.skill.summonMassiveCucumbers(100);'>
+    <span class="material-symbols-outlined"></span><span>오이 대량 소환</span>
+    <span class="shortcut">V</span>
+  </div>
+  <div class="" onclick='context.skill.summonMassiveMinerals(100);'>
+    <span class="material-symbols-outlined"></span><span>광물 대량 소환</span>
+    <span class="shortcut">M</span>
+  </div>
+  <div class="" onclick='context.skill.summonMassiveCats(10); context.skill.summonAll(25);'>
+    <span class="material-symbols-outlined"></span><span>"고마 쓰까서 소환해 주이소."</span>
+    <span class="shortcut">A</span>
+  </div>
+</div>
+<div class="">
+  <div class=" disabled" onclick="setTimeout(function(){window.print();},300);">
+    <span class="material-symbols-outlined">print</span><span>인쇄</span>
+    <span class="shortcut">Ctrl + P</span>
+  </div>
+</div>
+<div class="">
+  <div class=" disabled" onclick="load('notice');">
+    <span class="material-symbols-outlined">flag</span><span>도움말</span>
+    <span class="shortcut">F1</span>
+  </div>
+  <div class=" disabled" onclick="">
+    <span class="material-symbols-outlined"></span><span>리뷰남기기</span>
+  </div>
+</div>
+<div class="">
+  <div class=" disabled" onclick="">
+    <span class="material-symbols-outlined">favorite</span><span>#버킷리스트 바로가기</span>
+    <span class="shortcut"></span>
+  </div>
+  <div class=" disabled" onclick="$('#main_item').load('opensource_license.html',function(){after_load('opensource_license');});$('#context_menu').removeClass('on');">
+    <span class="material-symbols-outlined"></span><span>오픈소스 라이선스</span>
+    <span class="shortcut"></span>
+  </div>
+  <div class=" disabled" onclick="$('#main_item').load('update_log.html',function(){after_load('update_log');});$('#context_menu').removeClass('on');">
+    <span class="material-symbols-outlined"></span><span>업데이트 기록</span>
+    <span class="shortcut"></span>
+  </div>
+</div>

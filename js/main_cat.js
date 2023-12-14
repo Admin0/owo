@@ -244,9 +244,7 @@ class Cat {
 class Fish {
     constructor(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 62) + 32 }) {
         this.element = document.createElement('div');
-        const types = ['fish', 'cucumber'];
-        this.type = types[Math.floor(Math.random() * types.length)];
-        this.element.className = this.type;
+        this.setType();
 
         this.position = pos;
 
@@ -269,6 +267,22 @@ class Fish {
         document.addEventListener('mouseup', () => this.stopDragging());
     }
 
+    setType(type) {
+        const types = ['fish', 'cucumber', 'mineral'];
+        const type_index = Math.floor(Math.random() * types.length);
+
+        // 기존 클래스 삭제
+        types.forEach(type => { this.element.classList.remove(type); });
+        this.element.classList.remove('goldfish');
+
+        // 파라미터 전달 안 받았으면 랜덤값 지정
+        this.type = type == null ? types[type_index] : type;
+
+        // 생선은 1/10 확률로 금붕어가 된다
+        if (this.type == 'fish') { this.type = Math.floor(Math.random() * 10) != 0 ? 'fish' : 'goldfish' }
+        this.element.classList.add(this.type);
+        return this;
+    }
 
     startDragging(event) {
         // 드래그 시작 시 위치 오프셋 설정
@@ -323,12 +337,19 @@ class Fish {
 
     remove() {
         this.element.remove();
+        clearInterval(this.activateInterval);
+        // for (var key in this) {
+        //     if (this.hasOwnProperty(key)) {
+        //         this[key] = null;
+        //     }
+        // }
     }
 
     // Cat 객체를 전달받아 activate 메서드 호출
     activate(cats) {
         cats.forEach(cat => {
-            const catPosition = { x: cat.element.getBoundingClientRect().left, y: cat.element.getBoundingClientRect().top }
+            const catRect = cat.element.getBoundingClientRect();
+            const catPosition = { x: catRect.left, y: catRect.top }
             const distance = this.calculateDistance(this.getPosition(), catPosition);
 
             // 야옹 소리를 내는 함수
@@ -337,15 +358,19 @@ class Fish {
                 cat.meow.className = 'meow';
                 document.body.appendChild(cat.meow);
                 cat.meow.innerHTML = mmm;
-                cat.meow.style.left = `${cat.element.getBoundingClientRect().left}px`;
-                cat.meow.style.top = `${cat.element.getBoundingClientRect().top}px`;
-                setInterval(() => { cat.meow.remove() }, 2000);
+
+                const meowRect = cat.meow.getBoundingClientRect();
+                cat.meow.style.left = `${catRect.left + catRect.width / 2 - meowRect.width / 2}px`;
+                cat.meow.style.top = `${catRect.top}px`;
+
+                // 일정 시간 후 삭제
+                setTimeout(() => { cat.meow.remove() }, 2000);
             }
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 고양이를 옮길때는 이벤트 제외
             if (distance < 32 && !cat.element.classList.contains('drag')) {
-                if (this.type == 'fish') {
+                if (this.type == 'fish' || this.type == 'goldfish') {
                     // 생선을 먹는 움직임
                     cat.toggleMovement('lick');
                     // 야옹거리는 동작
@@ -353,7 +378,7 @@ class Fish {
 
                     // 생선 객체 삭제
                     this.remove();
-                } else if (this.type == 'cucumber') {
+                } else if (this.type == 'cucumber' || this.type == 'mineral') {
                     // 오이를 먹는 움직임
                     cat.toggleMovement('surprise');
                     // 야옹거리는 동작

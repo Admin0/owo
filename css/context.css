@@ -1,0 +1,174 @@
+/* ------------------------------------------------------------------- */
+/* ***** context-menu ***** */
+/* ------------------------------------------------------------------- */
+#context,
+.context {
+  z-index: 20;
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  cursor: default;
+  /* color: rgba(0, 0, 0, .5); */
+  background-color: #fff;
+  /* border: 1px solid #bbb; */
+  border-radius: 3px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  transition: .25s;
+  transition-property: opacity, transform, margin, visibility;
+  top: 50%;
+  font-size: 14px;
+  width: fit-content;
+  min-width: 350px;
+  transform: perspective(1000px) rotateX(15deg);
+  margin-top: -2em;
+}
+
+.context {
+  position: absolute;
+  min-width: 50px;
+  white-space: nowrap;
+  transform: none;
+  margin-top: 0;
+}
+
+#context>div,
+.context>div {
+  padding: .5em 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.general__dark #context>div,
+.general__dark .context>div {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+#context>div:last-child,
+.context>div:last-child {
+  border-bottom: none;
+}
+
+#context>div>*,
+.context>div>* {
+  display: flex;
+  padding: .5em 1em .5em 1em;
+  margin: 0;
+  text-decoration: none;
+}
+
+#context .activated {
+  background-color: #FFF9C4;
+}
+
+#context>div>*.disabled,
+.context>div>*.disabled {
+  color: #aaa;
+}
+
+#context>div>*:not(.disabled),
+.context>div>*:not(.disabled) {
+  /* color: #000; */
+}
+
+#context>div>*:not(.disabled):hover,
+.context>div>*:not(.disabled):hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#context>div>*:not(.disabled):hover>.context,
+.context:hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+#context.on,
+.context:hover {
+  transform: none;
+  transform-origin: 50% 100%;
+  margin-top: 0;
+  visibility: visible;
+  opacity: 1;
+}
+
+#context .shortcut {
+  position: absolute;
+  margin-right: 2em;
+  right: 0;
+}
+
+#context .shortcut::before {
+  /* content: "("; */
+}
+
+#context .shortcut::after {
+  /* content: ")"; */
+}
+
+
+#context .material-symbols-outlined {
+  opacity: .75;
+  width: 24px;
+  font-size: 20px;
+  /* margin-bottom: -2px; */
+
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+#context .material-symbols-outlined svg,
+#context .material-symbols-outlined img {
+  width: 20px;
+  height: 20px;
+}
+
+#context .skill_wrap {
+  display: flex;
+  padding-left: 2em;
+}
+
+#context .skill {
+  outline: none;
+  position: static;
+  color: transparent;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+}
+
+#context .skill.cat {
+  animation: none;
+  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -.45);
+}
+#context .skill.cat.activated {
+  background-position-y: calc(var(--sprite-block-size) * -4.45);
+}
+
+#context .skill.fish {
+  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -.45);
+}
+#context .skill.fish.activated {
+  background-position-x: calc(var(--sprite-block-size) * -1.125);
+}
+
+#context .skill.cucumber {
+  background-position: calc(var(--sprite-block-size) * -.15) calc(var(--sprite-block-size) * -1.45);
+}
+#context .skill.cucumber.activated {
+  background-position-x: calc(var(--sprite-block-size) * -1.125);
+}
+
+#context .skill.mineral {
+  background-position: calc(var(--sprite-block-size) * -2.15) calc(var(--sprite-block-size) * -1.35);
+}
+#context .skill.mineral.activated {
+  background-position-x: calc(var(--sprite-block-size) * -3.125);
+}
+
+#context .skill.random {
+  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -2.35);
+}
+#context .skill.random.activated {
+  background-position-x: calc(var(--sprite-block-size) * -1.125);
+}
