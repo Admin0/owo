@@ -23,6 +23,10 @@
   margin-top: -2em;
 }
 
+#context {
+  font-family: 'StarDust Bold', sans-serif;
+}
+
 .context {
   position: absolute;
   min-width: 50px;
@@ -31,50 +35,43 @@
   margin-top: 0;
 }
 
-#context>div,
-.context>div {
+#context ul {
   padding: .5em 0;
+  margin: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.general__dark #context>div,
-.general__dark .context>div {
+.general__dark #context ul {
   border-bottom: 1px solid rgba(255, 255, 255, 0.125);
 }
 
-#context>div:last-child,
-.context>div:last-child {
+#context ul:last-child {
   border-bottom: none;
 }
 
-#context>div>*,
-.context>div>* {
+#context ul li {
+  height: 16px;
   display: flex;
+  align-items: center;
   padding: .5em 1em .5em 1em;
   margin: 0;
   text-decoration: none;
+  list-style: none;
 }
 
 #context .activated {
   background-color: #FFF9C4;
 }
 
-#context>div>*.disabled,
-.context>div>*.disabled {
+#context ul li.disabled {
   color: #aaa;
 }
 
-#context>div>*:not(.disabled),
-.context>div>*:not(.disabled) {
-  /* color: #000; */
-}
-
-#context>div>*:not(.disabled):hover,
-.context>div>*:not(.disabled):hover {
+#context ul li:not(.disabled):hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-#context>div>*:not(.disabled):hover>.context,
+#context ul li:not(.disabled):hover>.context,
 .context:hover {
   opacity: 1;
   visibility: visible;
@@ -125,50 +122,78 @@
 
 #context .skill_wrap {
   display: flex;
-  padding-left: 2em;
+  padding-left: 3em;
+}
+
+#context .icon {
+  position: inherit;
+  margin: 0 12px 0 0;
+  --sprite-block-size: 32px;
+  width: var(--sprite-block-size);
+  height: var(--sprite-block-size);
+  background: url('../img/context.png');
+  background-size: calc(2 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+  background-position-y: calc(var(--sprite-block-size) * 1);
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  padding: 0px;
+  outline: none;
+  animation: none;
 }
 
 #context .skill {
   outline: none;
   position: static;
   color: transparent;
-  width: 32px;
-  height: 32px;
-  padding: 8px;
+  border: 8px solid #fff;
+  margin: 0;
 }
 
-#context .skill.cat {
-  animation: none;
-  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -.45);
-}
-#context .skill.cat.activated {
-  background-position-y: calc(var(--sprite-block-size) * -4.45);
+#context .skill:hover {
+  border-color: #ccc;
 }
 
-#context .skill.fish {
-  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -.45);
-}
-#context .skill.fish.activated {
-  background-position-x: calc(var(--sprite-block-size) * -1.125);
-}
-
-#context .skill.cucumber {
-  background-position: calc(var(--sprite-block-size) * -.15) calc(var(--sprite-block-size) * -1.45);
-}
-#context .skill.cucumber.activated {
-  background-position-x: calc(var(--sprite-block-size) * -1.125);
+#context .skill.activated,
+#context .skill.activated:hover {
+  background-color: #FFF9C4;
+  border-color: #FFF9C4;
 }
 
-#context .skill.mineral {
-  background-position: calc(var(--sprite-block-size) * -2.15) calc(var(--sprite-block-size) * -1.35);
-}
-#context .skill.mineral.activated {
-  background-position-x: calc(var(--sprite-block-size) * -3.125);
+#context .icon.cat {
+  background-position-y: calc(var(--sprite-block-size) * 0);
 }
 
-#context .skill.random {
-  background-position: calc(var(--sprite-block-size) * -.125) calc(var(--sprite-block-size) * -2.35);
+#context .icon.fish {
+  background-position-y: calc(var(--sprite-block-size) * -1);
 }
-#context .skill.random.activated {
-  background-position-x: calc(var(--sprite-block-size) * -1.125);
+
+#context .icon.cucumber {
+  background-position-y: calc(var(--sprite-block-size) * -2);
+}
+
+#context .icon.mineral {
+  background-position-y: calc(var(--sprite-block-size) * -3);
+}
+
+#context .icon.random {
+  animation: random 1s steps(4) infinite;
+}
+
+#context .icon.ball {
+  background-position-y: calc(var(--sprite-block-size) * -4);
+}
+
+@keyframes random {
+  from {
+    background-position-y: calc(var(--sprite-block-size) * -1);
+  }
+
+  to {
+    background-position-y: calc(var(--sprite-block-size) * -5);
+  }
+}
+
+#context .icon.activated,
+#context .activated .icon {
+  background-position-x: calc(var(--sprite-block-size) * -1);
 }

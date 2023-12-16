@@ -29,6 +29,10 @@ class Cat {
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
         document.addEventListener('mouseup', () => this.stopDragging());
+        // 모바일 이벤트 리스너 등록
+        this.element.addEventListener('touchstart', (event) => this.startDragging(event));
+        document.addEventListener('touchmove', (event) => this.drag(event));
+        document.addEventListener('touchend', () => this.stopDragging());
 
         return this;
     }
@@ -41,8 +45,8 @@ class Cat {
         this.element.classList.remove('흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도');
         const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도'];
         const skin_index = Math.floor(Math.random() * skins.length);
-
-        this.element.classList.add(skin == null ? skins[skin_index] : skin);
+        this.skin = skin == null ? skins[skin_index] : skin
+        this.element.classList.add(this.skin);
         this.element.style.backgroundImage = `url('./img/cat_skin_${skin == null ? skins[skin_index] : skin}.png')`;
 
         return this;
@@ -50,7 +54,13 @@ class Cat {
 
     initialize(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 64) + 32 }, skin) {
         // 초기 위치 랜덤 설정
-        this.position = pos;
+        const rect = this.element.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+        this.position = {
+            x: Math.max(0, Math.min(pos.x, maxX)),
+            y: Math.max(0, Math.min(pos.y, maxY))
+        };
 
         // 초기 위치 스타일 적용
         this.element.style.left = `${this.position.x}px`;
@@ -62,6 +72,13 @@ class Cat {
 
         // 고양이 색깔 지정
         this.setSkin(skin);
+
+        // 소환 이벤트
+        this.toggleMovement('drag');
+        setTimeout(() => {
+            this.element.classList.remove('drag');
+            this.toggleMovement('stop');
+        }, 250);
 
         // 초기 이동 시작
         this.startMoving();
@@ -112,7 +129,7 @@ class Cat {
         this.isMoving = !this.isMoving;
 
         // 이동 관련 클래스 삭제
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'stretch', 'watch', 'surprise');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'stretch', 'watch', 'surprised');
 
         if (action == undefined) {
             if (this.isMoving) {
@@ -128,6 +145,15 @@ class Cat {
                 const randomClassIndex = Math.floor(Math.random() * randomClasses.length);
                 const randomClass = randomClasses[randomClassIndex];
                 this.element.classList.add(randomClass);
+
+                switch (randomClass) {
+                    // 스트레칭 이후에 동작 이후에 꼬리흔들기 시작
+                    case 'stretch':
+                        setTimeout(() => { this.toggleMovement('stop'); }, 1000);
+                        break;
+                    default:
+                        break;
+                }
             }
         } else {
             this.isMoving = false;
@@ -135,6 +161,15 @@ class Cat {
             // 지정된 움직임이 있을 때
             const randomClass = action;
             this.element.classList.add(action);
+            switch (action) {
+                case 'surprised':
+                    // 놀라는 동작 이후에 꼬리흔들기 시작
+                    setTimeout(() => { this.toggleMovement('stop'); }, 1000);
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         // 고양이 정보 창 업데이트
@@ -164,7 +199,7 @@ class Cat {
         this.dragOffsetY = event.clientY - rect.top;
 
         // 이동 관련 클래스 삭제 및 이동 중지
-        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'stretch', 'watch', 'surprise');
+        this.element.classList.remove('walk', 'run', 'wash', 'lick', 'stretch', 'watch', 'surprised');
         this.stopMoving();
 
         // 드래그 클래스 추가
@@ -223,14 +258,17 @@ class Cat {
         }
 
         // 고양이 정보 추가
+        tableHTML += addRowToTable('type', `${this.skin}`);
         tableHTML += addRowToTable('position', `x: ${Math.floor(this.position.x)}, y: ${Math.floor(this.position.y)}`);
-        tableHTML += addRowToTable('speed', this.speed.toFixed(2));
-        tableHTML += addRowToTable('angle', this.angle.toFixed(2));
+        tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(2)}, a: ${this.angle.toFixed(2)}`);
         tableHTML += addRowToTable('move', this.isMoving ? this.speed > 3 ? 'run' : 'walk' : 'stop');
 
         // 현재 고양이 객체의 클래스 리스트 가져오기
         const classList = Array.from(this.element.classList);
         tableHTML += addRowToTable('class', classList.join(', '));
+
+        // 울음소리 디버그를 위한 정보 추가
+        tableHTML += addRowToTable('meow', this.meow == undefined ? '-----' : this.meow.innerHTML);
 
         // 테이블을 닫음
         tableHTML += '</table>';
@@ -242,16 +280,23 @@ class Cat {
 }
 
 class Fish {
-    constructor(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 62) + 32 }) {
+    constructor(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 64) + 32 }) {
         this.element = document.createElement('div');
+        document.body.appendChild(this.element);
         this.setType();
 
-        this.position = pos;
+        // 초기 위치 설정
+        const rect = this.element.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+        this.position = {
+            x: Math.max(0, Math.min(pos.x, maxX)),
+            y: Math.max(0, Math.min(pos.y, maxY))
+        };
 
         this.element.style.left = `${this.position.x}px`;
         this.element.style.top = `${this.position.y}px`;
 
-        document.body.appendChild(this.element);
 
         // 고양이 객체와 충돌 이벤트 감지
         this.activateInterval = setInterval(() => this.activate(cats), 100);
@@ -265,10 +310,14 @@ class Fish {
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
         document.addEventListener('mouseup', () => this.stopDragging());
+        // 모바일 이벤트 리스너 등록
+        this.element.addEventListener('touchstart', (event) => this.startDragging(event));
+        document.addEventListener('touchmove', (event) => this.drag(event));
+        document.addEventListener('touchend', () => this.stopDragging());
     }
 
     setType(type) {
-        const types = ['fish', 'cucumber', 'mineral'];
+        const types = ['fish', 'cucumber', 'mineral', 'ball'];
         const type_index = Math.floor(Math.random() * types.length);
 
         // 기존 클래스 삭제
@@ -280,7 +329,7 @@ class Fish {
 
         // 생선은 1/10 확률로 금붕어가 된다
         if (this.type == 'fish') { this.type = Math.floor(Math.random() * 10) != 0 ? 'fish' : 'goldfish' }
-        this.element.classList.add(this.type);
+        this.element.classList.add(this.type, 'pisces');
         return this;
     }
 
@@ -338,6 +387,7 @@ class Fish {
     remove() {
         this.element.remove();
         clearInterval(this.activateInterval);
+        // 객체를 삭제할 때 메모리에서도 해제하려고 넣었는데 작동하는지는 몰?루 --> 에러 생기네;;
         // for (var key in this) {
         //     if (this.hasOwnProperty(key)) {
         //         this[key] = null;
@@ -354,38 +404,57 @@ class Fish {
 
             // 야옹 소리를 내는 함수
             function meow(cat, mmm) {
+                if (cat.meow != null) { cat.meow.remove(); }
                 cat.meow = document.createElement('div');
                 cat.meow.className = 'meow';
                 document.body.appendChild(cat.meow);
                 cat.meow.innerHTML = mmm;
+                cat.updateInfoWindow();
 
                 const meowRect = cat.meow.getBoundingClientRect();
                 cat.meow.style.left = `${catRect.left + catRect.width / 2 - meowRect.width / 2}px`;
                 cat.meow.style.top = `${catRect.top}px`;
 
                 // 일정 시간 후 삭제
-                setTimeout(() => { cat.meow.remove() }, 2000);
+                setTimeout(() => { cat.meow.remove(); }, 2000);
             }
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 고양이를 옮길때는 이벤트 제외
             if (distance < 32 && !cat.element.classList.contains('drag')) {
-                if (this.type == 'fish' || this.type == 'goldfish') {
-                    // 생선을 먹는 움직임
-                    cat.toggleMovement('lick');
-                    // 야옹거리는 동작
-                    meow(cat, 'Meow ♥️');
+                switch (this.type) {
+                    case 'fish':
+                    case 'goldfish':
+                        // 생선을 먹는 움직임
+                        cat.toggleMovement('lick');
+                        // 야옹거리는 동작
+                        meow(cat, 'Meow ♥️');
+                        // 생선 객체 삭제
+                        this.remove();
+                        break;
+                    case 'cucumber':
+                    case 'mineral':
+                        // 오이를 먹는 움직임
+                        cat.toggleMovement('surprised');
+                        // 야옹거리는 동작
+                        meow(cat, 'Grrrr!');
+                        // 오이 객체 삭제
+                        this.remove();
+                        break;
+                    case 'ball':
+                        // 공이랑 부딪히면 멈춤
+                        cat.toggleMovement();
+                        // 야옹거리는 동작
+                        meow(cat, 'Nyaa!');
 
-                    // 생선 객체 삭제
-                    this.remove();
-                } else if (this.type == 'cucumber' || this.type == 'mineral') {
-                    // 오이를 먹는 움직임
-                    cat.toggleMovement('surprise');
-                    // 야옹거리는 동작
-                    meow(cat, 'Grrrr!');
+                        // 초기 각도 및 속도 랜덤 설정
+                        this.angle = Math.random() * 2 * Math.PI;
+                        this.speed = Math.random() * 5 + 1;
+                        this.startMoving();
 
-                    // 오이 객체 삭제
-                    this.remove();
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -397,4 +466,41 @@ class Fish {
         const deltaY = point1.y - point2.y;
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
+
+    moveFish() {
+        const deltaX = this.speed * Math.cos(this.angle);
+        const deltaY = this.speed * Math.sin(this.angle);
+
+        const rect = this.element.getBoundingClientRect();
+        const newX = rect.left + deltaX;
+        const newY = rect.top + deltaY;
+
+        // 화면 경계를 벗어나면 방향을 바꿈
+        if (newX < 0 || newX + rect.width > window.innerWidth) {
+            this.angle = Math.PI - this.angle;
+        }
+        if (newY < 0 || newY + rect.height > window.innerHeight) {
+            this.angle = -this.angle;
+        }
+
+        this.position.x = newX;
+        this.position.y = newY;
+
+        this.element.style.left = `${newX}px`;
+        this.element.style.top = `${newY}px`;
+
+    }
+
+    startMoving() {
+        this.stopMoving();
+        // 일정한 간격으로 생선 이동
+        this.moveFishInterval = setInterval(() => this.moveFish(), 30);
+
+    }
+
+    stopMoving() {
+        clearInterval(this.moveCatInterval);
+        clearInterval(this.toggleMovementInterval);
+    }
+
 }

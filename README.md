@@ -56,3 +56,10 @@ new stare("#stare", { angle: 15, perspective: 1000 });
 ```js
 new stare("#stare").angle(15).persfective(1000);
 ```
+
+## Open-source License
+```
+PF스타더스트
+
+(c)campanula913 https://blog.naver.com/campanula913/221366697603
+```

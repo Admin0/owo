@@ -1,5 +1,6 @@
 const context = {
     element: document.querySelector("#context"),
+    sub: { element: null },
     setDevMode(wannaToggle = false) {
         // 현재 dev_mode 값을 확인
         let isDevMode = this.getDevMode();
@@ -32,46 +33,60 @@ const context = {
         },
         summonMassiveFishs(n) {
             for (let i = 0; i < n; i++) {
-                fishs.push(new Fish().setType('fish'));
+                pisces.push(new Fish().setType('fish'));
             }
         },
         summonMassiveCucumbers(n) {
             for (let i = 0; i < n; i++) {
-                fishs.push(new Fish().setType('cucumber'));
+                pisces.push(new Fish().setType('cucumber'));
             }
         },
         summonMassiveMinerals(n) {
             for (let i = 0; i < n; i++) {
-                fishs.push(new Fish().setType('mineral'));
+                pisces.push(new Fish().setType('mineral'));
             }
         },
         summonAll(n) {
             for (let i = 0; i < n; i++) {
-                fishs.push(new Fish().setType('fish'));
-                fishs.push(new Fish().setType('cucumber'));
-                fishs.push(new Fish().setType('mineral'));
+                pisces.push(new Fish().setType('fish'));
+                pisces.push(new Fish().setType('cucumber'));
+                pisces.push(new Fish().setType('mineral'));
             }
+        },
+        clearMeow() {
+            cats.forEach(e => {
+                e.meow != undefined ? e.meow.remove() : false;
+            });
         }
     },
     setSkill(skill = localStorage.skill) {
+        const targetSkill = document.querySelector(`#context .skill.${skill}`);
+
+        // 현재 선택된 스킬이 액티베이션 상태이면 액티베이션 취소
+        if (targetSkill != null && targetSkill.classList.contains('activated')) {
+            targetSkill.classList.remove('activated');
+            localStorage.removeItem('skill'); // 선택 해제 시 스킬 정보 삭제
+        } else {
+            // 현재 선택된 스킬이 액티베이션 상태가 아니면 액티베이션 상태로 변경
+            this.getSkill(skill);
+            localStorage.setItem('skill', skill);
+        }
+    },
+    getSkill(skill = localStorage.skill) {
+        const targetSkill = document.querySelector(`#context .skill.${skill}`);
         document.querySelectorAll('#context .skill').forEach((e) => { e.classList.remove('activated'); });
-        localStorage.setItem('skill', skill);
-        const targetSkill = document.querySelector(`#context .skill.${skill}`)
-        if (targetSkill != null) targetSkill.classList.add('activated');
-    }
-};
-
-document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-
-    context.setDevMode();
-    context.setSkill();
-
-    if (!is_mobile) {
-        function set_location() {
+        if (targetSkill != null) {
+            targetSkill.classList.add('activated');
+        }
+    },
+    /**
+     * 이벤트 위치를 기준으로 컨텍스트 메뉴를 표시합니다.
+     * @param {Event} e - 컨텍스트 메뉴를 트리거한 이벤트입니다.
+     */
+    showContext(e) {
+        if (!is_mobile) {
+            // 컨텍스트 메위 생성 위치 계산
             const rect = context.element.getBoundingClientRect();
-            // console.log(`window.innerWidth: ${window.innerWidth} / rect.width: ${rect.width} / e.pageX: ${e.pageX}`);
-            // console.log(`window.innerHeight: ${window.innerHeight} / rect.height: ${rect.height} / e.pageY: ${e.pageY} / document.documentElement.scrollTop: ${document.documentElement.scrollTop}`);
             context.x = window.innerWidth - rect.width > e.pageX ? e.pageX : window.innerWidth - rect.width;
 
             if (window.innerHeight - rect.height > e.pageY - document.documentElement.scrollTop) {
@@ -82,34 +97,48 @@ document.addEventListener("contextmenu", (e) => {
             context.element.style.left = `${context.x}px`;
             context.element.style.top = `${context.y}px`;
             context.element.classList.add("on");
-
-            // context.element.querySelector('section.context').parent().hover(function () { //하위 메뉴 항목
-            //     if (window.innerWidth - rect.width - this.children().last().outerWidth() > e.pageX) {
-            //         context.sub.x = 'calc(100% - .5em)';
-            //     } else {
-            //         context.sub.x = 'calc(' + (-$(this).children().last().outerWidth()) + 'px + .5em)';
-            //     }
-            //     if (window.innerHeight - this.position().top > this.children().last().outerHeight()) {
-            //         context.sub.y = this.position().top - 7 + 'px';
-            //     } else {
-            //         context.sub.y = window.innerHeight - context.position().top - this.children().last().outerHeight() + "px";
-            //     }
-            //     $(this).children().last().css({
-            //         'left': context.sub.x,
-            //         'top': context.sub.y
-            //     });
-            // }).on("click", function (e) {
-            //     context.classList.remove("on");
-            // });
-        }
-        set_location();
-    } else {
-        if ($('nav').attr('class') != 'on') {
-            $('nav, #nav_bg').classList.add('on');
         } else {
-            $('nav, #nav_bg').classList.remove('on');
+            // 모바일 네비게이션 메뉴 토글
+            if ($('nav').attr('class') != 'on') {
+                $('nav, #nav_bg').classList.add('on');
+            } else {
+                $('nav, #nav_bg').classList.remove('on');
+            }
         }
+        // 하위 메뉴 항목 위치 계산
+        context.element.querySelectorAll('.context').forEach(sub_context => {
+            sub_context.parentElement.addEventListener('mouseenter', (e) => {
+                const rect = context.element.getBoundingClientRect();
+                const sub_wrap_rect = e.target.getBoundingClientRect();
+                const sub_rect = e.target.querySelector('section.context').getBoundingClientRect();
+                context.sub.element = e.target.querySelector('section.context');
+
+                // 오른쪽에 너무 붙어있을 때 화면 밖으로 나가지 않게 조절
+                if (window.innerWidth - rect.right > sub_rect.width - 7) {
+                    context.sub.x = rect.width - 7;
+                } else {
+                    context.sub.x = (window.innerWidth - rect.right) + (rect.width - sub_rect.width);
+                }
+
+                // 아래쪽에 너무 붙어있을 때 화면 밖으로 나가지 않게 조절
+                if (sub_wrap_rect.top + sub_rect.height < window.innerHeight - 7) {
+                    context.sub.y = sub_wrap_rect.top - rect.top - 7;
+                } else {
+                    context.sub.y = (window.innerHeight - rect.bottom) + (rect.height - sub_rect.height);
+                }
+                context.sub.element.style.left = `${context.sub.x}px`;
+                context.sub.element.style.top = `${context.sub.y}px`;
+            }, { once: true });
+        });
     }
+};
+
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+
+    context.setDevMode();
+    context.getSkill();
+    context.showContext(e);
 }, false);
 
 document.addEventListener("click", (e) => {

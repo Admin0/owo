@@ -76,10 +76,10 @@ cats.forEach(cat => {
 });
 
 // 생선 객체 생성
-const fishs = [];
+const pisces = [];
 
 document.addEventListener('mousedown', (event) => {
-  const catElements = document.querySelectorAll('.cat, .fish, .goldfish, .cucumber, .mineral, #book, #context, footer');
+  const catElements = document.querySelectorAll('.pisces, #book, #context, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만
@@ -94,16 +94,19 @@ document.addEventListener('mousedown', (event) => {
         if (context.getDevMode()) cats[cats.length - 1].infoWindow.style.display = 'block';
         break;
       case 'fish':
-        fishs.push(new Fish(pos).setType('fish'));
+        pisces.push(new Fish(pos).setType('fish'));
         break;
       case 'cucumber':
-        fishs.push(new Fish(pos).setType('cucumber'));
+        pisces.push(new Fish(pos).setType('cucumber'));
         break;
       case 'mineral':
-        fishs.push(new Fish(pos).setType('mineral'));
+        pisces.push(new Fish(pos).setType('mineral'));
         break;
       case 'random':
-        fishs.push(new Fish(pos));
+        pisces.push(new Fish(pos));
+        break;
+      case 'ball':
+        pisces.push(new Fish(pos).setType('ball'));
         break;
       default:
         break;
@@ -138,7 +141,10 @@ $('#setting input').forEach((e) => {
   });
 });
 
+document.addEventListener('mousedown', (e) => { e.preventDefault(); });
+
 context.setDevMode();
-localStorage.skill = 'undefined';
+context.setSkill();
+// localStorage.skill = 'undefined';
 
 time.log('activated');

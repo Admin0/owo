@@ -7,6 +7,23 @@
 @import url('context.css');
 
 @font-face {
+  font-family: 'DNFBitBitv2';
+  src: url('../font/DNFBitBitv2.woff2') format('woff2');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'StarDust';
+  src: url('../font/PF스타더스트.woff2') format('woff2');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'StarDust Bold';
+  src: url('../font/PF스타더스트 Bold.woff2') format('woff2');
+}
+
+@font-face {
   font-family: 'jamsil_3';
   src: url('../font/The Jamsil 3 Regular.woff') format('woff');
 }
@@ -24,7 +41,7 @@
 }
 
 body {
-  font-family: 'Noto Sans KR';
+  font-family: 'Noto Sans';
   margin: 0;
   /* background: linear-gradient(to bottom, rgba(256, 256, 256, .5) 0%, transparent 10%, transparent 100%); */
   height: calc(100vh - 0em);

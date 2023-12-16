@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&display=swap');
 
 ::selection {
     /* background: transparent; */
 }
 
 .info-window {
-    font-family: 'Pixelify Sans', sans-serif;
+    font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif;
     position: absolute;
     background-color: #fff;
     color: #4caf50;
@@ -13,7 +13,6 @@
     margin-left: 8px;
     margin-top: -2px;
     display: none;
-    font-weight: bold;
 }
 
 .info-window table {
@@ -47,11 +46,7 @@
     --sprite-block-size: 64px;
 }
 
-body.dev_mode .cat,
-body.dev_mode .fish,
-body.dev_mode .goldfish,
-body.dev_mode .cucumber,
-body.dev_mode .mineral {
+body.dev_mode .pisces {
     outline: 2px dashed #FFC107;
     border-radius: 4px;
 }
@@ -92,8 +87,8 @@ body.dev_mode .cat {
     animation: stretch 1s steps(8) 1;
 }
 
-.cat.surprise {
-    animation: surprise 1s steps(8) 1;
+.cat.surprised {
+    animation: surprised 1s steps(8) 1;
 }
 
 .cat.drag {
@@ -176,7 +171,7 @@ body.dev_mode .cat {
 }
 
 
-@keyframes surprise {
+@keyframes surprised {
     from {
         background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -6);
     }
@@ -202,7 +197,8 @@ body.dev_mode .cat {
 .goldfish,
 .cucumber,
 .mineral,
-.random {
+.random,
+.ball {
     background: url('../img/fish.png');
     position: absolute;
     width: var(--sprite-block-size);
@@ -211,9 +207,20 @@ body.dev_mode .cat {
     cursor: pointer;
 
     background-size: calc(4 * var(--sprite-block-size)) calc(4 * var(--sprite-block-size));
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * 0);
     image-rendering: pixelated;
     --sprite-block-size: 64px;
+
+    animation: fish .125s steps(1);
+}
+
+@keyframes fish {
+    from {
+        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * 0);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * 0);
+    }
 }
 
 .fish.drag {
@@ -222,8 +229,18 @@ body.dev_mode .cat {
 }
 
 .goldfish {
+    animation: goldfish .125s steps(1);
     background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
+}
 
+@keyframes goldfish {
+    from {
+        background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * 0);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
+    }
 }
 
 .goldfish.drag {
@@ -232,8 +249,18 @@ body.dev_mode .cat {
 }
 
 .cucumber {
+    animation: cucumber .125s steps(1);
     background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -1);
+}
 
+@keyframes cucumber {
+    from {
+        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -1);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -1);
+    }
 }
 
 .cucumber.drag {
@@ -242,12 +269,44 @@ body.dev_mode .cat {
 }
 
 .mineral {
+    animation: mineral .125s steps(1);
     background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -1);
 
 }
 
+@keyframes mineral {
+    from {
+        background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * -1);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -1);
+    }
+}
+
 .mineral.drag {
     background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * -1);
+
+}
+
+.ball {
+    animation: ball .125s steps(1);
+    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
+
+}
+
+@keyframes ball {
+    from {
+        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -2);
+    }
+
+    to {
+        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
+    }
+}
+
+.ball.drag {
+    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -2);
 
 }
 
