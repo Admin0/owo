@@ -132,7 +132,7 @@
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
   background: url('../img/context.png');
-  background-size: calc(2 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+  background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
   background-position-y: calc(var(--sprite-block-size) * 1);
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -179,7 +179,7 @@
   animation: random 1s steps(4) infinite;
 }
 
-#context .icon.ball {
+#context .icon.yarnball {
   background-position-y: calc(var(--sprite-block-size) * -4);
 }
 
@@ -196,4 +196,49 @@
 #context .icon.activated,
 #context .activated .icon {
   background-position-x: calc(var(--sprite-block-size) * -1);
+}
+
+
+ul#resources {
+  position: fixed;
+  right: 0;
+  margin: .5em 1em 0 0;
+  padding: 0;
+  font-family: 'StarDust Bold', sans-serif;
+  color: #4caf50;
+  display: flex;
+}
+
+#resources li {
+  display: inline-block;
+  list-style: none;
+  margin-right: 3em;
+  display: flex;
+  align-items: center;
+}
+
+#resources .icon {
+  position: inherit;
+  display: inline-block;
+  margin: 0 6px 0 0;
+  --sprite-block-size: 16px;
+  width: var(--sprite-block-size);
+  height: var(--sprite-block-size);
+  background: url('../img/context.png');
+  background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+  background-repeat: no-repeat;
+  /* image-rendering: pixelated; */
+  padding: 0px;
+  outline: none;
+  animation: none;
+  outline: 2px solid #303F9F;
+  background-color: #E8EAF6;
+}
+
+#resources .icon.iconcat {
+  background-position: calc(var(--sprite-block-size) * 0)calc(var(--sprite-block-size) * 0);
+}
+
+#resources .icon.mineral {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -3);
 }

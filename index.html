@@ -45,6 +45,11 @@
     <h1></h1>
     <h1 id="type"></span></h1>
 
+    <ul id="resources">
+      <li id="minerals"><span class="icon mineral"></span><span class="val"></span></li>
+      <li id="supplies"><span class="icon iconcat"></span><span class="val"></span></li>
+    </ul>
+
     <!-- <div class="copyright">
       © 2023 - <span id="year"></span> </script> C3VA <br>
     </div> -->
@@ -54,7 +59,7 @@
 
   <div id="inside_page"><span class="tag">#퇴근_시간을_알려주는_고양이</span></div>
 
-  <section id="book">
+  <section id="book" class="pisces">
     <div id="page_1" class="pages">
       <!-- <h2><span class="msg"></span><span class="dday"></span></h2> -->
 
@@ -65,18 +70,19 @@
       <section id="setting">
         <div style="font-weight:bold;">
           <span>출근 <input type="time" id="work_start" value="08:30" required /> </span>
+          <!-- <span>월급날 <input type="date" id="payday" required /> </span> -->
+        </div>
+        <div style="font-weight:bold;">
           <span>퇴근 <input type="time" id="work_final" value="17:30" required /> </span>
-          <span>월급날 <input type="date" id="payday" required /> </span>
         </div>
         <div>
-          테스트 버튼
           <button class="material-symbols-outlined" title="퇴근 4 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 4)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_frustrated</button>
           <button class="material-symbols-outlined" title="퇴근 1 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_satisfied</button>
-          <button class="material-symbols-outlined split" title="퇴근이면 정말 좋겠네" onclick="p.set('work_final', `${('0' + (new Date().getHours() - 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_excited</button> /
-          <button class="material-symbols-outlined" title="월급 1 일 전" onclick="p.set('payday', `${('0' + (new Date().getDate() + 1)).slice(-2)}`); p.set_push();">paid</button>
-          <button class="material-symbols-outlined split" title="월급날" onclick="p.set('payday', `${('0' + (new Date().getDate())).slice(-2)}`); p.set_push();">sentiment_excited</button> /
-          <button class="material-symbols-outlined" title="평일" onclick="IS_WEEKDAYS = true; p.set_push();">date_range</button>
-          <button class="material-symbols-outlined" title="주말" onclick="IS_WEEKDAYS = false; p.set_push();">event</button>
+          <button class="material-symbols-outlined split" title="퇴근이면 정말 좋겠네" onclick="p.set('work_final', `${('0' + (new Date().getHours() - 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_excited</button>
+          <!-- <button class="material-symbols-outlined" title="월급 1 일 전" onclick="p.set('payday', `${('0' + (new Date().getDate() + 1)).slice(-2)}`); p.set_push();">paid</button> -->
+          <!-- <button class="material-symbols-outlined split" title="월급날" onclick="p.set('payday', `${('0' + (new Date().getDate())).slice(-2)}`); p.set_push();">sentiment_excited</button> / -->
+          <!-- <button class="material-symbols-outlined" title="평일" onclick="IS_WEEKDAYS = true; p.set_push();">date_range</button> -->
+          <!-- <button class="material-symbols-outlined" title="주말" onclick="IS_WEEKDAYS = false; p.set_push();">event</button> -->
         </div>
       </section>
     </div>

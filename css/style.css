@@ -150,11 +150,13 @@ header #type {
 
 #book {
   margin: auto;
-  display: flex;
-  perspective: 1000px;
   z-index: 10;
-  position: relative;
+  position: absolute;
   width: fit-content;
+  height: fit-content;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 footer {

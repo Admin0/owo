@@ -1,14 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&display=swap');
 
-::selection {
-    /* background: transparent; */
-}
-
 .info-window {
     font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif;
     position: absolute;
     background-color: #fff;
-    color: #4caf50;
     font-size: 10px;
     margin-left: 8px;
     margin-top: -2px;
@@ -24,7 +19,20 @@
 .info-window table th,
 .info-window table td {
     border: 2px dashed #4caf50;
+    color: #4caf50;
     padding: 2px 4px;
+}
+
+.pisces+.info-window table th,
+.pisces+.info-window table td {
+    border-color: #FFC107;
+    color: #FFC107;
+}
+
+.yarnball+.info-window table th,
+.yarnball+.info-window table td {
+    border-color: #FF5722;
+    color: #FF5722;
 }
 
 .info-window table th:nth-child(1) {
@@ -46,13 +54,22 @@
     --sprite-block-size: 64px;
 }
 
+body.dev_mode .cat,
 body.dev_mode .pisces {
     outline: 2px dashed #FFC107;
     border-radius: 4px;
 }
 
+body.dev_mode .yarnball {
+    outline-color: #FF5722;
+}
+
 body.dev_mode .cat {
     outline-color: #4caf50;
+}
+
+body.dev_mode .info-window {
+    display: inherit;
 }
 
 .cat.left {
@@ -193,12 +210,7 @@ body.dev_mode .cat {
 
 
 
-.fish,
-.goldfish,
-.cucumber,
-.mineral,
-.random,
-.ball {
+.pisces {
     background: url('../img/fish.png');
     position: absolute;
     width: var(--sprite-block-size);
@@ -206,11 +218,15 @@ body.dev_mode .cat {
     z-index: 10;
     cursor: pointer;
 
-    background-size: calc(4 * var(--sprite-block-size)) calc(4 * var(--sprite-block-size));
+    background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
     image-rendering: pixelated;
     --sprite-block-size: 64px;
 
     animation: fish .125s steps(1);
+}
+
+.pisces.right {
+    transform: scaleX(-1);
 }
 
 @keyframes fish {
@@ -270,46 +286,125 @@ body.dev_mode .cat {
 
 .mineral {
     animation: mineral .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -1);
+    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
 
 }
 
 @keyframes mineral {
     from {
-        background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * -1);
+        background-position-x: calc(var(--sprite-block-size) * -1);
     }
 
     to {
-        background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -1);
+        background-position-x: calc(var(--sprite-block-size) * 0);
     }
 }
 
 .mineral.drag {
-    background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * -1);
+    background-position-x: calc(var(--sprite-block-size) * -1);
 
 }
 
-.ball {
-    animation: ball .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
 
+.richmineral {
+    animation: richmineral .125s steps(1);
+    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -2);
 }
 
-@keyframes ball {
+@keyframes richmineral {
     from {
-        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -2);
+        background-position-x: calc(var(--sprite-block-size) * -3);
     }
 
     to {
-        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
+        background-position-x: calc(var(--sprite-block-size) * -2);
     }
 }
 
-.ball.drag {
-    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -2);
+.richmineral.drag {
+    background-position-x: calc(var(--sprite-block-size) * -3);
 
 }
 
+.raremineral {
+    animation: raremineral .125s steps(1);
+    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -3);
+}
+
+@keyframes raremineral {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * -1);
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * 0);
+    }
+}
+
+.raremineral.drag {
+    background-position-x: calc(var(--sprite-block-size) * -1);
+
+}
+
+.richraremineral {
+    animation: richraremineral .125s steps(1);
+    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -3);
+}
+
+@keyframes richraremineral {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * -3);
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * -2);
+    }
+}
+
+.richraremineral.drag {
+    background-position-x: calc(var(--sprite-block-size) * -3);
+
+}
+
+.yarnball {
+    animation: yarnball .125s steps(1);
+    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -4);
+
+}
+
+@keyframes yarnball {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * -1)
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * 0);
+    }
+}
+
+.yarnball.drag {
+    background-position-x: calc(var(--sprite-block-size) * -1);
+
+}
+
+.yarnball.move {
+    animation: yarnball_roll .5s steps(4) infinite;
+}
+
+@keyframes yarnball_roll {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * 0)
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * -4);
+    }
+}
+
+
+/*
+ * 고양이 울음 소리 말풍선
+ */
 .meow {
     font-family: 'Pixelify Sans', sans-serif;
     position: absolute;

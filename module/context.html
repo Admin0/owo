@@ -1,7 +1,7 @@
 <ul class="">
-  <li class="" onclick="$('#setting, #setting_bg').toggleClass('on');$('#setting').css({ 'top': $('#context').offset().top - pageYOffset, 'left': $('#context_menu').offset().left});$('#context_menu').removeClass('on');">
-    <span class="icon"></span><span>설정</span>
-    <span class="shortcut">S</span>
+  <li class="" onclick="p.settingOn();">
+    <span class="icon"></span><span>타이머 설정</span>
+    <span class="shortcut">T</span>
   </li>
 </ul>
 <ul>
@@ -24,7 +24,13 @@
         <li class="" onclick="context.skill.summonMassiveCats(10); context.skill.summonAll(25);"><span>"고마 쓰까서 소환해 주이소."</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="for (let i = 0; i < 10; i++) { pisces.push(new Fish().setType('ball')); }"> <span>공 던지기</span> </li>
+        <li class="" onclick="context.skill.summonMassiveYarnballs(10)"> <span>공 뿌리기</span> </li>
+      </ul>
+      <ul>
+        <li class="" onclick="context.skill.clearAllPisces();"> <span>물건 치우기</span> </li>
+      </ul>
+      <ul>
+        <li class="" onclick="p.resources.minerals += 10000; p.updateResources();"> <span>Show me the money</span> </li>
       </ul>
     </section>
   </li>
@@ -34,59 +40,11 @@
     <li class="skill icon fish" onclick="context.setSkill('fish')"><span>생선</span></li>
     <li class="skill icon cucumber" onclick="context.setSkill('cucumber')"><span>오이</span></li>
     <li class="skill icon mineral" onclick="context.setSkill('mineral')"><span>미네랄</span></li>
-    <li class="skill icon ball" onclick="context.setSkill('ball')"><span>공</span></li>
+    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')"><span>공</span></li>
   </ul>
 </ul>
 <ul class="">
-  <li class=" disabled" onclick="setTimeout(function(){window.print();},300);">
-    <span class="icon cat"></span><span>인쇄</span>
-    <span class="shortcut">Ctrl + P</span>
-  </li>
-</ul>
-<ul class="">
-  <li class=" disabled" onclick="load('notice');">
-    <span class="icon"></span><span>도움말</span>
-    <span class="shortcut">F1</span>
-  </li>
-  <li class="" onclick="">
-    <span class="icon"></span><span>리뷰남기기</span>
-    <span style="position:absolute; right:1em;">▸</span>
-    <section class="context">
-      <ul>
-        <li class="" onclick='context.skill.summonMassiveCats(10);'> <span>길냥이 부르기</span> </li>
-      </ul>
-      <ul>
-        <li class="" onclick='context.skill.summonMassiveFishs(100);'> <span>생선 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveCucumbers(100);'> <span>오이 대량 소환</span> </div>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveMinerals(100);'> <span>광물 대량 소환</span> </li>
-        <li class="" onclick='context.skill.summonMassiveCats(10); context.skill.summonAll(25);'><span>"고마 쓰까서 소환해 주이소."</span> </li>
-      </ul>
-      <ul>
-        <li class="" onclick='context.skill.clearMeow();'><span>(디버그) 환청 제거</span> </li>
-      </ul>
-    </section>
-  </li>
-</ul>
-<ul class="">
-  <li class=" disabled" onclick="">
-    <span class="icon"></span><span>#버킷리스트 바로가기</span>
-    <span class="shortcut"></span>
-  </li>
-  <li class=" disabled" onclick="$('#main_item').load('opensource_license.html',function(){after_load('opensource_license');});$('#context_menu').removeClass('on');">
-    <span class="icon"></span><span>오픈소스 라이선스</span>
-    <span class="shortcut"></span>
-  </li>
-  <li class=" disabled" onclick="$('#main_item').load('update_log.html',function(){after_load('update_log');});$('#context_menu').removeClass('on');">
-    <span class="icon"></span><span>업데이트 기록</span>
-    <span class="shortcut"></span>
+  <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank')">
+    <span class="icon"></span><span>버킷리스트 바로가기</span>
   </li>
 </ul>

@@ -25,25 +25,71 @@ const context = {
         return localStorage.getItem('dev_mode') == 'true' ? true : false;
     },
     skill: {
+        summonCat(pos) {
+            if (p.resources.supplies < p.resources.suppliesMax) {
+                cats.push(new Cat(pos));
+                p.updateResources();
+            } else {
+                console.log('보급고가 부족합니다.');
+            }
+        },
         summonMassiveCats(n) {
             for (let i = 0; i < n; i++) {
-                cats.push(new Cat());
-                if (context.getDevMode()) cats[cats.length - 1].infoWindow.style.display = 'block';
+                this.summonCat();
+            }
+        },
+        summonFish(pos) {
+            const cost = 1;
+            if (p.resources.minerals - cost >= 0) {
+                p.resources.minerals -= cost;
+                pisces.push(new Fish(pos).setType('fish'));
+                p.updateResources();
+            } else {
+                console.log('광물이 부족합니다.');
             }
         },
         summonMassiveFishs(n) {
             for (let i = 0; i < n; i++) {
-                pisces.push(new Fish().setType('fish'));
+                this.summonFish();
             }
+        },
+        summonCucumber(pos) {
+            cats.push(new Fish(pos).setType('cucumber'));
+            p.updateResources();
         },
         summonMassiveCucumbers(n) {
             for (let i = 0; i < n; i++) {
                 pisces.push(new Fish().setType('cucumber'));
             }
         },
+        summonMineral(pos) {
+            const cost = 0;
+            if (p.resources.minerals - cost >= 0) {
+                p.resources.minerals -= cost;
+                pisces.push(new Fish(pos).setType('mineral'));
+                p.updateResources();
+            } else {
+                console.log('광물이 부족합니다.');
+            }
+        },
         summonMassiveMinerals(n) {
             for (let i = 0; i < n; i++) {
-                pisces.push(new Fish().setType('mineral'));
+                this.summonMineral()
+            }
+        },
+        summonYarnball(pos) {
+            const cost = 50;
+            if (p.resources.minerals - cost >= 0) {
+                p.resources.minerals -= cost;
+                pisces.push(new Fish(pos).setType('yarnball'));
+                p.updateResources();
+            } else {
+                console.log('광물이 부족합니다.');
+            }
+        },
+        summonMassiveYarnballs(n) {
+            for (let i = 0; i < n; i++) {
+                this.summonYarnball();
             }
         },
         summonAll(n) {
@@ -53,10 +99,9 @@ const context = {
                 pisces.push(new Fish().setType('mineral'));
             }
         },
-        clearMeow() {
-            cats.forEach(e => {
-                e.meow != undefined ? e.meow.remove() : false;
-            });
+        clearAllPisces() {
+            pisces.forEach(fish => { fish.remove(); });
+            pisces.length = 0;
         }
     },
     setSkill(skill = localStorage.skill) {
@@ -84,7 +129,8 @@ const context = {
      * @param {Event} e - 컨텍스트 메뉴를 트리거한 이벤트입니다.
      */
     showContext(e) {
-        if (!is_mobile) {
+        // if (!is_mobile) {
+        if (true) {
             // 컨텍스트 메위 생성 위치 계산
             const rect = context.element.getBoundingClientRect();
             context.x = window.innerWidth - rect.width > e.pageX ? e.pageX : window.innerWidth - rect.width;

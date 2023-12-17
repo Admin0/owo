@@ -54,6 +54,24 @@ const p = {
   lunch_start: '12:00',
   lunch_final: '13:00',
   payday: function () { return this.has('payday') ? this.get('payday') : S('payday') != null ? S('payday') : '25' },
+
+  settingOn() {
+    const s = $('#setting');
+    s.style.height = !s.classList.contains('on') ? `${s.scrollHeight}px` : 0;
+    s.classList.toggle('on');
+    $('#setting_bt').classList.toggle('on');
+  },
+
+  resources: {
+    minerals: 50,
+    supplies: 0,
+    suppliesMax: 12
+  },
+  updateResources() {
+    document.querySelector('#minerals .val').textContent = this.resources.minerals;
+    this.resources.supplies = cats.length;
+    document.querySelector('#supplies .val').textContent = `${this.resources.supplies}/${this.resources.suppliesMax}`;
+  }
 }
 
 p.work_start = p.work_start();
@@ -79,7 +97,7 @@ cats.forEach(cat => {
 const pisces = [];
 
 document.addEventListener('mousedown', (event) => {
-  const catElements = document.querySelectorAll('.pisces, #book, #context, footer');
+  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만
@@ -90,23 +108,22 @@ document.addEventListener('mousedown', (event) => {
     }
     switch (S('skill')) {
       case 'cat':
-        cats.push(new Cat(pos));
-        if (context.getDevMode()) cats[cats.length - 1].infoWindow.style.display = 'block';
+        context.skill.summonCat(pos);
         break;
       case 'fish':
-        pisces.push(new Fish(pos).setType('fish'));
+        context.skill.summonFish(pos);
         break;
       case 'cucumber':
-        pisces.push(new Fish(pos).setType('cucumber'));
+        context.skill.summonCucumber(pos);
         break;
       case 'mineral':
-        pisces.push(new Fish(pos).setType('mineral'));
+        context.skill.summonMineral(pos);
         break;
       case 'random':
         pisces.push(new Fish(pos));
         break;
-      case 'ball':
-        pisces.push(new Fish(pos).setType('ball'));
+      case 'yarnball':
+        context.skill.summonYarnball(pos);
         break;
       default:
         break;
@@ -127,10 +144,7 @@ $('#setting input#work_final').value = p.work_final;
 $('#setting input#payday').value = `${p.date.yyyy}-${p.date.mm + 1}-${p.payday}`;
 
 $('#setting_bt').addEventListener("click", (e) => {
-  const s = $('#setting');
-  s.style.height = !s.classList.contains('on') ? `${s.scrollHeight}px` : 0;
-  s.classList.toggle('on');
-  $('#setting_bt').classList.toggle('on');
+  p.settingOn();
 });
 $('#setting input').forEach((e) => {
   e.addEventListener("change", (e) => {
@@ -141,7 +155,13 @@ $('#setting input').forEach((e) => {
   });
 });
 
-document.addEventListener('mousedown', (e) => { e.preventDefault(); });
+p.updateResources();
+
+document.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  p.updateResources();
+});
+
 
 context.setDevMode();
 context.setSkill();
