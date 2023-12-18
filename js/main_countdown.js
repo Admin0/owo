@@ -107,6 +107,7 @@ class Countdown {
     getMins(full_length = true) { return full_length ? this.toFullLength(this.time_fragment.m) : this.time_fragment.m }
     getSecs(full_length = true) { return full_length ? this.toFullLength(this.time_fragment.s) : this.time_fragment.s }
     getcSecs(full_length = true) { return full_length ? this.toFullLength(this.time_fragment.c) : this.time_fragment.c }
+
     isIgnited() { return this.time_fragment.STD <= 0 }
 
     /**
@@ -133,13 +134,27 @@ class Countdown {
             { key: this.target.querySelector('.num_s'), val: T.s },
             { key: this.target.querySelector('.num_c'), val: T.c },
         ].slice(timer_head_index, timer_tail_index).forEach((e, i) => {
-            e.key.textContent = this.toFullLength(e.val);
-            if (e.key.textContent != e.val) {
-                e.key.classList.remove('on');
-            } else {
+            const fullLengthValue = this.toFullLength(e.val);
+            if (e.key.textContent != fullLengthValue) {
                 e.key.classList.add('on');
+                e.key.textContent = fullLengthValue;
+
+                // 값이 바뀌면 0.25초 후에 'on' 클래스를 확인하고 삭제 / 단, 센티초는 계속 켜짐
+                if (e.key != this.target.querySelector('.num_c')) {
+                    setTimeout(() => {
+                        e.key.classList.remove('on');
+                    }, 250);
+                }
+            } else {
+                // 값이 바뀌지 않으면 센티초의 경우에 'on' 클래스 제거
+                if (e.key == this.target.querySelector('.num_c')) {
+                    setTimeout(() => {
+                        e.key.classList.remove('on');
+                    }, 250);
+                }
             }
         });
+
         this.timeout = setTimeout(() => this.start(), 10);
 
         return this;
@@ -147,6 +162,10 @@ class Countdown {
     /**
      * 타이머를 종료합니다.
      */
-    stop() { clearTimeout(this.timeout); return this; }
+    stop() {
+        clearTimeout(this.timeout);
+        console.log('countdown is stopped');
+        return this;
+    }
 
 }

@@ -1,0 +1,54 @@
+/* 모바일 스타일 */
+@media only screen and (max-width: 768px) {
+  #context {
+    top: 0 !important;
+    left: -350px !important;
+    height: 100%;
+    overflow-y: auto;
+    line-height: 2;
+    transform: none;
+    visibility: visible;
+    opacity: 1;
+    transition-property: left;
+    box-shadow: none;
+    margin-top: 0;
+  }
+
+  #context ul li {
+    flex-wrap: wrap;
+  }
+
+  /* #context ul li:not(.disabled):hover .context,
+  .context:hover {
+    opacity: 0;
+    visibility: hidden;
+  } */
+
+  #context.on {
+    left: 0 !important;
+    top: 0 !important;
+    max-width: calc(100% - 5em);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, .25);
+  }
+
+  .context {
+    position: relative !important;
+    width: calc(100% + 5em) !important;
+    /* white-space: nowrap; */
+    top: 0 !important;
+    left: 0 !important;
+    height: 0 !important;
+    border: none;
+    background-color: rgba(0, 0, 0, .05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .25) inset;
+  }
+
+  .context.on {
+    visibility: visible;
+    opacity: 1;
+    height: fit-content !important;
+    margin-top: 1em;
+    max-width: calc(100% + 5em);
+  }
+
+}

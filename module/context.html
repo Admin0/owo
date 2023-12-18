@@ -1,17 +1,17 @@
 <ul class="">
   <li class="" onclick="p.settingOn();">
     <span class="icon"></span><span>타이머 설정</span>
-    <span class="shortcut">T</span>
+    <!-- <span class="shortcut">T</span> -->
   </li>
 </ul>
 <ul>
   <li class="dev_mode" onclick="context.setDevMode(true)">
     <span class="icon cat"></span><span>개발자 모드</span>
-    <span class="shortcut">D</span>
+    <!-- <span class="shortcut">D</span> -->
   </li>
-  <li>
+  <li class="sub">
     <span class="icon"></span><span>스킬</span>
-    <span class="shortcut">S</span>
+    <!-- <span class="shortcut">S</span> -->
     <span style="position:absolute; right:1em;">▸</span>
     <section class="context">
       <ul>
@@ -31,11 +31,12 @@
       </ul>
       <ul>
         <li class="" onclick="p.resources.minerals += 10000; p.updateResources();"> <span>Show me the money</span> </li>
+        <li class="" onclick="p.resources.suppliesMax = 200; p.updateResources();"> <span>Food for thought</span> </li>
       </ul>
     </section>
   </li>
   <ul class="skill_wrap">
-    <li class="skill icon cat" onclick="context.setSkill('cat')"><span>냥이</span></li>
+    <li class="skill icon cat" onclick="context.setSkill('cat')" title="고양이를 소환합니다."><span>냥이</span></li>
     <li class="skill icon random" onclick="context.setSkill('random')"><span>랜덤</span></li>
     <li class="skill icon fish" onclick="context.setSkill('fish')"><span>생선</span></li>
     <li class="skill icon cucumber" onclick="context.setSkill('cucumber')"><span>오이</span></li>

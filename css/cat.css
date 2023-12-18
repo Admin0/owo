@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&display=swap');
 
 .info-window {
-    font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif;
+    /* font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif; */
     position: absolute;
     background-color: #fff;
     font-size: 10px;
@@ -13,7 +13,7 @@
 .info-window table {
     border-collapse: collapse;
     border-spacing: 0;
-    width: 150px;
+    width: 175px;
 }
 
 .info-window table th,

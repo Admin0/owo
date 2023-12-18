@@ -33,7 +33,7 @@ class Cat {
         this.element.addEventListener('touchstart', (event) => this.startDragging({
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
-        }));
+        }), { passive: true });
         document.addEventListener('touchmove', (event) => this.drag({
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
@@ -61,7 +61,7 @@ class Cat {
         return this;
     }
 
-    initialize(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 64) + 32 }, skin) {
+    initialize(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }, skin) {
         // 초기 위치 랜덤 설정
         const rect = this.element.getBoundingClientRect();
         const maxX = window.innerWidth - rect.width;
@@ -213,6 +213,7 @@ class Cat {
 
         // 드래그 클래스 추가
         this.element.classList.add('drag');
+        this.setMeow('Hoe?');
     }
 
     drag(event) {
@@ -255,6 +256,26 @@ class Cat {
         this.startMoving();
     }
 
+    // 야옹 소리를 내는 메서드
+    setMeow(mmm) {
+        const rect = this.element.getBoundingClientRect();
+        if (this.meow != null) { this.meow.remove(); }
+        this.meow = document.createElement('div');
+        this.meow.className = 'meow';
+        document.body.appendChild(this.meow);
+        this.meow.innerHTML = mmm;
+        this.updateInfoWindow();
+
+        const meowRect = this.meow.getBoundingClientRect();
+        this.meow.style.left = `${rect.left + rect.width / 2 - meowRect.width / 2}px`;
+        this.meow.style.top = `${rect.top}px`;
+
+        // 일정 시간 후 삭제
+        setTimeout(() => { this.meow.remove(); }, 2000);
+
+        return this;
+    }
+
     handleWindowResize() {
         const rect = this.element.getBoundingClientRect();
         const maxX = window.innerWidth - rect.width;
@@ -286,7 +307,7 @@ class Cat {
         // 고양이 정보 추가
         tableHTML += addRowToTable('type', `${this.skin}`);
         tableHTML += addRowToTable('position', `x: ${Math.floor(this.position.x)}, y: ${Math.floor(this.position.y)}`);
-        tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(2)}, a: ${this.angle.toFixed(2)}`);
+        tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(1)}, a: ${this.angle.toFixed(1)}`);
         tableHTML += addRowToTable('move', this.isMoving ? this.speed > 3 ? 'run' : 'walk' : 'stop');
 
         // 현재 고양이 객체의 클래스 리스트 가져오기
@@ -306,7 +327,7 @@ class Cat {
 }
 
 class Fish {
-    constructor(pos = { x: Math.random() * (window.innerWidth - 64) + 32, y: Math.random() * (window.innerHeight - 64) + 32 }) {
+    constructor(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         this.element = document.createElement('div');
         this.element.className = 'pisces';
         document.body.appendChild(this.element);
@@ -350,7 +371,7 @@ class Fish {
         this.element.addEventListener('touchstart', (event) => this.startDragging({
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
-        }));
+        }), { passive: true });
         document.addEventListener('touchmove', (event) => this.drag({
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
@@ -509,23 +530,6 @@ class Fish {
             const catPosition = { x: catRect.left, y: catRect.top }
             const distance = this.calculateDistance(this.getPosition(), catPosition);
 
-            // 야옹 소리를 내는 함수
-            function meow(cat, mmm) {
-                if (cat.meow != null) { cat.meow.remove(); }
-                cat.meow = document.createElement('div');
-                cat.meow.className = 'meow';
-                document.body.appendChild(cat.meow);
-                cat.meow.innerHTML = mmm;
-                cat.updateInfoWindow();
-
-                const meowRect = cat.meow.getBoundingClientRect();
-                cat.meow.style.left = `${catRect.left + catRect.width / 2 - meowRect.width / 2}px`;
-                cat.meow.style.top = `${catRect.top}px`;
-
-                // 일정 시간 후 삭제
-                setTimeout(() => { cat.meow.remove(); }, 2000);
-            }
-
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 고양이와 생선을 옮길때는 이벤트 제외
             if (distance < 32 && !cat.element.classList.contains('drag') && !this.element.classList.contains('drag')) {
@@ -535,7 +539,7 @@ class Fish {
                         // 생선을 먹는 움직임
                         cat.toggleMovement('lick');
                         // 야옹거리는 동작
-                        meow(cat, 'Meow ♥️');
+                        cat.setMeow('setMeow ♥️');
                         // 생선 객체 삭제
                         this.remove();
                         break;
@@ -543,7 +547,7 @@ class Fish {
                         // 오이를 먹는 움직임
                         cat.toggleMovement('surprised');
                         // 야옹거리는 동작
-                        meow(cat, 'Grrrr!');
+                        cat.setMeow('Grrrr!');
                         // 오이 객체 삭제
                         this.remove();
                         break;
@@ -560,7 +564,7 @@ class Fish {
                         // 오이를 먹는 움직임
                         cat.toggleMovement('surprised');
                         // 야옹거리는 동작
-                        meow(cat, 'Grrrr!');
+                        cat.setMeow('Grrrr!');
                         // 오이 객체 삭제
                         this.remove();
                         break;
@@ -568,7 +572,7 @@ class Fish {
                         // 공이랑 부딪히면 고양이는 멈춤
                         cat.toggleMovement();
                         // 야옹거리는 동작
-                        meow(cat, 'Nyaa!');
+                        cat.setMeow('Nyaa!');
 
                         // 공 움직임 시작
                         this.startMoving();
@@ -680,9 +684,9 @@ class Fish {
         tableHTML += addRowToTable('type', `${this.type}`);
         tableHTML += addRowToTable('position', `x: ${Math.floor(this.position.x)}, y: ${Math.floor(this.position.y)}`);
         if (this.speed != null) {
-            tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(2)}, a: ${this.angle.toFixed(2)}`);
+            tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(1)}, a: ${this.angle.toFixed(1)}`);
         } else {
-            tableHTML += addRowToTable('vector', `v: ---, a: ---`);
+            tableHTML += addRowToTable('vector', `v: -.-, a: -.-`);
         }
 
         // 현재 생선 객체의 클래스 리스트 가져오기

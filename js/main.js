@@ -7,19 +7,6 @@ const time = new Time();
 // 모바일에서 접속했는지 확인
 const is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// ajax load
-function load(element, module) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.onload = function () {
-    document.querySelector(element).innerHTML = this.responseText;
-  }
-  xhttp.open("GET", module, true);
-  xhttp.send();
-}
-
-// 컨텍스트 메뉴 로드
-load("#context", "./module/context.html");
-
 tag_manager(document.querySelector("#inside_page"), 2013);
 // time.log("set_tags");
 
@@ -121,6 +108,7 @@ document.addEventListener('mousedown', (event) => {
         break;
       case 'random':
         pisces.push(new Fish(pos));
+        context.setMessage('아무거나 소환했습니다.')
         break;
       case 'yarnball':
         context.skill.summonYarnball(pos);
@@ -162,7 +150,7 @@ document.addEventListener('mousedown', (e) => {
   p.updateResources();
 });
 
-
+const context = new Context();
 context.setDevMode();
 context.setSkill();
 // localStorage.skill = 'undefined';
