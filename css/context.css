@@ -204,7 +204,7 @@ ul#resources {
   --sprite-block-size: 16px;
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
-  background: url('../img/context.png');
+  background: url('./img/context.png');
   background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
   background-repeat: no-repeat;
   /* image-rendering: pixelated; */

@@ -23,7 +23,7 @@ class Context {
         document.body.appendChild(this.element);
 
         // 컨텍스트 메뉴 로드
-        this.setElement(this.element, "../module/context.html")
+        this.setElement(this.element, "./module/context.html")
 
         // this.element = document.querySelector(selector);
         this.sub = { element: null }
