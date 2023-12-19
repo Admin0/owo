@@ -42,13 +42,6 @@ const p = {
   lunch_final: '13:00',
   payday: function () { return this.has('payday') ? this.get('payday') : S('payday') != null ? S('payday') : '25' },
 
-  settingOn() {
-    const s = $('#setting');
-    s.style.height = !s.classList.contains('on') ? `${s.scrollHeight}px` : 0;
-    s.classList.toggle('on');
-    $('#setting_bt').classList.toggle('on');
-  },
-
   resources: {
     minerals: 50,
     supplies: 0,
@@ -121,9 +114,9 @@ document.addEventListener('mousedown', (event) => {
 });
 
 
-/**
- * SETTINGS
- */
+// SETTINGS
+const settings = new Settings();
+
 localStorage.setItem("work_start", p.work_start);
 localStorage.setItem("work_final", p.work_final);
 localStorage.setItem("payday", p.payday);
@@ -132,13 +125,13 @@ $('#setting input#work_final').value = p.work_final;
 $('#setting input#payday').value = `${p.date.yyyy}-${p.date.mm + 1}-${p.payday}`;
 
 $('#setting_bt').addEventListener("click", (e) => {
-  p.settingOn();
+  settings.showSettings();
 });
-$('#setting input').forEach((e) => {
+$('#settings input').forEach((e) => {
   e.addEventListener("change", (e) => {
-    p.set('work_start', $('#setting input#work_start').value);
-    p.set('work_final', $('#setting input#work_final').value);
-    p.set('payday', $('#setting input#payday').value.substring(8, 10));
+    p.set('work_start', $('#settings input#work_start').value);
+    p.set('work_final', $('#settings input#work_final').value);
+    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
     p.set_push();
   });
 });
@@ -149,10 +142,16 @@ document.addEventListener('mousedown', (e) => {
   e.preventDefault();
   p.updateResources();
 });
+document.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  p.updateResources();
+}, { passive: true });
 
+// CONTEXT MENU
 const context = new Context();
 context.setDevMode();
 context.setSkill();
+
 // localStorage.skill = 'undefined';
 
 time.log('activated');

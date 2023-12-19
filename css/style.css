@@ -208,8 +208,15 @@ footer img {
 }
 
 #messages {
+  z-index: 15;
   position: fixed;
   bottom: 0;
   margin: 1em;
   color: #4caf50;
+}
+
+@media only screen and (max-width: 768px) {
+  #messages {
+    font-size: 12px;
+  }
 }

@@ -105,9 +105,9 @@
   padding-left: 3em;
 }
 
-#context .icon {
+#context .icon,
+#settings .icon {
   position: inherit;
-  margin: 0 12px 0 0;
   --sprite-block-size: 32px;
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
@@ -119,6 +119,10 @@
   padding: 0px;
   outline: none;
   animation: none;
+}
+
+#context .icon {
+  margin: 0 12px 0 0;
 }
 
 #context .skill {
@@ -178,7 +182,9 @@
   background-position-x: calc(var(--sprite-block-size) * -1);
 }
 
-
+/**
+ * RESOURCES
+ */
 ul#resources {
   position: fixed;
   right: 0;
@@ -200,16 +206,15 @@ ul#resources {
 #resources .icon {
   position: inherit;
   display: inline-block;
-  margin: 0 6px 0 0;
   --sprite-block-size: 16px;
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
-  background: url('./img/context.png');
+  background: url('../img/context.png');
   background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
   background-repeat: no-repeat;
   /* image-rendering: pixelated; */
+  margin: 0 6px 0 0;
   padding: 0px;
-  outline: none;
   animation: none;
   outline: 2px solid #303F9F;
   background-color: #E8EAF6;
@@ -221,4 +226,86 @@ ul#resources {
 
 #resources .icon.mineral {
   background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -3);
+}
+
+/**
+ * SETTINGS
+ */
+
+#setting_bt {
+  right: 1em;
+  color: rgba(0, 0, 0, .25);
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  cursor: pointer;
+  padding: 0.25em;
+  font-size: 18px;
+  margin: -18px -18px 0 0;
+  border-radius: 50%;
+  position: absolute;
+}
+
+#setting_bt.on {
+  color: #FBC02D;
+}
+
+#settings {
+  background: #fff;
+  /* display: none; */
+  height: 0;
+  opacity: 0;
+  transition: .5s;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+#settings.on {
+  display: inherit;
+  opacity: 1;
+  border-top: 1px solid #ddd;
+  visibility: visible;
+}
+
+#settings div {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+}
+
+#settings .icon {
+  border: 1px solid silver;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#settings .icon.on {
+  font-weight: bold;
+  color: #FF5722;
+}
+
+#settings .icon:not(:last-child) {
+  margin-right: .5em;
+}
+
+#settings .icon.enf {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -2);
+}
+
+#settings .icon.enf.on {
+  background-position-x: calc(var(--sprite-block-size) * -3);
+}
+
+#settings .icon.tk {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -1);
+}
+
+#settings .icon.tk.on {
+  background-position-x: calc(var(--sprite-block-size) * -3);
+}
+
+#settings .icon.jw {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * 0);
+}
+
+#settings .icon.jw.on {
+  background-position-x: calc(var(--sprite-block-size) * -3);
 }

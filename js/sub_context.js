@@ -34,6 +34,7 @@ class Context {
         this.messages.id = 'messages';
         document.body.appendChild(this.messages);
     }
+
     setMessage(string) {
         const d = new Date();
         const z = number => (number < 10 ? '0' : '') + number;
@@ -134,7 +135,7 @@ class Context {
                 const cost = 50;
                 if (p.resources.minerals - cost >= 0) {
                     p.resources.minerals -= cost;
-                    pisces.push(new Fish(pos).setType('yarnball'));
+                    pisces.push(new Fish(pos).setType('yarnball').startSliding());
                     parent.setMessage('털실 공을 소환했습니다.');
                     p.updateResources();
                 } else {
@@ -234,7 +235,10 @@ class Context {
             }, { once: true });
 
             sub_context.parentElement.addEventListener('click', (e) => {
-                e.target.querySelector('section.context').classList.toggle('on');
+                const check_is_not_null = e.target.querySelector('section.context');
+                if (check_is_not_null != null) {
+                    check_is_not_null.classList.toggle('on');
+                }
             })
         });
     }
@@ -250,7 +254,7 @@ document.addEventListener("contextmenu", (e) => {
 
 document.addEventListener("click", (e) => {
     const context = document.querySelector("#context");
-    const keepElements = document.querySelectorAll('#context .skill, #context .sub');
+    const keepElements = document.querySelectorAll('#context .skill');
     const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(e.target));
     if (document.querySelector('#context.on') != null) {
         if (isClickedOnKeeps) {
@@ -267,4 +271,34 @@ document.addEventListener("click", (e) => {
     // context.classList.remove("on");
 });
 
+class Settings {
+    constructor(settings_area = '#settings') {
+        this.setElement(document.querySelector(settings_area), './module/settings.html');
+        this.element = document.querySelector(settings_area);
+    }
 
+    setElement(element, module) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            element.innerHTML = this.responseText;
+        }
+        xhttp.open("GET", module, true);
+        xhttp.send();
+
+        // this.element = document.querySelector(selector);
+        this.sub = { element: null }
+    }
+
+    showSettings() {
+        this.element.style.height = !this.element.classList.contains('on') ? `${this.element.scrollHeight}px` : 0;
+        this.element.classList.toggle('on');
+        document.querySelector('#setting_bt').classList.toggle('on');
+    }
+
+    clickButtons(target) {
+        this.element.querySelectorAll('button').forEach((e) => {
+            e.classList.remove('on');
+        });
+        target.classList.add('on');
+    }
+}

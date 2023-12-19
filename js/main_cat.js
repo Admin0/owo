@@ -28,7 +28,7 @@ class Cat {
         // 드래그 앤 드롭 이벤트 리스너 등록
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
-        document.addEventListener('mouseup', () => this.stopDragging());
+        this.element.addEventListener('mouseup', (event) => this.stopDragging(event));
         // 모바일 이벤트 리스너 등록
         this.element.addEventListener('touchstart', (event) => this.startDragging({
             clientX: event.touches[0].clientX,
@@ -253,6 +253,7 @@ class Cat {
         // 드래그 종료 시 상태 초기화 및 이동 재개
         this.isDragging = false;
         this.element.classList.remove('drag');
+        this.toggleMovement();
         this.startMoving();
     }
 
@@ -365,8 +366,7 @@ class Fish {
         // 드래그 앤 드롭 이벤트 리스너 등록
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
-        document.addEventListener('mouseup', () => this.stopDragging());
-        // 모바일 이벤트 리스너 등록
+        this.element.addEventListener('mouseup', (event) => this.stopDragging(event));
         // 모바일 이벤트 리스너 등록
         this.element.addEventListener('touchstart', (event) => this.startDragging({
             clientX: event.touches[0].clientX,
@@ -376,7 +376,7 @@ class Fish {
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
         }));
-        document.addEventListener('touchend', () => this.stopDragging());
+        document.addEventListener('touchend', (event) => this.stopDragging(event));
 
         // 화면 크기 변경 시 이벤트
         window.addEventListener("resize", () => this.handleWindowResize());
@@ -411,6 +411,9 @@ class Fish {
     }
 
     startDragging(event) {
+        // 움직이고 있으면 움직임 종료
+        this.stopMoving();
+
         // 드래그 시작 시 위치 오프셋 설정
         this.isDragging = true;
         const rect = this.element.getBoundingClientRect();
@@ -420,15 +423,15 @@ class Fish {
         // 드래그 클래스 추가
         this.element.classList.add('drag');
 
-        if (this.type == 'yarnball') {
-            // 드래그 시작 시의 시간과 위치 저장
-            this.startDragTime = performance.now();
-            this.startDragX = event.clientX;
-            this.startDragY = event.clientY;
+        // if (this.type == 'yarnball') {
+        // 드래그 시작 시의 시간과 위치 저장
+        this.startDragTime = performance.now();
+        this.startDragX = event.clientX;
+        this.startDragY = event.clientY;
 
-            // 드래그 이력 저장
-            this.dragHistory = [];
-        }
+        // 드래그 이력 저장
+        this.dragHistory = [];
+        // }
     }
 
     drag(event) {
@@ -461,24 +464,25 @@ class Fish {
             this.element.style.top = `${this.position.y}px`;
 
             // 털실 공을 굴려보자
-            if (this.type == 'yarnball') {
-                this.lastDragX = event.clientX;
-                this.lastDragY = event.clientY;
+            // if (this.type == 'yarnball') {
+            this.lastDragX = event.clientX;
+            this.lastDragY = event.clientY;
 
-                // 드래그 이력 추가
-                this.dragHistory.push({ x: event.clientX, y: event.clientY, time: performance.now() });
-            }
+            // 드래그 이력 추가
+            this.dragHistory.push({ x: event.clientX, y: event.clientY, time: performance.now() });
+            // }
 
             this.updateInfoWindow();
         }
     }
 
-    stopDragging() {
+    stopDragging(event) {
         // 드래그 종료 시 상태 초기화 및 이동 재개
         this.isDragging = false;
         this.element.classList.remove('drag');
 
-        if (this.type == 'yarnball' && this.dragHistory != null) {
+        // if (this.type == 'yarnball' && this.dragHistory != null) {
+        if (this.dragHistory != null) {
             // 드래그 종료되기 100ms 전의 시간
             const startTime = performance.now() - 100;
 
@@ -493,13 +497,13 @@ class Fish {
             const deltaY = this.lastDragY - startPos.y;
 
             // 마우스 커서의 이동 거리를 속도로 계산
-            const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / (performance.now() - startPos.time) * 10;
+            const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / (performance.now() - startPos.time) * 9.8;
 
             // 마우스 커서의 이동 각도 계산
             const angle = Math.atan2(deltaY, deltaX);
 
             // 이동 시작
-            this.startMoving(speed, angle);
+            this.startSliding(speed, angle);
         }
     }
 
@@ -539,7 +543,7 @@ class Fish {
                         // 생선을 먹는 움직임
                         cat.toggleMovement('lick');
                         // 야옹거리는 동작
-                        cat.setMeow('setMeow ♥️');
+                        cat.setMeow('Meow ♥️');
                         // 생선 객체 삭제
                         this.remove();
                         break;
@@ -575,7 +579,7 @@ class Fish {
                         cat.setMeow('Nyaa!');
 
                         // 공 움직임 시작
-                        this.startMoving();
+                        this.startSliding();
 
                         break;
                     default:
@@ -625,7 +629,7 @@ class Fish {
      * @param {*} v velocity를 정의합니다.
      * @param {*} a angle를 정의합니다.
      */
-    startMoving(v = Math.random() * 5 + 1, a = Math.random() * 2 * Math.PI) {
+    startSliding(v = Math.random() * 5 + 1, a = Math.random() * 2 * Math.PI) {
         this.stopMoving();
 
         this.speed = v;
@@ -634,17 +638,20 @@ class Fish {
         // 일정한 간격으로 생선 이동
         this.moveFishInterval = setInterval(() => this.moveFish(), 30);
 
-        switch (this.type) {
-            case 'yarnball':
-                this.moveFishSpeedDown = setInterval(() => {
-                    this.speed = this.speed > 0 ? this.speed -= 0.01 : 0, 30;
-                    if (this.speed == 0) { this.stopMoving(); this.element.classList.remove('move'); this.updateInfoWindow(); }
-                });
-
-                break;
-            default:
-                break;
+        const getFriction = () => {
+            switch (this.type) {
+                case 'yarnball':
+                    return 0.01;
+                default:
+                    return 0.1;
+            }
         }
+        this.moveFishSpeedDown = setInterval(() => {
+            this.speed = this.speed > 0 ? this.speed -= getFriction() : 0, 30;
+            if (this.speed == 0) { this.stopMoving(); this.element.classList.remove('move'); this.updateInfoWindow(); }
+        });
+
+        return this;
     }
 
     stopMoving() {
@@ -666,7 +673,7 @@ class Fish {
     }
 
     updateInfoWindow() {
-        // 생선 정보 창 위치 설정 (고양이 옆)
+        // 생선 정보 창 위치 설정 (생선 옆)
         const catRect = this.element.getBoundingClientRect();
         this.infoWindow.style.left = `${catRect.right}px`;
         this.infoWindow.style.top = `${catRect.top}px`;

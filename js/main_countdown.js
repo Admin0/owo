@@ -125,6 +125,14 @@ class Countdown {
                     ));
             });
         }
+        if (!this.target.contains(document.querySelector('.separator'))) {
+            document.querySelectorAll('.numbox:not(:last-child)').forEach(e => {
+                const separator = Object.assign(document.createElement('span'), {
+                    className: 'separator', innerText: ':'
+                });
+                e.parentNode.insertBefore(separator, e.nextSibling);
+            });
+        }
         this.countdown(timer_head_index, timer_tail_index);
         const T = this.time_fragment;
         [

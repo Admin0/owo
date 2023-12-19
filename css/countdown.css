@@ -29,43 +29,6 @@
   box-shadow: 0px 5px 11px rgba(0, 0, 0, .25)
 }
 
-#setting_bt {
-  right: 1em;
-  color: rgba(0, 0, 0, .25);
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  cursor: pointer;
-  padding: 0.25em;
-  font-size: 18px;
-  margin: -18px -18px 0 0;
-  border-radius: 50%;
-  position: absolute;
-}
-
-#setting_bt.on {
-  color: #FBC02D;
-}
-
-#setting {
-  background: #fff;
-  /* display: none; */
-  height: 0;
-  opacity: 0;
-  transition: .5s;
-  overflow: hidden;
-  visibility: hidden;
-}
-
-#setting.on {
-  display: inherit;
-  opacity: 1;
-  border-top: 1px solid #ddd;
-  visibility: visible;
-}
-
-#setting div {
-  margin-top: 1em;
-}
-
 .numd {
   text-align: right;
 }
@@ -80,10 +43,6 @@
 
 .numbox.on {
   animation: time_on .25s infinite;
-}
-
-.numbox.on:after {
-  animation: time_on_after .25s infinite;
 }
 
 @keyframes time_on {
@@ -106,38 +65,6 @@
   100% {
     transform: translateY(0);
   }
-}
-
-
-@keyframes time_on_after {
-  0% {
-    transform: translateY(0);
-  }
-
-  25% {
-    transform: translateY(.1em);
-  }
-
-  50% {
-    transform: translateY(.1em);
-  }
-
-  75% {
-    transform: translateY(-.1em);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.numbox:not(:last-of-type) {
-  margin-right: .5em;
-}
-
-.numbox:not(:last-of-type)::after {
-  content: ':';
-  position: absolute;
 }
 
 #outbox {

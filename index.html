@@ -62,37 +62,14 @@
   <section id="book" class="pisces">
     <div id="page_1" class="pages">
       <!-- <h2><span class="msg"></span><span class="dday"></span></h2> -->
-
       <span id="setting_bt" class="material-symbols-outlined">tune</span>
-
       <div class="countdown"></div>
-
-      <section id="setting">
-        <div>
-          <span>출근 <input type="time" id="work_start" value="08:30" required /> </span>
-          <!-- <span>월급날 <input type="date" id="payday" required /> </span> -->
-        </div>
-        <div>
-          <span>퇴근 <input type="time" id="work_final" value="17:30" required /> </span>
-        </div>
-        <div>
-          <button class="material-symbols-outlined" title="퇴근 4 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 4)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_frustrated</button>
-          <button class="material-symbols-outlined" title="퇴근 1 시간 전" onclick="p.set('work_final', `${('0' + (new Date().getHours() + 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_satisfied</button>
-          <button class="material-symbols-outlined split" title="퇴근이면 정말 좋겠네" onclick="p.set('work_final', `${('0' + (new Date().getHours() - 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`); p.set_push();">sentiment_excited</button>
-          <!-- <button class="material-symbols-outlined" title="월급 1 일 전" onclick="p.set('payday', `${('0' + (new Date().getDate() + 1)).slice(-2)}`); p.set_push();">paid</button> -->
-          <!-- <button class="material-symbols-outlined split" title="월급날" onclick="p.set('payday', `${('0' + (new Date().getDate())).slice(-2)}`); p.set_push();">sentiment_excited</button> / -->
-          <!-- <button class="material-symbols-outlined" title="평일" onclick="IS_WEEKDAYS = true; p.set_push();">date_range</button> -->
-          <!-- <button class="material-symbols-outlined" title="주말" onclick="IS_WEEKDAYS = false; p.set_push();">event</button> -->
-        </div>
-      </section>
+      <section id="settings"></section>
     </div>
   </section>
 
   <footer>
-    special thanks to...
-    <img src="img\enf_union__k.png" alt="2023-on @enf union" onclick="p.set('work_start', '08:30'); p.set('work_final', '17:30'); p.set('payday', '25'); p.set_push();">
-    <img src="img\tk_syndicate__k.png" alt="2021-2023 @tki syndicate" onclick="p.set('work_start', '08:30'); p.set('work_final', '17:30'); p.set('payday', '25'); p.set_push();">
-    <img src="img\jw_cartel__k.png" alt="2019-2021 @jw cartel" onclick="p.set('work_start', '08:00'); p.set('work_final', '17:00'); p.set('payday', '25'); p.set_push();">
+
   </footer>
 
 </body>
