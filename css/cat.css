@@ -111,6 +111,7 @@ body.dev_mode .info-window {
 
 .cat.drag {
     animation: drag .5s steps(4) infinite;
+    z-index: 11;
 }
 
 @keyframes stop {
@@ -228,6 +229,10 @@ body.dev_mode .info-window {
 
 .pisces.right {
     transform: scaleX(-1);
+}
+
+.pisces.drag {
+    z-index: 11;
 }
 
 @keyframes fish {

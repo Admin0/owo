@@ -1,40 +1,69 @@
 class Context {
     constructor() {
-        this.setContextElement();
-        this.setMessagesElement();
+        this.loadContextElement();
+        this.loadMessagesElement();
+        this.loadToastElement();
+        // this.loadToasts(); 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            this.loadToasts();
+        });
+
         this.initializeSkills(this);
+
+        // 컨텍스트 메뉴 불러오기
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+
+            this.setDevMode();
+            this.getSkill();
+            this.showContext(event);
+        }, false);
+
+        // 컨텍스트 메뉴 종료하기
+        document.addEventListener("click", (event) => {
+            const context = document.querySelector("#context");
+            const keepElements = document.querySelectorAll('#context .skill');
+            const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(event.target));
+            if (document.querySelector('#context.on') != null) {
+                if (isClickedOnKeeps) {
+                    // console.log(`context: 1`);
+                } else {
+                    context.classList.remove("on");
+                    // console.log(`context: 2`);
+                }
+            } else {
+                // console.log(`context: 3`);
+                context.classList.remove("on");
+            }
+            // console.log(`context: 4`);
+            // context.classList.remove("on");
+        });
     }
 
-    setElement(element, module) {
+    loadElement(element, module) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
             element.innerHTML = this.responseText;
         }
         xhttp.open("GET", module, true);
         xhttp.send();
-
-        // this.element = document.querySelector(selector);
-        this.sub = { element: null }
     }
-
-    setContextElement() {
+    loadContextElement() {
         this.element = document.createElement('section');
         this.element.id = 'context';
         document.body.appendChild(this.element);
 
         // 컨텍스트 메뉴 로드
-        this.setElement(this.element, "./module/context.html")
-
-        // this.element = document.querySelector(selector);
+        this.loadElement(this.element, "./module/context.html");
         this.sub = { element: null }
     }
 
-    setMessagesElement() {
+    loadMessagesElement() {
         this.messages = document.createElement('section');
         this.messages.id = 'messages';
         document.body.appendChild(this.messages);
     }
-
     setMessage(string) {
         const d = new Date();
         const z = number => (number < 10 ? '0' : '') + number;
@@ -47,6 +76,30 @@ class Context {
         }, 5000);
 
     }
+
+    loadToastElement() {
+        this.toast = document.createElement('section');
+        this.toast.id = 'toast';
+        document.body.appendChild(this.toast);
+    }
+    loadToasts() {
+        console.log('1');
+        document.querySelectorAll('.icon').forEach(event => {
+            console.log('2', event);
+            event.addEventListener('mouseenter', event2 => {
+                console.log('4');
+                if (event.getAttribute('title') != null) {
+                    event.setAttribute('data-title', event.getAttribute('title'));
+                    event.removeAttribute("title");
+                    console.log('3');
+                }
+                this.toast.style.left = `${event.getBoundingClientRect().x}px`
+                this.toast.style.top = `${event.getBoundingClientRect().y}px`
+                this.toast.innerHTML = event.getAttribute('data-title');
+            });
+        });
+    }
+
     setDevMode(wannaToggle = false) {
         // 현재 dev_mode 값을 확인
         let isDevMode = this.getDevMode();
@@ -67,7 +120,6 @@ class Context {
             contextDevElement != null ? contextDevElement.classList.remove('activated') : false;
         }
     }
-
     getDevMode() {
         return localStorage.getItem('dev_mode') == 'true' ? true : false;
     }
@@ -244,40 +296,13 @@ class Context {
     }
 }
 
-document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-
-    context.setDevMode();
-    context.getSkill();
-    context.showContext(e);
-}, false);
-
-document.addEventListener("click", (e) => {
-    const context = document.querySelector("#context");
-    const keepElements = document.querySelectorAll('#context .skill');
-    const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(e.target));
-    if (document.querySelector('#context.on') != null) {
-        if (isClickedOnKeeps) {
-            // console.log(`context: 1`);
-        } else {
-            context.classList.remove("on");
-            // console.log(`context: 2`);
-        }
-    } else {
-        // console.log(`context: 3`);
-        context.classList.remove("on");
-    }
-    // console.log(`context: 4`);
-    // context.classList.remove("on");
-});
-
 class Settings {
     constructor(settings_area = '#settings') {
-        this.setElement(document.querySelector(settings_area), './module/settings.html');
+        this.loadElement(document.querySelector(settings_area), './module/settings.html');
         this.element = document.querySelector(settings_area);
     }
 
-    setElement(element, module) {
+    loadElement(element, module) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
             element.innerHTML = this.responseText;

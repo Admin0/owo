@@ -38,7 +38,7 @@ class Cat {
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
         }));
-        document.addEventListener('touchend', () => this.stopDragging());
+        this.element.addEventListener('touchend', () => this.stopDragging());
 
         // 화면 크기 변경 시 이벤트
         window.addEventListener("resize", () => this.handleWindowResize());
@@ -376,7 +376,7 @@ class Fish {
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
         }));
-        document.addEventListener('touchend', (event) => this.stopDragging(event));
+        this.element.addEventListener('touchend', (event) => this.stopDragging(event));
 
         // 화면 크기 변경 시 이벤트
         window.addEventListener("resize", () => this.handleWindowResize());

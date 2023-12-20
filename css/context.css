@@ -3,7 +3,7 @@
 /* ------------------------------------------------------------------- */
 #context,
 .context {
-  z-index: 20;
+  z-index: 16;
   position: fixed;
   opacity: 0;
   visibility: hidden;
@@ -193,6 +193,8 @@ ul#resources {
   /* font-family: 'StarDust Bold', sans-serif; */
   color: #4caf50;
   display: flex;
+  z-index: 15;
+  pointer-events: none;
 }
 
 #resources li {
@@ -249,13 +251,13 @@ ul#resources {
 }
 
 #settings {
-  background: #fff;
   /* display: none; */
   height: 0;
   opacity: 0;
   transition: .5s;
   overflow: hidden;
   visibility: hidden;
+  /* pointer-events: none; */
 }
 
 #settings.on {

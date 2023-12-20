@@ -76,7 +76,7 @@ cats.forEach(cat => {
 // 생선 객체 생성
 const pisces = [];
 
-document.addEventListener('mousedown', (event) => {
+const leftClick = event => {
   const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
@@ -109,9 +109,10 @@ document.addEventListener('mousedown', (event) => {
       default:
         break;
     }
-
   }
-});
+}
+document.addEventListener('mouseup', (event) => { leftClick(event); });
+document.addEventListener('touchend', (event) => { leftClick(event); });
 
 
 // SETTINGS
@@ -143,14 +144,13 @@ document.addEventListener('mousedown', (e) => {
   p.updateResources();
 });
 document.addEventListener('touchstart', (e) => {
-  e.preventDefault();
+  // e.preventDefault();
   p.updateResources();
-}, { passive: true });
+}, { passive: false });
 
 // CONTEXT MENU
 const context = new Context();
 context.setDevMode();
-context.setSkill();
 
 // localStorage.skill = 'undefined';
 
