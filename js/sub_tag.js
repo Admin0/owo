@@ -76,3 +76,5 @@ function tag_manager(target, times) {
     target.appendChild(tag_msg);
   }
 }
+
+tag_manager(document.querySelector("#inside_page"), 2013);

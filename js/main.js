@@ -7,57 +7,55 @@ const time = new Time();
 // 모바일에서 접속했는지 확인
 const is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-tag_manager(document.querySelector("#inside_page"), 2013);
+function loadScript(src, handler) {
+  const js = document.createElement('script');
+  js.src = src;
+  document.head.appendChild(js);
+  js.onload = handler;
+}
 // time.log("set_tags");
 
 // 바라보기 생성
 // const st = new Stare('.cat');
 
+// loadScript('/js/main_parameter.js', () => {
+const p = new Parameter();
+
 // 카운트다운 생성
 const cd = new Countdown()
   .setTarget('.countdown')
-  .setTime(S('work_final'))
+  .setTime(p.val.work_final)
   .setOptions({ timer_head: 'h', timer_tail: 'c' })
   .start();
 
 
-function $(selector) { return document.querySelectorAll(selector).length == 1 ? document.querySelector(selector) : document.querySelectorAll(selector); }
-function S(key) { return localStorage.getItem(key); }
-const p = {
-  date: { yyyy: new Date().getFullYear(), mm: new Date().getMonth(), dd: new Date().getDate() },
+// SETTINGS
+settings = new Settings();
 
-  get: (para) => { return new URLSearchParams(window.location.search).get(para) },
-  has: (para) => { return new URLSearchParams(window.location.search).has(para) },
-  set: (para, val) => { p[para] = val; localStorage.setItem(para, val); },
-  set_push: function () {
-    $('#setting input#work_start').value = this.work_start;
-    $('#setting input#work_final').value = this.work_final;
-    $('#setting input#payday').value = `${this.date.yyyy}-${this.date.mm + 1}-${this.payday}`;
-    history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.work_start}&work_final=${this.work_final}&payday=${this.payday}`);
-    cd.setTime(this.work_final);
-  },
-  work_start: function () { return this.has('work_start') ? this.get('work_start') : S('work_start') != null ? S('work_start') : '08:30' },
-  work_final: function () { return this.has('work_final') ? this.get('work_final') : S('work_final') != null ? S('work_final') : '17:30' },
-  lunch_start: '12:00',
-  lunch_final: '13:00',
-  payday: function () { return this.has('payday') ? this.get('payday') : S('payday') != null ? S('payday') : '25' },
+document.querySelector('#setting_bt').addEventListener("click", () => { settings.showSettings(); });
+document.querySelectorAll('#settings input').forEach((event) => {
+  console.log(event);
+  event.addEventListener("change", (event) => {
+    console.log(event);
+    p.val.work_start = document.querySelector('#settings input#work_start').value;
+    p.val.work_final = document.querySelector('#settings input#work_final').value;
+    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
+    p.set_push();
+    p.updateParameterValues();
+  });
+});
 
-  resources: {
-    minerals: 50,
-    supplies: 0,
-    suppliesMax: 12
-  },
-  updateResources() {
-    document.querySelector('#minerals .val').textContent = this.resources.minerals;
-    this.resources.supplies = cats.length;
-    document.querySelector('#supplies .val').textContent = `${this.resources.supplies}/${this.resources.suppliesMax}`;
-  }
-}
 
-p.work_start = p.work_start();
-p.work_final = p.work_final();
-p.payday = p.payday();
+document.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  p.updateParameterValues();
+});
+document.addEventListener('touchend', (e) => {
+  // e.preventDefault();
+  p.updateParameterValues();
+});
 
+// });
 
 let IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
 let engine_timeout;
@@ -66,12 +64,12 @@ let engine_timeout;
 // 고양이 객체 생성
 const cats = [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
 
-cats.forEach(cat => {
-  if (S('dev_mode') == 'true') {
-    cat.element.classList.add('outlined');
-    cat.infoWindow.style.display = 'block';
-  }
-});
+// cats.forEach(cat => {
+//   if (p.val.dev_mode == 'true') {
+//     cat.element.classList.add('outlined');
+//     cat.infoWindow.style.display = 'block';
+//   }
+// });
 
 // 생선 객체 생성
 const pisces = [];
@@ -86,7 +84,7 @@ const leftClick = event => {
       x: event.pageX - 64 + 64 * Math.random(),
       y: event.pageY - 86 + 64 * Math.random()
     }
-    switch (S('skill')) {
+    switch (p.val.setedSkill) {
       case 'cat':
         context.skill.summonCat(pos);
         break;
@@ -115,52 +113,21 @@ document.addEventListener('mouseup', (event) => { leftClick(event); });
 document.addEventListener('touchend', (event) => { leftClick(event); });
 
 
-// SETTINGS
-const settings = new Settings();
-
-localStorage.setItem("work_start", p.work_start);
-localStorage.setItem("work_final", p.work_final);
-localStorage.setItem("payday", p.payday);
-$('#setting input#work_start').value = p.work_start;
-$('#setting input#work_final').value = p.work_final;
-$('#setting input#payday').value = `${p.date.yyyy}-${p.date.mm + 1}-${p.payday}`;
-
-$('#setting_bt').addEventListener("click", (e) => {
-  settings.showSettings();
-});
-$('#settings input').forEach((e) => {
-  e.addEventListener("change", (e) => {
-    p.set('work_start', $('#settings input#work_start').value);
-    p.set('work_final', $('#settings input#work_final').value);
-    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
-    p.set_push();
-  });
-});
-
-p.updateResources();
-
-document.addEventListener('mousedown', (e) => {
-  e.preventDefault();
-  p.updateResources();
-});
-document.addEventListener('touchstart', (e) => {
-  // e.preventDefault();
-  p.updateResources();
-}, { passive: false });
 
 // CONTEXT MENU
 const context = new Context();
 context.setDevMode();
 
 // localStorage.skill = 'undefined';
+p.updateParameterValues();
 
 // PWA Setting
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, function(err) {
+    }, function (err) {
       // registration failed :(
       console.log('ServiceWorker registration failed: ', err);
     });

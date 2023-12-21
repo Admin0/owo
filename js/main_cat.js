@@ -555,15 +555,12 @@ class Fish {
                         // 오이 객체 삭제
                         this.remove();
                         break;
-                    case 'richraremineral':
-                        p.resources.minerals += 8;
-                    case 'raremineral':
-                        p.resources.minerals += 8;
-                    case 'richmineral':
-                        p.resources.minerals += 8;
+                    case 'richraremineral': p.resources.setMinerals(8);
+                    case 'raremineral': p.resources.setMinerals(8);
+                    case 'richmineral': p.resources.setMinerals(8);
                     case 'mineral':
-                        p.resources.minerals += 8;
-                        p.updateResources();
+                        p.resources.setMinerals(8);
+                        p.updateParameterValues();
 
                         // 오이를 먹는 움직임
                         cat.toggleMovement('surprised');

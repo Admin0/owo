@@ -6,7 +6,7 @@ class Context {
         // this.loadToasts(); 
 
         document.addEventListener('DOMContentLoaded', () => {
-            this.loadToasts();
+          this.loadToasts();
         });
 
         this.initializeSkills(this);
@@ -127,11 +127,11 @@ class Context {
     initializeSkills(parent) {
         this.skill = {
             summonCat(pos) {
-                if (p.resources.supplies < p.resources.suppliesMax) {
+                if (p.val.resources.supplies < p.val.resources.suppliesMax) {
                     const cat = new Cat(pos).setMeow('Eow');
                     cats.push(cat);
                     parent.setMessage(`${cat.skin}에게 간택 당했습니다. `);
-                    p.updateResources();
+                    p.updateParameterValues();
                 } else {
                     parent.setMessage('보급고가 부족합니다.');
                 }
@@ -143,11 +143,11 @@ class Context {
             },
             summonFish(pos) {
                 const cost = 1;
-                if (p.resources.minerals - cost >= 0) {
-                    p.resources.minerals -= cost;
+                if (p.val.resources.minerals - cost >= 0) {
+                    p.val.resources.minerals -= cost;
                     pisces.push(new Fish(pos).setType('fish'));
                     parent.setMessage('생선을 소환했습니다.');
-                    p.updateResources();
+                    p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
                 }
@@ -160,7 +160,7 @@ class Context {
             summonCucumber(pos) {
                 pisces.push(new Fish(pos).setType('cucumber'));
                 parent.setMessage('오이를 소환했습니다.');
-                p.updateResources();
+                p.updateParameterValues();
             },
             summonMassiveCucumbers(n) {
                 for (let i = 0; i < n; i++) {
@@ -169,11 +169,11 @@ class Context {
             },
             summonMineral(pos) {
                 const cost = 0;
-                if (p.resources.minerals - cost >= 0) {
-                    p.resources.minerals -= cost;
+                if (p.val.resources.minerals - cost >= 0) {
+                    p.val.resources.minerals -= cost;
                     pisces.push(new Fish(pos).setType('mineral'));
                     parent.setMessage('광물을 소환했습니다.');
-                    p.updateResources();
+                    p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
                 }
@@ -185,11 +185,11 @@ class Context {
             },
             summonYarnball(pos) {
                 const cost = 50;
-                if (p.resources.minerals - cost >= 0) {
-                    p.resources.minerals -= cost;
+                if (p.val.resources.minerals - cost >= 0) {
+                    p.val.resources.minerals -= cost;
                     pisces.push(new Fish(pos).setType('yarnball').startSliding());
                     parent.setMessage('털실 공을 소환했습니다.');
-                    p.updateResources();
+                    p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
                 }
@@ -223,7 +223,8 @@ class Context {
         } else {
             // 현재 선택된 스킬이 액티베이션 상태가 아니면 액티베이션 상태로 변경
             this.getSkill(skill);
-            localStorage.setItem('skill', skill);
+            p.val.setedSkill = skill;
+            p.updateParameterValues();
         }
     }
     getSkill(skill = localStorage.skill) {

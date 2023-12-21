@@ -30,8 +30,8 @@
         <li class="" onclick="context.skill.clearAllPisces();"> <span>물건 치우기</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="p.resources.minerals += 10000; p.updateResources();"> <span>Show me the money</span> </li>
-        <li class="" onclick="p.resources.suppliesMax = 200; p.updateResources();"> <span>Food for thought</span> </li>
+        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span>Show me the money</span> </li>
+        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span>Food for thought</span> </li>
       </ul>
     </section>
   </li>
@@ -44,8 +44,13 @@
     <li class="skill icon yarnball" onclick="context.setSkill('yarnball')"><span>공</span></li>
   </ul>
 </ul>
-<ul class="">
-  <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank')">
+<ul>
+  <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank');">
     <span class="icon"></span><span>버킷리스트 바로가기</span>
+  </li>
+</ul>
+<ul>
+  <li class="" onclick="localStorage.clear();">
+    <span class="icon"></span><span>초기화</span>
   </li>
 </ul>
