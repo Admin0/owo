@@ -1,0 +1,26 @@
+{
+  "background_color": "#ffffff",
+  "description": "집에 가고싶다 증후군... 주요 증상: 강력한 귀소 본능을 느낌 (심한 경우 집에서도 환상통을 겪음)",
+  "dir": "auto",
+  "display": "standalone",
+  "name": "퇴근 시간을 알려주는 고양이",
+  "orientation": "any",
+  "scope": "/owo/",
+  "short_name": "owo",
+  "start_url": "/owo/",
+  "theme_color": "#ffffff",
+  "categories": [],
+  "screenshots": [],
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icon.png",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [],
+  "id": "owo"
+}
