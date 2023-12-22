@@ -1,4 +1,8 @@
 class Time {
     start = localStorage.timer || Date.now();
-    log(msg) { this[msg] = Date.now() - this.start; };
+
+    log(msg) { 
+        this[msg] = Date.now() - this.start; 
+        console.log(`${msg}: ${this[msg]} ms`);
+    };
 };

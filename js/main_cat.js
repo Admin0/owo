@@ -60,7 +60,9 @@ class Cat {
 
         return this;
     }
-
+    loadCat(){
+        console.log('try to cat load');
+    }
     initialize(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }, skin) {
         // 초기 위치 랜덤 설정
         const rect = this.element.getBoundingClientRect();

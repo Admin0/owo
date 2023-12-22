@@ -7,18 +7,15 @@
   "orientation": "any",
   "scope": "/owo/",
   "short_name": "owo",
-  "start_url": "/owo/",
+  "start_url": "/",
   "theme_color": "#ffffff",
   "categories": [],
   "screenshots": [],
   "icons": [
     {
       "src": "icon.png",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "/icon.png",
-      "type": "image/x-icon"
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "shortcuts": [],

@@ -62,20 +62,21 @@ let engine_timeout;
 
 
 // 고양이 객체 생성
+// const cats = p.cats || [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
 const cats = [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
+// console.log(cats);
 
-// cats.forEach(cat => {
-//   if (p.val.dev_mode == 'true') {
-//     cat.element.classList.add('outlined');
-//     cat.infoWindow.style.display = 'block';
-//   }
-// });
+cats.forEach(cat => {
+  // cat.loadCat();
+  // console.log(cat);
+  // cat = new Cat()
+});
 
 // 생선 객체 생성
 const pisces = [];
 
 const leftClick = event => {
-  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, footer');
+  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만
@@ -118,6 +119,11 @@ document.addEventListener('touchend', (event) => { leftClick(event); });
 const context = new Context();
 context.setDevMode();
 
+document.querySelector('#context').addEventListener('load', () => {
+  console.log(context);
+  context.loadToasts();
+});
+
 // localStorage.skill = 'undefined';
 p.updateParameterValues();
 
@@ -134,4 +140,4 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-time.log('activated');
+time.log('main.js was loaded.');

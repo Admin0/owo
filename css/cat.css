@@ -44,15 +44,25 @@
     width: var(--sprite-block-size);
     height: var(--sprite-block-size);
     background: url('../img/cat_skin_우유.png');
-    background-size: calc(8 * var(--sprite-block-size)) calc(8 * var(--sprite-block-size));
+    background-size: calc(8 * var(--sprite-block-size)) calc(9 * var(--sprite-block-size));
     image-rendering: pixelated;
     position: absolute;
 
     z-index: 10;
-    animation: stop .5s steps(4) infinite;
+    animation: cat 1s steps(8) infinite;
 
     cursor: pointer;
     --sprite-block-size: 64px;
+}
+
+@keyframes cat {
+    from {
+        background-position-x: calc(var(--sprite-block-size) *0)
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * -8)
+    }
 }
 
 body.dev_mode .cat,
@@ -77,140 +87,38 @@ body.dev_mode .info-window {
     transform: scaleX(-1);
 }
 
+.cat.watch {
+    background-position-y: calc(var(--sprite-block-size) * -1);
+}
+
 .cat.walk {
-    animation: walk 1s steps(8) infinite;
+    background-position-y: calc(var(--sprite-block-size) * -2);
 }
 
 .cat.run {
-    animation: run 1s steps(8) infinite;
-}
-
-
-.cat.wash {
-    animation: wash .5s steps(4) infinite;
-}
-
-
-.cat.watch {
-    animation: watch .5s steps(4) infinite;
-}
-
-
-.cat.lick {
-    animation: lick .5s steps(4) infinite;
-}
-
-
-.cat.stretch {
-    animation: stretch 1s steps(8) 1;
-}
-
-.cat.surprised {
-    animation: surprised 1s steps(8) 1;
+    background-position-y: calc(var(--sprite-block-size) * -3);
 }
 
 .cat.drag {
-    animation: drag .5s steps(4) infinite;
+    background-position-y: calc(var(--sprite-block-size) * -4);
     z-index: 11;
 }
 
-@keyframes stop {
-    from {
-        background-position: calc(var(--sprite-block-size) *0) 0;
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -4) 0;
-    }
+.cat.lick {
+    background-position-y: calc(var(--sprite-block-size) * -5);
 }
 
-
-@keyframes walk {
-    from {
-        background-position: 0px calc(var(--sprite-block-size) * -1);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -1);
-    }
+.cat.wash {
+    background-position-y: calc(var(--sprite-block-size) * -6);
 }
 
-
-@keyframes run {
-    from {
-        background-position: 0px calc(var(--sprite-block-size) * -2);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -2);
-    }
+.cat.stretch {
+    background-position-y: calc(var(--sprite-block-size) * -7);
 }
 
-
-@keyframes wash {
-    from {
-        background-position: calc(var(--sprite-block-size) * -4) calc(var(--sprite-block-size) * -3);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -3);
-    }
+.cat.surprised {
+    background-position-y: calc(var(--sprite-block-size) * -8);
 }
-
-@keyframes watch {
-    from {
-        background-position: calc(var(--sprite-block-size) * -4) 0;
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) 0;
-    }
-}
-
-
-@keyframes lick {
-    from {
-        background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -3);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -4) calc(var(--sprite-block-size) * -3);
-    }
-}
-
-
-@keyframes stretch {
-    from {
-        background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -5);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -5);
-    }
-}
-
-
-@keyframes surprised {
-    from {
-        background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -6);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -8) calc(var(--sprite-block-size) * -6);
-    }
-}
-
-@keyframes drag {
-    from {
-        background-position: calc(var(--sprite-block-size) * -0) calc(var(--sprite-block-size) * -4);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -4) calc(var(--sprite-block-size) * -4);
-    }
-}
-
-
 
 .pisces {
     background: url('../img/fish.png');
@@ -224,7 +132,7 @@ body.dev_mode .info-window {
     image-rendering: pixelated;
     --sprite-block-size: 64px;
 
-    animation: fish .125s steps(1);
+    animation: pisces .125s steps(1);
 }
 
 .pisces.right {
@@ -232,172 +140,71 @@ body.dev_mode .info-window {
 }
 
 .pisces.drag {
+    background-position-x: calc(var(--sprite-block-size) * -1);
     z-index: 11;
 }
 
-@keyframes fish {
-    from {
-        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * 0);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * 0);
-    }
-}
-
-.fish.drag {
-    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * 0);
-
-}
-
-.goldfish {
-    animation: goldfish .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
-}
-
-@keyframes goldfish {
-    from {
-        background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * 0);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * 0);
-    }
-}
-
-.goldfish.drag {
-    background-position: calc(var(--sprite-block-size) * -3) calc(var(--sprite-block-size) * 0);
-
-}
-
-.cucumber {
-    animation: cucumber .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -1);
-}
-
-@keyframes cucumber {
-    from {
-        background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -1);
-    }
-
-    to {
-        background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -1);
-    }
-}
-
-.cucumber.drag {
-    background-position: calc(var(--sprite-block-size) * -1) calc(var(--sprite-block-size) * -1);
-
-}
-
-.mineral {
-    animation: mineral .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -2);
-
-}
-
-@keyframes mineral {
+@keyframes pisces {
     from {
         background-position-x: calc(var(--sprite-block-size) * -1);
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * 0);
+        background-position-x: 0;
     }
 }
 
-.mineral.drag {
-    background-position-x: calc(var(--sprite-block-size) * -1);
-
-}
-
-
-.richmineral {
-    animation: richmineral .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -2);
-}
-
-@keyframes richmineral {
-    from {
-        background-position-x: calc(var(--sprite-block-size) * -3);
-    }
-
-    to {
-        background-position-x: calc(var(--sprite-block-size) * -2);
-    }
-}
-
-.richmineral.drag {
-    background-position-x: calc(var(--sprite-block-size) * -3);
-
-}
-
-.raremineral {
-    animation: raremineral .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -3);
-}
-
-@keyframes raremineral {
-    from {
-        background-position-x: calc(var(--sprite-block-size) * -1);
-    }
-
-    to {
-        background-position-x: calc(var(--sprite-block-size) * 0);
-    }
-}
-
-.raremineral.drag {
-    background-position-x: calc(var(--sprite-block-size) * -1);
-
-}
-
-.richraremineral {
-    animation: richraremineral .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * -2) calc(var(--sprite-block-size) * -3);
-}
-
-@keyframes richraremineral {
-    from {
-        background-position-x: calc(var(--sprite-block-size) * -3);
-    }
-
-    to {
-        background-position-x: calc(var(--sprite-block-size) * -2);
-    }
-}
-
+.goldfish.drag,
+.richmineral.drag,
 .richraremineral.drag {
     background-position-x: calc(var(--sprite-block-size) * -3);
 
 }
 
-.yarnball {
-    animation: yarnball .125s steps(1);
-    background-position: calc(var(--sprite-block-size) * 0) calc(var(--sprite-block-size) * -4);
-
+.goldfish,
+.richmineral,
+.richraremineral {
+    animation-name: pisces-col2;
+    background-position-x: calc(var(--sprite-block-size) * -2);
 }
 
-@keyframes yarnball {
+@keyframes pisces-col2 {
     from {
-        background-position-x: calc(var(--sprite-block-size) * -1)
+        background-position-x: calc(var(--sprite-block-size) * -3);
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * 0);
+        background-position-x: calc(var(--sprite-block-size) * -2);
     }
 }
 
-.yarnball.drag {
-    background-position-x: calc(var(--sprite-block-size) * -1);
+
+.cucumber {
+    background-position-y: calc(var(--sprite-block-size) * -1);
+}
+
+.mineral,
+.richmineral {
+    background-position-y: calc(var(--sprite-block-size) * -2);
+
+}
+
+.raremineral,
+.richraremineral {
+    background-position-y: calc(var(--sprite-block-size) * -3);
+
+}
+
+.yarnball {
+    background-position-y: calc(var(--sprite-block-size) * -4);
 
 }
 
 .yarnball.move {
-    animation: yarnball_roll .5s steps(4) infinite;
+    animation: yarnball .5s steps(4) infinite;
 }
 
-@keyframes yarnball_roll {
+@keyframes yarnball {
     from {
         background-position-x: calc(var(--sprite-block-size) * 0)
     }

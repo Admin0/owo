@@ -3,11 +3,6 @@ class Context {
         this.loadContextElement();
         this.loadMessagesElement();
         this.loadToastElement();
-        // this.loadToasts(); 
-
-        document.addEventListener('DOMContentLoaded', () => {
-          this.loadToasts();
-        });
 
         this.initializeSkills(this);
 
@@ -19,22 +14,27 @@ class Context {
             this.getSkill();
             this.showContext(event);
         }, false);
+        document.querySelector('#context_bt').addEventListener("click", (event) => {
+            console.log('1');
+            this.setDevMode();
+            this.getSkill();
+            this.showContext(event)
+        });
 
         // 컨텍스트 메뉴 종료하기
         document.addEventListener("click", (event) => {
-            const context = document.querySelector("#context");
-            const keepElements = document.querySelectorAll('#context .skill');
+            const keepElements = document.querySelectorAll('#context .skill, #context .sub, #context_bt');
             const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(event.target));
             if (document.querySelector('#context.on') != null) {
                 if (isClickedOnKeeps) {
                     // console.log(`context: 1`);
                 } else {
-                    context.classList.remove("on");
+                    this.element.classList.remove("on");
                     // console.log(`context: 2`);
                 }
             } else {
                 // console.log(`context: 3`);
-                context.classList.remove("on");
+                this.element.classList.remove("on");
             }
             // console.log(`context: 4`);
             // context.classList.remove("on");
@@ -134,11 +134,15 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('보급고가 부족합니다.');
+                    return false;
                 }
             },
             summonMassiveCats(n) {
                 for (let i = 0; i < n; i++) {
-                    this.summonCat();
+                    if (this.summonCat() == false) {
+                        parent.setMessage('소환을 중지합니다.');
+                        break;
+                    }
                 }
             },
             summonFish(pos) {
@@ -150,6 +154,7 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
+                    return false;
                 }
             },
             summonMassiveFishs(n) {
@@ -176,11 +181,12 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
+                    return false;
                 }
             },
             summonMassiveMinerals(n) {
                 for (let i = 0; i < n; i++) {
-                    this.summonMineral()
+                    this.summonMineral();
                 }
             },
             summonYarnball(pos) {
@@ -192,11 +198,15 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
+                    return false;
                 }
             },
             summonMassiveYarnballs(n) {
                 for (let i = 0; i < n; i++) {
-                    this.summonYarnball();
+                    if (this.summonYarnball() == false) {
+                        parent.setMessage('소환을 중지합니다.');
+                        break;
+                    }
                 }
             },
             summonAll(n) {
@@ -209,6 +219,7 @@ class Context {
             clearAllPisces() {
                 pisces.forEach(fish => { fish.remove(); });
                 pisces.length = 0;
+                parent.setMessage('물건들을 치웠습니다.');
             }
         }
     }
@@ -301,6 +312,13 @@ class Settings {
     constructor(settings_area = '#settings') {
         this.loadElement(document.querySelector(settings_area), './module/settings.html');
         this.element = document.querySelector(settings_area);
+
+        // 설정창이 켜진 상태에서 외부를 클릭하면 설정 닫기
+        document.addEventListener("click", (event) => {
+            const keepElements = document.querySelectorAll('#book, #context');
+            const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(event.target));
+            if (this.element.classList.contains('on') == true && !isClickedOnKeeps) { this.showSettings(); }
+        });
     }
 
     loadElement(element, module) {

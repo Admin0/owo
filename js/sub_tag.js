@@ -78,3 +78,4 @@ function tag_manager(target, times) {
 }
 
 tag_manager(document.querySelector("#inside_page"), 2013);
+// time.log('tag was created.');

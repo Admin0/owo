@@ -17,10 +17,10 @@
   transition-property: opacity, transform, margin, visibility;
   top: 50%;
   font-size: 14px;
-  width: fit-content;
-  min-width: 350px;
-  transform: perspective(1000px) rotateX(15deg);
+  max-width: 350px;
+  transform: perspective(1000px) rotateX(5deg);
   margin-top: -2em;
+  text-overflow: hidden;
 }
 
 #context {
@@ -53,7 +53,7 @@
   height: 16px;
   display: flex;
   align-items: center;
-  padding: .5em 1em .5em 1em;
+  padding: .5em 1em;
   margin: 0;
   text-decoration: none;
   list-style: none;
@@ -103,16 +103,18 @@
 #context .skill_wrap {
   display: flex;
   padding-left: 3em;
+  flex-wrap: wrap;
 }
 
 #context .icon,
+#resources .icon,
 #settings .icon {
   position: inherit;
   --sprite-block-size: 32px;
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
   background: url('../img/context.png');
-  background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+  background-size: calc(6 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
   background-position-y: calc(var(--sprite-block-size) * 1);
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -182,6 +184,18 @@
   background-position-x: calc(var(--sprite-block-size) * -1);
 }
 
+#context .icon.timer {
+  background-position: calc(var(--sprite-block-size) * -5) 0;
+}
+
+#context .icon.bucket {
+  background-position: calc(var(--sprite-block-size) * -4) 0;
+}
+
+#context_bt {
+  display: none;
+}
+
 /**
  * RESOURCES
  */
@@ -211,10 +225,8 @@ ul#resources {
   --sprite-block-size: 16px;
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
-  background: url('../img/context.png');
-  background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
   background-repeat: no-repeat;
-  /* image-rendering: pixelated; */
+  image-rendering: auto;
   margin: 0 6px 0 0;
   padding: 0px;
   animation: none;

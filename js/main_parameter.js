@@ -1,7 +1,8 @@
 class Parameter {
     constructor() {
         // 로컬 스토리지에서 파라미터 값을 가져오거나 기본값으로 설정
-        this.val = localStorage.owo_parameters != null ? JSON.parse(localStorage.owo_parameters) : {};
+        this.val = localStorage.val != null ? JSON.parse(localStorage.val) : {};
+        this.cats = localStorage.cats != null ? JSON.parse(localStorage.cats) : null;
 
         // 날짜와 점심 시간 기본값 설정
         this.val.date = { yyyy: new Date().getFullYear(), mm: new Date().getMonth(), dd: new Date().getDate() };
@@ -73,10 +74,13 @@ class Parameter {
 
     // 파라미터 값을 업데이트하는 메서드
     updateParameterValues() {
-        // 화면에 자원 값 및 공급품 정보를 업데이트하고 로컬 스토리지에 저장
+        // 화면에 자원 값 및 공급품 정보를 업데이트하고
         document.querySelector('#minerals .val').textContent = this.val.resources.minerals;
         this.val.resources.supplies = cats.length;
         document.querySelector('#supplies .val').textContent = `${this.val.resources.supplies}/${this.val.resources.suppliesMax}`;
-        localStorage.setItem('owo_parameters', JSON.stringify(this.val));
+
+        // 로컬 스토리지에 저장
+        localStorage.setItem('val', JSON.stringify(this.val));
+        localStorage.setItem('cats', JSON.stringify(cats));
     }
 }
