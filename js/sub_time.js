@@ -3,6 +3,6 @@ class Time {
 
     log(msg) { 
         this[msg] = Date.now() - this.start; 
-        console.log(`${msg}: ${this[msg]} ms`);
+        console.log(`${this[msg]} ms: ${msg}`);
     };
 };

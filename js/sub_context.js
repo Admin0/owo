@@ -4,6 +4,8 @@ class Context {
         this.loadMessagesElement();
         this.loadToastElement();
 
+        this.setSelectCatOrSometing();
+
         this.initializeSkills(this);
 
         // 컨텍스트 메뉴 불러오기
@@ -111,7 +113,6 @@ class Context {
         }
 
         const contextDevElement = document.querySelector('#context .dev_mode');
-        cats.forEach(cat => { cat.infoWindow.style.display = isDevMode ? 'block' : 'none'; });
         if (isDevMode) {
             document.body.classList.add('dev_mode');
             contextDevElement != null ? contextDevElement.classList.add('activated') : false;
@@ -224,21 +225,21 @@ class Context {
         }
     }
 
-    setSkill(skill = localStorage.skill) {
+    setSkill(skill = p.val.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
 
         // 현재 선택된 스킬이 액티베이션 상태이면 액티베이션 취소
         if (targetSkill != null && targetSkill.classList.contains('activated')) {
             targetSkill.classList.remove('activated');
-            localStorage.removeItem('skill'); // 선택 해제 시 스킬 정보 삭제
+            p.val.skill = 'dummy'; // 선택 해제 시 스킬 정보 삭제
         } else {
             // 현재 선택된 스킬이 액티베이션 상태가 아니면 액티베이션 상태로 변경
             this.getSkill(skill);
-            p.val.setedSkill = skill;
+            p.val.skill = skill;
             p.updateParameterValues();
         }
     }
-    getSkill(skill = localStorage.skill) {
+    getSkill(skill = p.val.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
         document.querySelectorAll('#context .skill').forEach((e) => { e.classList.remove('activated'); });
         if (targetSkill != null) {
@@ -304,6 +305,15 @@ class Context {
                     check_is_not_null.classList.toggle('on');
                 }
             })
+        });
+    }
+
+    setSelectCatOrSometing() {
+        document.addEventListener('click', event => {
+            document.querySelectorAll('.cat, .pisces').forEach(event => { event.classList.remove('selected'); });
+            if (event.target.matches('.cat, .pisces')) {
+                event.target.classList.add('selected');
+            }
         });
     }
 }

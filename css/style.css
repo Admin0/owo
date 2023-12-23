@@ -124,7 +124,7 @@ header #type {
 
 #inside_page {
   font-family: "Galmuri11", sans-serif;
-  font-size: .5em;
+  font-size: 12px;
   /* font-weight: bold; */
   color: rgba(125, 125, 125, .125);
   position: absolute;
@@ -210,13 +210,17 @@ footer img {
 #messages {
   z-index: 15;
   position: fixed;
-  bottom: 0;
+  left: 20%;
+  bottom: 25%;
   margin: 1em;
   color: #4caf50;
+  pointer-events: none;
 }
 
 @media only screen and (max-width: 768px) {
   #messages {
+    bottom: 0;
+    left: 0;
     font-size: 12px;
   }
 }
@@ -230,7 +234,7 @@ footer img {
   z-index: 17;
   transform: translate(-1em, calc(-1em - 100%));
   box-shadow: 0px 2px 5px rgba(0, 0, 0, .25)
- }
+}
 
 /* z-index position
 017   #toast
@@ -239,7 +243,7 @@ footer img {
 014
 013
 012 
-011   #book | .cat.drag | .pisces.drag
+011   #book | .cat.drag | .pisces.drag | .유령
 010   .cat | .pisces
 009
 008

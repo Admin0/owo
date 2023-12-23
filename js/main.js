@@ -67,15 +67,14 @@ const cats = [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new 
 // console.log(cats);
 
 cats.forEach(cat => {
-  // cat.loadCat();
-  // console.log(cat);
-  // cat = new Cat()
+
 });
 
 // 생선 객체 생성
 const pisces = [];
 
 const leftClick = event => {
+  // {고양이 객체 = 클릭의 영향을 받지 않는 요소} 정의
   const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
@@ -85,8 +84,8 @@ const leftClick = event => {
       x: event.pageX - 64 + 64 * Math.random(),
       y: event.pageY - 86 + 64 * Math.random()
     }
-    switch (p.val.setedSkill) {
-      case 'cat':
+    switch (p.val.skill) {
+      case 'iconcat':
         context.skill.summonCat(pos);
         break;
       case 'fish':

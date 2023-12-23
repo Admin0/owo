@@ -54,24 +54,6 @@ class Parameter {
         countdownObject.setTime(this.val.work_final);
     }
 
-    // 파라미터 값을 가져오는 메서드
-    // get(para) { return new URLSearchParams(window.location.search).get(para); }
-
-    // 파라미터가 존재하는지 확인하는 메서드
-    // has(para) { return new URLSearchParams(window.location.search).has(para); }
-
-    // 파라미터 값을 설정하고 업데이트하는 메서드
-    // set(para, val) { p.val[para] = val; this.updateParameterValues(); }
-
-    // 설정 값을 업데이트하고 URL을 업데이트하는 메서드
-    // set_push() {
-    //     // document.querySelector('#settings input#work_start').value = this.val.work_start;
-    //     // document.querySelector('#settings input#work_final').value = this.val.work_final;
-    //     // document.querySelector('#settings input#payday').value = `${this.val.date.yyyy}-${this.val.date.mm + 1}-${this.val.payday}`;
-    //     this.setParaFromURL();
-    //     cd.setTime(this.val.work_final);
-    // }
-
     // 파라미터 값을 업데이트하는 메서드
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고

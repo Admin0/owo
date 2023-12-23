@@ -145,7 +145,7 @@
   border-color: #FFF9C4;
 }
 
-#context .icon.cat {
+#context .icon.iconcat {
   background-position-y: calc(var(--sprite-block-size) * 0);
 }
 

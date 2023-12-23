@@ -1,14 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&display=swap');
 
+body {
+    --cat-size: 64px;
+}
+
 .info-window {
     /* font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif; */
     position: absolute;
-    background-color: #fff;
-    font-size: 10px;
-    margin-left: 8px;
-    margin-top: -2px;
+    /* background-color: #fff; */
+    font-size: 12px;
+    left: calc(var(--cat-size) + 8px);
+    top: -2px;
     display: none;
-    z-index: 9;
+}
+
+body.dev_mode .pisces.selected .info-window,
+body.dev_mode .cat.selected .info-window,
+body.dev_mode .hp-bar,
+.cat.selected .hp-bar {
+    display: initial;
+}
+
+.left .info-window {
+    transform: scaleX(-1);
+    left: initial;
+    right: calc(var(--cat-size) + 8px);
 }
 
 .info-window table {
@@ -24,14 +40,14 @@
     padding: 2px 4px;
 }
 
-.pisces+.info-window table th,
-.pisces+.info-window table td {
+.pisces .info-window table th,
+.pisces .info-window table td {
     border-color: #FFC107;
     color: #FFC107;
 }
 
-.yarnball+.info-window table th,
-.yarnball+.info-window table td {
+.yarnball .info-window table th,
+.yarnball .info-window table td {
     border-color: #FF5722;
     color: #FF5722;
 }
@@ -41,10 +57,10 @@
 }
 
 .cat {
-    width: var(--sprite-block-size);
-    height: var(--sprite-block-size);
+    width: var(--cat-size);
+    height: var(--cat-size);
     background: url('../img/cat_skin_우유.png');
-    background-size: calc(8 * var(--sprite-block-size)) calc(9 * var(--sprite-block-size));
+    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
     image-rendering: pixelated;
     position: absolute;
 
@@ -52,20 +68,33 @@
     animation: cat 1s steps(8) infinite;
 
     cursor: pointer;
-    --sprite-block-size: 64px;
+
+    /* for selected class */
+    transform-style: preserve-3d;
 }
 
 @keyframes cat {
     from {
-        background-position-x: calc(var(--sprite-block-size) *0)
+        background-position-x: calc(var(--cat-size) *0)
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * -8)
+        background-position-x: calc(var(--cat-size) * -8)
+    }
+}
+
+@keyframes cat-start-again {
+    from {
+        background-position-x: calc(var(--cat-size) *0)
+    }
+
+    to {
+        background-position-x: calc(var(--cat-size) * -8)
     }
 }
 
 body.dev_mode .cat,
+body.dev_mode .cat.유령,
 body.dev_mode .pisces {
     outline: 2px dashed #FFC107;
     border-radius: 4px;
@@ -79,74 +108,75 @@ body.dev_mode .cat {
     outline-color: #4caf50;
 }
 
-body.dev_mode .info-window {
-    display: inherit;
-}
-
 .cat.left {
     transform: scaleX(-1);
 }
 
 .cat.watch {
-    background-position-y: calc(var(--sprite-block-size) * -1);
+    background-position-y: calc(var(--cat-size) * -1);
 }
 
 .cat.walk {
-    background-position-y: calc(var(--sprite-block-size) * -2);
+    background-position-y: calc(var(--cat-size) * -2);
 }
 
 .cat.run {
-    background-position-y: calc(var(--sprite-block-size) * -3);
+    background-position-y: calc(var(--cat-size) * -3);
 }
 
 .cat.drag {
-    background-position-y: calc(var(--sprite-block-size) * -4);
+    background-position-y: calc(var(--cat-size) * -4);
     z-index: 11;
 }
 
 .cat.lick {
-    background-position-y: calc(var(--sprite-block-size) * -5);
+    background-position-y: calc(var(--cat-size) * -5);
 }
 
 .cat.wash {
-    background-position-y: calc(var(--sprite-block-size) * -6);
+    background-position-y: calc(var(--cat-size) * -6);
 }
 
 .cat.stretch {
-    background-position-y: calc(var(--sprite-block-size) * -7);
+    animation-name: cat-start-again;
+    background-position-y: calc(var(--cat-size) * -7);
 }
 
 .cat.surprised {
-    background-position-y: calc(var(--sprite-block-size) * -8);
+    animation-name: cat-start-again;
+    background-position-y: calc(var(--cat-size) * -8);
 }
 
 .pisces {
     background: url('../img/fish.png');
     position: absolute;
-    width: var(--sprite-block-size);
-    height: var(--sprite-block-size);
+    width: var(--cat-size);
+    height: var(--cat-size);
     z-index: 10;
     cursor: pointer;
 
-    background-size: calc(4 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+    background-size: calc(4 * var(--cat-size)) calc(5 * var(--cat-size));
     image-rendering: pixelated;
-    --sprite-block-size: 64px;
+    --cat-size: 64px;
 
     animation: pisces .125s steps(1);
+
+    /* for selected class */
+    transform-style: preserve-3d;
 }
 
-.pisces.right {
+.pisces.left {
     transform: scaleX(-1);
 }
 
 .pisces.drag {
-    background-position-x: calc(var(--sprite-block-size) * -1);
+    background-position-x: calc(var(--cat-size) * -1);
     z-index: 11;
 }
 
 @keyframes pisces {
     from {
-        background-position-x: calc(var(--sprite-block-size) * -1);
+        background-position-x: calc(var(--cat-size) * -1);
     }
 
     to {
@@ -157,7 +187,7 @@ body.dev_mode .info-window {
 .goldfish.drag,
 .richmineral.drag,
 .richraremineral.drag {
-    background-position-x: calc(var(--sprite-block-size) * -3);
+    background-position-x: calc(var(--cat-size) * -3);
 
 }
 
@@ -165,38 +195,38 @@ body.dev_mode .info-window {
 .richmineral,
 .richraremineral {
     animation-name: pisces-col2;
-    background-position-x: calc(var(--sprite-block-size) * -2);
+    background-position-x: calc(var(--cat-size) * -2);
 }
 
 @keyframes pisces-col2 {
     from {
-        background-position-x: calc(var(--sprite-block-size) * -3);
+        background-position-x: calc(var(--cat-size) * -3);
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * -2);
+        background-position-x: calc(var(--cat-size) * -2);
     }
 }
 
 
 .cucumber {
-    background-position-y: calc(var(--sprite-block-size) * -1);
+    background-position-y: calc(var(--cat-size) * -1);
 }
 
 .mineral,
 .richmineral {
-    background-position-y: calc(var(--sprite-block-size) * -2);
+    background-position-y: calc(var(--cat-size) * -2);
 
 }
 
 .raremineral,
 .richraremineral {
-    background-position-y: calc(var(--sprite-block-size) * -3);
+    background-position-y: calc(var(--cat-size) * -3);
 
 }
 
 .yarnball {
-    background-position-y: calc(var(--sprite-block-size) * -4);
+    background-position-y: calc(var(--cat-size) * -4);
 
 }
 
@@ -206,14 +236,76 @@ body.dev_mode .info-window {
 
 @keyframes yarnball {
     from {
-        background-position-x: calc(var(--sprite-block-size) * 0)
+        background-position-x: calc(var(--cat-size) * 0)
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * -4);
+        background-position-x: calc(var(--cat-size) * -4);
     }
 }
 
+
+/*
+ * 고양이 선택했을때 세부 사항 표시
+ */
+
+.cat.selected:before,
+.pisces.selected:before {
+    content: '';
+    --width: 32px;
+    --border-width: 2px;
+    width: calc(var(--width));
+    height: calc(var(--width)/2);
+    top: calc(54px - var(--width)/4 - var(--border-width));
+    left: calc(32px - var(--width)/2 - var(--border-width));
+    border: var(--border-width) solid #4caf50;
+    position: absolute;
+    border-radius: 50%;
+    transform: translateZ(-1px);
+}
+
+.pisces.selected:before {
+    border-color: #FFC107;
+}
+
+.yarnball.selected:before {
+    border-color: #FF5722;
+}
+
+/* hp bar */
+.cat .hp-bar {
+    position: absolute;
+    display: none;
+    top: calc(100% + 4px);
+    transform: translateX(50%);
+}
+
+.cat .hp-bar table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.cat .hp-bar td {
+    border: 2px solid #212121;
+    width: 2px;
+    height: 4px;
+}
+
+.left .hp-bar {
+    transform: scaleX(-1) translateX(-50%);
+}
+
+.cat .hp-bar .high td.on {
+    background-color: #4caf50;
+}
+
+.cat .hp-bar .mid td.on {
+    background-color: #FFC107;
+}
+
+.cat .hp-bar .low td.on {
+    background-color: #FF5722;
+}
 
 /*
  * 고양이 울음 소리 말풍선
@@ -259,4 +351,22 @@ body.dev_mode .info-window {
         visibility: hidden;
         margin-top: -32px;
     }
+}
+
+/* 유령 */
+.cat.유령 {
+    z-index: 11;
+}
+
+.cat.유령:before {
+    border: none;
+}
+
+body.dev_mode .cat.유령 {
+    outline: none;
+}
+
+body.dev_mode .cat.유령 .info-window,
+.cat.유령 .hp-bar {
+    display: none;
 }
