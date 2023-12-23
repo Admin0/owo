@@ -208,6 +208,7 @@ footer img {
 }
 
 #messages {
+  max-width: 1280px;
   z-index: 15;
   position: fixed;
   left: 20%;
@@ -215,10 +216,21 @@ footer img {
   margin: 1em;
   color: #4caf50;
   pointer-events: none;
+  text-shadow: -1px 0px #fff, 0px 1px #fff, 1px 0px #fff, 0px -1px #fff;
+}
+
+#messages .message_wrap {
+  display: flex;
+}
+
+#messages .time {
+  width: fit-content;
+  margin-right: .5em;
 }
 
 @media only screen and (max-width: 768px) {
   #messages {
+    max-width: 100%;
     bottom: 0;
     left: 0;
     font-size: 12px;
@@ -240,7 +252,7 @@ footer img {
 017   #toast
 016   #context
 015   #messages | #resources
-014
+014   #context(mobile)
 013
 012 
 011   #book | .cat.drag | .pisces.drag | .유령

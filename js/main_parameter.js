@@ -41,7 +41,7 @@ class Parameter {
     setParaFromURL() {
         history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.val.work_start}&work_final=${this.val.work_final}&payday=${this.val.payday}`);
     }
-    
+
     // URL에서 파라미터 값을 가져오는 메서드
     getParaFromURL() {
         // URL에서 작업 시작, 종료 및 월급일 정보를 가져와 설정
@@ -50,7 +50,7 @@ class Parameter {
         this.val.payday = new URLSearchParams(window.location.search).get('payday') || this.val.payday || '25';
     }
 
-    setCountdownNewValue(countdownObject){
+    setCountdownNewValue(countdownObject) {
         countdownObject.setTime(this.val.work_final);
     }
 

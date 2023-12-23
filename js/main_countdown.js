@@ -108,6 +108,7 @@ class Countdown {
     getSecs(full_length = true) { return full_length ? this.toFullLength(this.time_fragment.s) : this.time_fragment.s }
     getcSecs(full_length = true) { return full_length ? this.toFullLength(this.time_fragment.c) : this.time_fragment.c }
 
+    // 타이머가 종료되면 true 반환
     isIgnited() { return this.time_fragment.STD <= 0 }
 
     /**

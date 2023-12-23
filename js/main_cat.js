@@ -350,8 +350,11 @@ class Cat {
             } else {
                 this.hp = 0;
                 this.setMeow('Woem...');
-                context.setMessage(`${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다.`);
+                context.setMessage('');
+                context.setMessage(`*** ${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다. ***`);
+                context.setMessage('');
                 const i = cats.findIndex(cat => cat == this);
+                
                 // 고양이 객체 제거
                 this.setSkin('유령');
                 // cats[i].element.remove();

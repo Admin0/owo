@@ -13,6 +13,7 @@
     transition-property: left;
     box-shadow: none;
     margin-top: 0;
+    z-index: 14;
   }
 
   #context ul li {

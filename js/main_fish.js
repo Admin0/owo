@@ -57,7 +57,12 @@ class Fish {
     }
 
     setType(type) {
-        const types = ['fish', 'cucumber', 'mineral', 'yarnball'];
+        const types = [
+            'fish', 'fish', 'fish', 'fish', 'fish',
+            'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber',
+            'mineral', 'mineral', 'mineral', 'mineral', 'mineral',
+            'yarnball'
+        ];
         const type_index = Math.floor(Math.random() * types.length);
 
         // 기존 클래스 삭제
@@ -75,6 +80,20 @@ class Fish {
         if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 20) != 0 ? 'mineral' : 'raremineral' }
         // 희귀광물이 1/10 확률로 풍부한희귀광물이 된다
         if (this.type == 'raremineral') { this.type = Math.floor(Math.random() * 10) != 0 ? 'raremineral' : 'richraremineral' }
+
+        if (this.type == 'yarnball') {
+            // 털실공이면 체력 추가
+            this.hp = 30;
+            this.hp_max = 30;
+
+            // 털실공 체력바를 표시할 창
+            this.hpBar = document.createElement('div');
+            this.hpBar.className = 'hp-bar';
+            this.element.appendChild(this.hpBar);
+
+            // 생선 체력 바 업데이트
+            this.updateHpBar();
+        }
 
         this.element.classList.add(this.type);
         this.updateInfoWindow();
@@ -188,8 +207,12 @@ class Fish {
 
     remove() {
         this.element.remove();
-        this.infoWindow.remove();
         clearInterval(this.activateInterval);
+
+        // 물고기 배열에서 생선 객체 제거
+        const i = pisces.findIndex(fish => fish == this);
+        pisces.splice(i, 1);
+
         // 객체를 삭제할 때 메모리에서도 해제하려고 넣었는데 작동하는지는 몰?루 --> 에러 생기네;;
         // for (var key in this) {
         //     if (this.hasOwnProperty(key)) {
@@ -249,6 +272,10 @@ class Fish {
                         cat.toggleMovement();
                         // 야옹거리는 동작
                         cat.setMeow('Nyaa!');
+
+                        // 공 내구도 업데이트
+                        this.updateHp(-2);
+                        this.updateHpBar();
 
                         // 공 움직임 시작
                         this.startSliding();
@@ -362,6 +389,7 @@ class Fish {
 
         // 생선 정보 추가
         tableHTML += addRowToTable('type', `${this.type}`);
+        if (this.type == 'yarnball') tableHTML += addRowToTable('hp', `${this.hp}/${this.hp_max}`);
         tableHTML += addRowToTable('position', `x: ${Math.floor(this.position.x)}, y: ${Math.floor(this.position.y)}`);
         if (this.speed != null) {
             tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(1)}, a: ${this.angle.toFixed(1)}`);
@@ -380,4 +408,46 @@ class Fish {
         this.infoWindow.innerHTML = tableHTML;
     }
 
+    updateHp(val) {
+        const hp = this.hp;
+        const hp_max = this.hp_max;
+        if (hp + val < hp_max && hp + val > 0) {
+            this.hp += val;
+        } else {
+            if (val > 0) {
+                this.hp = hp_max;
+            } else {
+                this.hp = 0;
+                const i = pisces.findIndex(fish => fish == this);
+
+                // 효과 후 생선 객체 제거
+                this.element.classList.add('ghost');
+                setTimeout(() => {
+                    this.remove();
+                }, 1500);
+
+                p.updateParameterValues();
+            }
+        }
+    }
+    updateHpBar() {
+        const hp = this.hp;
+        const hp_max = this.hp_max;
+        // 테이블을 생성하고 헤더를 추가
+        let tableHTML = hp / hp_max * 100 > 50 ? '<table class="high"><tr>' : hp / hp_max * 100 > 25 ? '<table class="mid"><tr>' : '<table class="low"><tr>';
+
+        for (let i = 0; i < Math.ceil(hp_max / 10); i++) {
+            if (i < Math.ceil(hp / 10)) {
+                tableHTML += '<td class="on"></td>';
+            } else {
+                tableHTML += '<td class=""></td>';
+            }
+        }
+
+        // 테이블을 닫음
+        tableHTML += '</tr></table>';
+
+        // 정보 창에 HTML 설정
+        this.hpBar.innerHTML = tableHTML;
+    }
 }

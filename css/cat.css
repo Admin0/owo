@@ -17,7 +17,7 @@ body {
 body.dev_mode .pisces.selected .info-window,
 body.dev_mode .cat.selected .info-window,
 body.dev_mode .hp-bar,
-.cat.selected .hp-bar {
+.selected .hp-bar {
     display: initial;
 }
 
@@ -63,6 +63,8 @@ body.dev_mode .hp-bar,
     background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
     image-rendering: pixelated;
     position: absolute;
+    display: flex;
+    justify-content: center;
 
     z-index: 10;
     animation: cat 1s steps(8) infinite;
@@ -150,12 +152,14 @@ body.dev_mode .cat {
 .pisces {
     background: url('../img/fish.png');
     position: absolute;
+    display: flex;
+    justify-content: center;
     width: var(--cat-size);
     height: var(--cat-size);
     z-index: 10;
     cursor: pointer;
 
-    background-size: calc(4 * var(--cat-size)) calc(5 * var(--cat-size));
+    background-size: calc(4 * var(--cat-size)) calc(6 * var(--cat-size));
     image-rendering: pixelated;
     --cat-size: 64px;
 
@@ -244,6 +248,10 @@ body.dev_mode .cat {
     }
 }
 
+.yarnball.ghost {
+    animation: yarnball .5s steps(4) infinite;
+    background-position-y: calc(var(--cat-size) * -5);
+}
 
 /*
  * 고양이 선택했을때 세부 사항 표시
@@ -273,37 +281,42 @@ body.dev_mode .cat {
 }
 
 /* hp bar */
-.cat .hp-bar {
+.hp-bar {
     position: absolute;
     display: none;
     top: calc(100% + 4px);
-    transform: translateX(50%);
 }
 
-.cat .hp-bar table {
+.cat:hover .hp-bar,
+.pisces:hover .hp-bar {
+    display: initial;
+}
+
+.hp-bar table {
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-.cat .hp-bar td {
+.hp-bar td {
     border: 2px solid #212121;
     width: 2px;
     height: 4px;
 }
 
 .left .hp-bar {
-    transform: scaleX(-1) translateX(-50%);
+    transform: scaleX(-1);
 }
 
-.cat .hp-bar .high td.on {
+.hp-bar .high td.on,
+.hp-bar .high td.on {
     background-color: #4caf50;
 }
 
-.cat .hp-bar .mid td.on {
+.hp-bar .mid td.on {
     background-color: #FFC107;
 }
 
-.cat .hp-bar .low td.on {
+.hp-bar .low td.on {
     background-color: #FF5722;
 }
 
@@ -356,6 +369,7 @@ body.dev_mode .cat {
 /* 유령 */
 .cat.유령 {
     z-index: 11;
+    pointer-events: none;
 }
 
 .cat.유령:before {

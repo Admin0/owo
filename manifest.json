@@ -5,7 +5,7 @@
   "display": "standalone",
   "name": "퇴근 시간을 알려주는 고양이",
   "orientation": "any",
-  "scope": "/owo/",
+  "scope": ".",
   "short_name": "owo",
   "start_url": "/",
   "theme_color": "#ffffff",

@@ -98,8 +98,7 @@ const leftClick = event => {
         context.skill.summonMineral(pos);
         break;
       case 'random':
-        pisces.push(new Fish(pos));
-        context.setMessage('아무거나 소환했습니다.')
+        context.skill.summonRandom(pos);
         break;
       case 'yarnball':
         context.skill.summonYarnball(pos);
@@ -112,7 +111,40 @@ const leftClick = event => {
 document.addEventListener('mouseup', (event) => { leftClick(event); });
 document.addEventListener('touchend', (event) => { leftClick(event); });
 
+setInterval(() => {
+  function shouldSummonEvil() {
+    const seconds = cd.getSecs();
+    const validTimes = [45, 30, 15, '00'];  // 10 초 미만이면 앞에 0 붙이고 문자열로 바뀜
 
+    return validTimes.includes(seconds);
+  }
+
+
+  if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
+
+  const evilList = ['요정', '마녀', '잼민', '헤드헌터', '월급루팡', '생계형월급채굴러', '버즈도둑놈', '부서폭파범(KDA 2/1/3)'];
+  const evil = evilList[Math.floor(Math.random() * evilList.length)];
+  context.setMessage('');
+
+  p.autoSummon = p.autoSummon == null ? true : p.autoSummon;
+  if (!p.autoSummon) {
+    context.setMessage(`*** 방 밖에서 인기척이 있었지만, 방 문을 잠궈둔 덕에 아무일도 일어나지 않았습니다. ***`);
+    context.setMessage('');
+    return;
+  }
+
+  // 예상되는 최대 개수 계산
+  const maxFish = context.skill.getReasonableNumbers(2);
+
+  if (pisces.length <= maxFish) {
+    context.setMessage(`*** 사악한 ${evil}이(가) 방 안을 어지럽히고 도망쳤습니다! ***`);
+    context.setMessage('');
+    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1/3));
+  } else {
+    context.setMessage(`*** 사악한 ${evil}이(가) 방 안의 더러운 모습을 보고 혀를 내두릅니다... ***`);
+    context.setMessage('');
+  }
+}, 1000);
 
 // CONTEXT MENU
 const context = new Context();

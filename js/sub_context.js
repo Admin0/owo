@@ -65,18 +65,40 @@ class Context {
         this.messages = document.createElement('section');
         this.messages.id = 'messages';
         document.body.appendChild(this.messages);
+
+        // setMessage 에서 이전 메시지와 같은 지 확인 목적
+        this.messages.textCheckVal = '이전 메시지와 같은 지 확인할 거에요';
     }
-    setMessage(string) {
-        const d = new Date();
-        const z = number => (number < 10 ? '0' : '') + number;
-        const message = document.createElement('div')
-        message.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}] ${string}`;
-        document.getElementById(this.messages.id).appendChild(message);
+    setMessage(msg_string) {
+        // 이전 메시지와 다른 값인 경우 메시지 출력
+        if (this.messages.textCheckVal != msg_string) {
+            // 바깥 구조 생성
+            const message_wrap = document.createElement('div');
+            message_wrap.className = 'message_wrap'
 
-        setTimeout(() => {
-            message.remove();
-        }, 5000);
+            // 내부 중 시간 부분 생성
+            const time = document.createElement('div');
+            time.className = 'time';
+            const d = new Date();
+            const z = number => (number < 10 ? '0' : '') + number;
+            time.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}]`;
+            message_wrap.appendChild(time);
 
+            // 내부 중 메시지 부분 생성
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerText = msg_string;
+            message_wrap.appendChild(message);
+
+            document.getElementById(this.messages.id).appendChild(message_wrap)
+            this.messages.textCheckVal = msg_string;
+
+            // 5 초 뒤 메시지 삭제
+            setTimeout(() => {
+                message_wrap.remove();
+                this.messages.textCheckVal = '5 초 뒤 메시지 삭제';
+            }, 5000);
+        }
     }
 
     loadToastElement() {
@@ -124,9 +146,25 @@ class Context {
     getDevMode() {
         return localStorage.getItem('dev_mode') == 'true' ? true : false;
     }
+    setAutoSummon() {
+        const isAutoSummon = p.autoSummon == null ? false : p.autoSummon ? false : true;
+
+        const contextAutoSummonElement = document.querySelector('#context .auto_summon');
+        if (isAutoSummon) {
+            contextAutoSummonElement != null ? contextAutoSummonElement.classList.remove('activated') : false;
+            this.setMessage('아무나 들어와서 방을 어지럽힐 수 있습니다.');
+        } else {
+            contextAutoSummonElement != null ? contextAutoSummonElement.classList.add('activated') : false;
+            this.setMessage('방문을 잠궜으니, 이제는 안전합니다!');
+        }
+        p.autoSummon = isAutoSummon;
+    }
 
     initializeSkills(parent) {
         this.skill = {
+            getReasonableNumbers(times = 1) {
+                return Math.min(Math.floor(window.innerWidth * window.innerHeight / 33333 * times), 100 * times);
+            },
             summonCat(pos) {
                 if (p.val.resources.supplies < p.val.resources.suppliesMax) {
                     const cat = new Cat(pos).setMeow('Eow');
@@ -139,15 +177,17 @@ class Context {
                 }
             },
             summonMassiveCats(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0
+                for (i; i < n; i++) {
                     if (this.summonCat() == false) {
                         parent.setMessage('소환을 중지합니다.');
                         break;
                     }
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonFish(pos) {
-                const cost = 1;
+                const cost = 4;
                 if (p.val.resources.minerals - cost >= 0) {
                     p.val.resources.minerals -= cost;
                     pisces.push(new Fish(pos).setType('fish'));
@@ -159,9 +199,11 @@ class Context {
                 }
             },
             summonMassiveFishs(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0
+                for (i; i < n; i++) {
                     this.summonFish();
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonCucumber(pos) {
                 pisces.push(new Fish(pos).setType('cucumber'));
@@ -169,9 +211,11 @@ class Context {
                 p.updateParameterValues();
             },
             summonMassiveCucumbers(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0
+                for (i; i < n; i++) {
                     this.summonCucumber();
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonMineral(pos) {
                 const cost = 0;
@@ -186,9 +230,11 @@ class Context {
                 }
             },
             summonMassiveMinerals(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0;
+                for (i; i < n; i++) {
                     this.summonMineral();
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonYarnball(pos) {
                 const cost = 50;
@@ -203,24 +249,58 @@ class Context {
                 }
             },
             summonMassiveYarnballs(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0;
+                for (i; i < n; i++) {
                     if (this.summonYarnball() == false) {
                         parent.setMessage('소환을 중지합니다.');
                         break;
                     }
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonAll(n) {
-                for (let i = 0; i < n; i++) {
+                let i = 0;
+                for (i; i < n; i++) {
                     this.summonFish();
+                }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+                i = 0;
+                for (i; i < n; i++) {
                     this.summonCucumber();
+                }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+                i = 0;
+                for (i; i < n; i++) {
                     this.summonMineral();
                 }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+            },
+            summonRandom(pos) {
+                pisces.push(new Fish(pos));
+                parent.setMessage('아무거나 소환했습니다.');
+            },
+            summonMassiveRandoms(n) {
+                let i = 0;
+                for (i; i < n; i++) {
+                    this.summonRandom();
+                }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             clearAllPisces() {
-                pisces.forEach(fish => { fish.remove(); });
-                pisces.length = 0;
-                parent.setMessage('물건들을 치웠습니다.');
+                const i = pisces.length;
+                while (pisces.length > 0) {
+                    pisces[pisces.length - 1].remove();
+                }
+                if (i != 0) parent.setMessage(`${i} 개의 물건들을 치웠습니다.`);
+                else parent.setMessage(`방안에 물건이 없습니다.`);
+            },
+            surpriseCats() {
+                cats.forEach(event => {
+                    event.toggleMovement('surprised');
+                });
+                parent.setMessage(``);
+                parent.setMessage(`고양이들이 깜짝 놀랐습니다!`);
+                parent.setMessage(``);
             }
         }
     }
