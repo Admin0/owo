@@ -25,8 +25,6 @@ var tag = [
   "오늘의_노력은_내일의_성과를_만든다",
   "실패는_성공의_어머니다",
   "고통은_성장의_기회이다",
-  "협업은_힘이다",
-  "책임감을_가져라",
   "팀은_모두가_승리할수_있을때_가장강하다",
   "변화는_성장의_시작이다",
   "성공은_자기_관리에서_시작된다",
@@ -74,5 +72,5 @@ function tag_manager(target, times) {
   }
 }
 
-tag_manager(document.querySelector("#inside_page"), 2013);
+// tag_manager(document.querySelector("#inside_page"), 2013);
 // time.log('tag was created.');

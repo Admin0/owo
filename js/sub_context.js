@@ -93,11 +93,11 @@ class Context {
             document.getElementById(this.messages.id).appendChild(message_wrap)
             this.messages.textCheckVal = msg_string;
 
-            // 5 초 뒤 메시지 삭제
+            // 7 초 뒤 메시지 삭제
             setTimeout(() => {
                 message_wrap.remove();
-                this.messages.textCheckVal = '5 초 뒤 메시지 삭제';
-            }, 5000);
+                this.messages.textCheckVal = '7 초 뒤 메시지 삭제';
+            }, 7000);
         }
     }
 
@@ -152,10 +152,10 @@ class Context {
         const contextAutoSummonElement = document.querySelector('#context .auto_summon');
         if (isAutoSummon) {
             contextAutoSummonElement != null ? contextAutoSummonElement.classList.remove('activated') : false;
-            this.setMessage('아무나 들어와서 방을 어지럽힐 수 있습니다.');
+            // this.setMessage('급식기 전원을 켰습니다.');
         } else {
             contextAutoSummonElement != null ? contextAutoSummonElement.classList.add('activated') : false;
-            this.setMessage('방문을 잠궜으니, 이제는 안전합니다!');
+            // this.setMessage('급식기 전원을 껐습니다.');
         }
         p.autoSummon = isAutoSummon;
     }
@@ -261,30 +261,28 @@ class Context {
             summonAll(n) {
                 let i = 0;
                 for (i; i < n; i++) {
-                    this.summonFish();
+                    this.summonFish(undefined, { mute: true });
                 }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-                i = 0;
-                for (i; i < n; i++) {
-                    this.summonCucumber();
+                let j = 0;
+                for (j; j < n; j++) {
+                    this.summonCucumber(undefined, { mute: true });
                 }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-                i = 0;
-                for (i; i < n; i++) {
-                    this.summonMineral();
+                let k = 0;
+                for (k; k < n; k++) {
+                    this.summonMineral(undefined, { mute: true });
                 }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+                parent.setMessage(`(x${i + j + k} 회 소환 성공)`);
             },
-            summonRandom(pos) {
+            summonRandom(pos, options) {
                 pisces.push(new Fish(pos));
-                parent.setMessage('아무거나 소환했습니다.');
+                if (options == null || options.mute != true) parent.setMessage('아무거나 소환했습니다.');
             },
-            summonMassiveRandoms(n) {
+            summonMassiveRandoms(n, options) {
                 let i = 0;
                 for (i; i < n; i++) {
-                    this.summonRandom();
+                    this.summonRandom(undefined, options);
                 }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+                if (options == null || options.mute != true) if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             clearAllPisces() {
                 const i = pisces.length;

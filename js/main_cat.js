@@ -8,6 +8,7 @@ class Cat {
     constructor(position, skin) {
         // 초기화 메서드 호출
         this.initialize(position, skin);
+        this.initIvents(this);
 
         // 드래그 앤 드롭 관련 속성 추가
         this.isDragging = false;
@@ -54,7 +55,8 @@ class Cat {
         // 객체 생성
         this.element = document.createElement('div');
         this.element.className = 'cat';
-        document.body.appendChild(this.element);
+        document.getElementById('cage').appendChild(this.element);
+        // document.body.appendChild(this.element);
 
         // 고양이 정보를 표시할 창
         this.infoWindow = document.createElement('div');
@@ -231,7 +233,7 @@ class Cat {
 
     drag(event) {
         // 드래그 중일 때, 새로운 위치로 이동
-        if (this.isDragging) {
+        if (this.isDragging && !this.element.classList.contains('유령')) {
             const newX = event.clientX - this.dragOffsetX;
             const newY = event.clientY - this.dragOffsetY;
 
@@ -274,15 +276,17 @@ class Cat {
     setMeow(mmm) {
         const rect = this.element.getBoundingClientRect();
         if (this.meow != null) { this.meow.remove(); }
+
         this.meow = document.createElement('div');
         this.meow.className = 'meow';
-        document.body.appendChild(this.meow);
+        document.getElementById('cage').appendChild(this.meow);
+
         this.meow.innerHTML = this.skin != '유령' ? mmm : '······.';
-        this.updateInfoWindow();
+        // this.updateInfoWindow();
 
         const meowRect = this.meow.getBoundingClientRect();
         this.meow.style.left = `${rect.left + rect.width / 2 - meowRect.width / 2}px`;
-        this.meow.style.top = `${rect.top}px`;
+        this.meow.style.top = `${rect.top - 8}px`;
 
         // 일정 시간 후 삭제
         setTimeout(() => { this.meow.remove(); }, 2000);
@@ -330,7 +334,7 @@ class Cat {
         tableHTML += addRowToTable('class', classList.join(', '));
 
         // 울음소리 디버그를 위한 정보 추가
-        tableHTML += addRowToTable('meow', this.meow == undefined ? '-----' : this.meow.innerHTML);
+        // tableHTML += addRowToTable('meow', this.meow == undefined ? '-----' : this.meow.innerHTML);
 
         // 테이블을 닫음
         tableHTML += '</table>';
@@ -348,19 +352,22 @@ class Cat {
             if (val > 0) {
                 this.hp = hp_max;
             } else {
+                // 고양이 쥬금 ㅠㅠ
                 this.hp = 0;
                 this.setMeow('Woem...');
                 context.setMessage('');
                 context.setMessage(`*** ${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다. ***`);
                 context.setMessage('');
                 const i = cats.findIndex(cat => cat == this);
-                
+
                 // 고양이 객체 제거
                 this.setSkin('유령');
                 // cats[i].element.remove();
                 cats.splice(i, 1);
 
                 p.updateParameterValues();
+
+                this.getShouldEvent()
             }
         }
     }
@@ -383,6 +390,26 @@ class Cat {
 
         // 정보 창에 HTML 설정
         this.hpBar.innerHTML = tableHTML;
+    }
+
+    getShouldEvent() {
+        this.event.allCatsDead();
+    }
+    initIvents(parent) {
+        this.event = {
+            allCatsDead: () => {
+                console.log('allCatsDead check');
+                if (p.val.resources.supplies == 0) {
+                    context.setMessage('')
+                    context.setMessage('*** 모든 고양이가 고양이 별로 떠났습니다 ***')
+                    context.setMessage('성좌 냥냥이가 당신을 원망합니다...')
+                    context.setMessage('')
+                }
+            },
+            test: () => {
+                console.log('test');
+            }
+        }
     }
 
 }

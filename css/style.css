@@ -15,41 +15,28 @@
   font-weight: 400;
 }
 
-@font-face {
-  font-family: 'StarDust';
-  src: url('../font/PF스타더스트.woff2') format('woff2');
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: 'StarDust Bold';
-  src: url('../font/PF스타더스트 Bold.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'jamsil_3';
-  src: url('../font/The Jamsil 3 Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'SKYBORI';
-  src: url('../font/SKYBORI.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'omyu_pretty';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
 body {
+  --tile-size: 32px;
   font-family: 'NeoDunggeunmo', sans-serif;
   /* font-family: "Galmuri11", sans-serif; */
   margin: 0;
-  /* background: linear-gradient(to bottom, rgba(256, 256, 256, .5) 0%, transparent 10%, transparent 100%); */
   height: calc(100vh - 0em);
   overflow: hidden;
+  background: url('../img/background1.png');
+  background-size: calc(var(--tile-size) * 2);
+}
+
+#background {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#background .tile {
+  width: var(--tile-size);
+  height: var(--tile-size);
+  background: url('../img/background2.png');
+  background-size: calc(2 * var(--tile-size)) calc(2 * var(--tile-size));
+  background-position: calc(var(--tile-size) * -1) calc(var(--tile-size) * 0);
 }
 
 header {
@@ -214,9 +201,9 @@ footer img {
   left: 20%;
   bottom: 25%;
   margin: 1em;
-  color: #4caf50;
+  color: #212121;
   pointer-events: none;
-  text-shadow: -1px 0px #fff, 0px 1px #fff, 1px 0px #fff, 0px -1px #fff;
+  text-shadow: -2px 0px #fff, 0px 2px #fff, 2px 0px #fff, 0px -2px #fff;
 }
 
 #messages .message_wrap {
@@ -254,7 +241,7 @@ footer img {
 015   #messages | #resources
 014   #context(mobile)
 013
-012 
+012
 011   #book | .cat.drag | .pisces.drag | .유령
 010   .cat | .pisces
 009

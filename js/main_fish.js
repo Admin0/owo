@@ -2,7 +2,8 @@ class Fish {
     constructor(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         this.element = document.createElement('div');
         this.element.className = 'pisces';
-        document.body.appendChild(this.element);
+        document.getElementById('basket').appendChild(this.element);
+        // document.body.appendChild(this.element);
 
         // 생선 정보를 표시할 창
         this.infoWindow = document.createElement('div');
@@ -233,6 +234,8 @@ class Fish {
             if (distance < 32 && !cat.element.classList.contains('drag') && !this.element.classList.contains('drag')) {
                 switch (this.type) {
                     case 'fish':
+                        // 고양이 체력 증가
+                        cat.updateHp(10);
                     case 'goldfish':
                         // 생선을 먹는 움직임
                         cat.toggleMovement('lick');

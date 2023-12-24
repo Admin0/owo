@@ -60,11 +60,19 @@ document.addEventListener('touchend', (e) => {
 let IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
 let engine_timeout;
 
+// CONTEXT MENU
+const context = new Context();
+context.setDevMode();
+
+document.querySelector('#context').addEventListener('load', () => {
+  console.log(context);
+  context.loadToasts();
+});
+
 
 // 고양이 객체 생성
-// const cats = p.cats || [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
-const cats = [new Cat().setSkin('우유'), new Cat(), new Cat(), new Cat(), new Cat(), new Cat(), new Cat()];
-// console.log(cats);
+const cats = [new Cat().setSkin('우유')];
+for (let i = 0; i < context.skill.getReasonableNumbers(.1); i++) { cats.push(new Cat()); }
 
 cats.forEach(cat => {
 
@@ -114,22 +122,30 @@ document.addEventListener('touchend', (event) => { leftClick(event); });
 setInterval(() => {
   function shouldSummonEvil() {
     const seconds = cd.getSecs();
+    // const validTimes = [58, 55, 53, 50, 48, 45, 43, 30, 15, '00'];  // 테스트 코드
     const validTimes = [45, 30, 15, '00'];  // 10 초 미만이면 앞에 0 붙이고 문자열로 바뀜
 
     return validTimes.includes(seconds);
   }
 
+  // 오늘의 한마디
+  if (cd.getSecs() == '55') {
+    context.setMessage(`*** 오늘의 해시태그 ***`);
+    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
+    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
+    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
+  }
 
   if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
 
-  const evilList = ['요정', '마녀', '잼민', '헤드헌터', '월급루팡', '생계형월급채굴러', '버즈도둑놈', '부서폭파범(KDA 2/1/3)'];
+  const evilList = [
+    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈', '부서폭파범(KDA 2/1/3)', '눈까리', '맑눈광', '탕비실독재자'
+  ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
-  context.setMessage('');
 
   p.autoSummon = p.autoSummon == null ? true : p.autoSummon;
   if (!p.autoSummon) {
-    context.setMessage(`*** 방 밖에서 인기척이 있었지만, 방 문을 잠궈둔 덕에 아무일도 일어나지 않았습니다. ***`);
-    context.setMessage('');
+    context.setMessage(`급식기 전원이 꺼져있있습니다.`);
     return;
   }
 
@@ -137,23 +153,14 @@ setInterval(() => {
   const maxFish = context.skill.getReasonableNumbers(2);
 
   if (pisces.length <= maxFish) {
-    context.setMessage(`*** 사악한 ${evil}이(가) 방 안을 어지럽히고 도망쳤습니다! ***`);
-    context.setMessage('');
-    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1/3));
+    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1 / 3), { mute: true });
+    context.setMessage(`*** 자동 급식기 작동 완료 (${pisces.length}/${maxFish}) ***`);
+    context.setMessage(`(사악한 ${evil}이(가) 다른 물건들도 흩뿌렸습니다.)`);
   } else {
-    context.setMessage(`*** 사악한 ${evil}이(가) 방 안의 더러운 모습을 보고 혀를 내두릅니다... ***`);
-    context.setMessage('');
+    context.setMessage(`*** 자동 급식기 작동 실패 (${pisces.length}/${maxFish}) ***`);
+    context.setMessage(`(선량한 ${evil}이(가) 어질러진 꼴을 보고 급식기 작동을 막았습니다.)`);
   }
 }, 1000);
-
-// CONTEXT MENU
-const context = new Context();
-context.setDevMode();
-
-document.querySelector('#context').addEventListener('load', () => {
-  console.log(context);
-  context.loadToasts();
-});
 
 // localStorage.skill = 'undefined';
 p.updateParameterValues();
