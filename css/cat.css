@@ -35,21 +35,25 @@ body.dev_mode .hp-bar,
 .info-window table th,
 .info-window table td {
     border: 2px dashed #4caf50;
-    color: #4caf50;
-    background-color: #ffffff40;
+    color: #212121;
     padding: 2px 4px;
+}
+
+.cat .info-window table th,
+.cat .info-window table td {
+    background-color: #ffffff60;
 }
 
 .pisces .info-window table th,
 .pisces .info-window table td {
     border-color: #FFC107;
-    color: #FFC107;
+    /* color: #FFC107; */
 }
 
 .yarnball .info-window table th,
 .yarnball .info-window table td {
     border-color: #FF5722;
-    color: #FF5722;
+    /* color: #FF5722; */
 }
 
 .info-window table th:nth-child(1) {
@@ -100,7 +104,6 @@ body.dev_mode .cat.유령,
 body.dev_mode .pisces {
     outline: 2px dashed #FFC107;
     border-radius: 4px;
-    background-color: #ffffff40;
 }
 
 body.dev_mode .yarnball {
@@ -109,6 +112,7 @@ body.dev_mode .yarnball {
 
 body.dev_mode .cat {
     outline-color: #4caf50;
+    background-color: #ffffff60;
 }
 
 .cat.left,
@@ -161,7 +165,7 @@ body.dev_mode .cat {
     justify-content: center;
     width: var(--cat-size);
     height: var(--cat-size);
-    z-index: 10;
+    z-index: 9;
     cursor: pointer;
 
     background-size: calc(4 * var(--cat-size)) calc(6 * var(--cat-size));
@@ -375,6 +379,7 @@ body.dev_mode .cat {
 }
 
 body.dev_mode .cat.유령 {
+    background-color: transparent;
     outline: none;
 }
 

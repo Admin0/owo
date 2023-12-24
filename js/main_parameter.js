@@ -38,8 +38,13 @@ class Parameter {
     }
 
     // URL에 파라미터 값을 설정하는 메서드
-    setParaFromURL() {
+    setParaToURL(params) {
+        this.val.work_start = params.work_start;
+        this.val.work_final = params.work_final;
+        this.val.payday = params.payday || '25';
         history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.val.work_start}&work_final=${this.val.work_final}&payday=${this.val.payday}`);
+        this.setCountdownNewValue(cd);
+        this.updateParameterValues();
     }
 
     // URL에서 파라미터 값을 가져오는 메서드
@@ -57,9 +62,9 @@ class Parameter {
     // 파라미터 값을 업데이트하는 메서드
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고
-        document.querySelector('#minerals .val').textContent = this.val.resources.minerals;
+        document.querySelector('#minerals').textContent = this.val.resources.minerals;
         this.val.resources.supplies = cats.length;
-        document.querySelector('#supplies .val').textContent = `${this.val.resources.supplies}/${this.val.resources.suppliesMax}`;
+        document.querySelector('#supplies').textContent = `${this.val.resources.supplies}/${this.val.resources.suppliesMax}`;
 
         // 로컬 스토리지에 저장
         localStorage.setItem('val', JSON.stringify(this.val));

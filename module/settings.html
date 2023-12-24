@@ -6,11 +6,13 @@
   <span>퇴근 <input type="time" id="work_final" value="17:30" required /> </span>
 </div>
 <div>
-  <button class="icon" title="퇴근 1 시간 전" onclick="settings.clickButtons(this); p.val.work_final = `${('0' + (new Date().getHours() + 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();">
+  <button class="icon" title="퇴근 1 시간 전 시뮬레이션" onclick="settings.clickButtons(this); p.setParaToURL({work_final : `${('0' + (new Date().getHours() + 1)%24).slice(-2)}:${('0' + (new Date().getMinutes())).slice(-2)}`})">
     1h
   </button>
-  <button class="icon" title="퇴근 30 분 전" onclick="settings.clickButtons(this); p.val.work_final = `${('0' + (new Date().getHours())%24).slice(-2)}:${('0' + (new Date().getMinutes()+30)).slice(-2)}`; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();">30m</button>
-  <button class="icon split" title="퇴근 1 분 전" onclick="settings.clickButtons(this); p.val.work_final = `${('0' + (new Date().getHours())%24).slice(-2)}:${('0' + (new Date().getMinutes()+1)).slice(-2)}`; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();">
+  <button class="icon" title="퇴근 30 분 전 시뮬레이션" onclick="settings.clickButtons(this); p.setParaToURL({work_final : `${('0' + (new Date().getHours())%24).slice(-2)}:${('0' + (new Date().getMinutes()+30)).slice(-2)}`})">
+    30m
+  </button>
+  <button class="icon split" title="퇴근 1 분 전 시뮬레이션" onclick="settings.clickButtons(this); p.setParaToURL({work_final : `${('0' + (new Date().getHours())%24).slice(-2)}:${('0' + (new Date().getMinutes()+1)).slice(-2)}`})">
     1m
   </button>
   <!-- <button class="icon split" title="퇴근 1 분 전" onclick="settings.clickButtons(this); p.set('work_final',1); p.set_push();">
@@ -22,7 +24,7 @@
   <!-- <button class="material-symbols-outlined" title="주말" onclick="IS_WEEKDAYS = false; p.set_push();">event</button> -->
 </div>
 <div>
-  <button class="icon enf" title="이엔에프테크놀로지('23) 업무시간 적용" onclick="settings.clickButtons(this); p.val.work_start='08:30'; p.val.work_final = '17:30'; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();"></button>
-  <button class="icon tk" title="태광산업('22) 업무시간 적용" onclick="settings.clickButtons(this); p.val.work_start = '08:30'; p.val.work_final = '17:30'; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();"></button>
-  <button class="icon jw" title="재원산업('20) 업무시간 적용" onclick="settings.clickButtons(this); p.val.work_start = '08:00'; p.val.work_final = '17:00'; p.setParaFromURL(); p.setCountdownNewValue(cd); p.updateParameterValues();"></button>
+  <button class="icon enf" title="이엔에프테크놀로지('23) 업무시간 적용" onclick="settings.clickButtons(this); p.setParaToURL({work_start : '08:30', work_final : '17:30'});"></button>
+  <button class="icon tk" title="태광산업('22) 업무시간 적용" onclick="settings.clickButtons(this); p.setParaToURL({work_start : '08:30', work_final : '17:30'});"></button>
+  <button class="icon jw" title="재원산업('20) 업무시간 적용" onclick="settings.clickButtons(this); p.setParaToURL({work_start : '08:00', work_final : '17:00'});"></button>
 </div>

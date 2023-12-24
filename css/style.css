@@ -22,7 +22,7 @@ body {
   margin: 0;
   height: calc(100vh - 0em);
   overflow: hidden;
-  background: url('../img/background1.png');
+  background: url('../img/background_autumn.png');
   background-size: calc(var(--tile-size) * 2);
 }
 
@@ -228,11 +228,25 @@ footer img {
   width: fit-content;
   position: absolute;
   padding: .5em .7em;
-  border: 2px solid silver;
+  border: 2px solid #212121;
   background: #fff;
   z-index: 17;
   transform: translate(-1em, calc(-1em - 100%));
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, .25)
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, .25);
+  font-size: 12px;
+  /* pointer-events: none; */
+  display: none;
+}
+
+#toast .resources {
+  position: relative;
+  font-size: 16px;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+#toast.on {
+  display: initial;
 }
 
 /* z-index position
@@ -241,10 +255,10 @@ footer img {
 015   #messages | #resources
 014   #context(mobile)
 013
-012
+012   
 011   #book | .cat.drag | .pisces.drag | .유령
-010   .cat | .pisces
-009
+010   .cat | 
+009   .pisces
 008
 007
 006

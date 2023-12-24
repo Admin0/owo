@@ -3,6 +3,7 @@ class Context {
         this.loadContextElement();
         this.loadMessagesElement();
         this.loadToastElement();
+        this.setToasts();
 
         this.setSelectCatOrSometing();
 
@@ -106,22 +107,33 @@ class Context {
         this.toast.id = 'toast';
         document.body.appendChild(this.toast);
     }
-    loadToasts() {
-        console.log('1');
-        document.querySelectorAll('.icon').forEach(event => {
-            console.log('2', event);
-            event.addEventListener('mouseenter', event2 => {
-                console.log('4');
-                if (event.getAttribute('title') != null) {
-                    event.setAttribute('data-title', event.getAttribute('title'));
-                    event.removeAttribute("title");
-                    console.log('3');
-                }
-                this.toast.style.left = `${event.getBoundingClientRect().x}px`
-                this.toast.style.top = `${event.getBoundingClientRect().y}px`
-                this.toast.innerHTML = event.getAttribute('data-title');
+    setToasts() {
+        const toastLoadInterval = setInterval(() => {
+            if (document.querySelectorAll('[title]').length != 0) {
+                setToasts();
+                clearInterval(toastLoadInterval);
+            }
+        }, 100);
+        const setToasts = () => {
+            document.querySelectorAll('[title]').forEach(event => {
+                // console.log('2', event);
+                event.addEventListener('mouseenter', event2 => {
+                    // console.log('4');
+                    if (event.getAttribute('title') != null) {
+                        event.setAttribute('data-title', event.getAttribute('title'));
+                        event.removeAttribute("title");
+                        // console.log('3');
+                    }
+                    this.toast.style.left = `${event.getBoundingClientRect().x + 12}px`
+                    this.toast.style.top = `${event.getBoundingClientRect().y}px`
+                    this.toast.innerHTML = event.getAttribute('data-title');
+                    this.toast.classList.add('on');
+                });
+                event.addEventListener('mouseleave', event2 => {
+                    this.toast.classList.remove('on');
+                })
             });
-        });
+        }
     }
 
     setDevMode(wannaToggle = false) {
@@ -165,12 +177,22 @@ class Context {
             getReasonableNumbers(times = 1) {
                 return Math.min(Math.floor(window.innerWidth * window.innerHeight / 33333 * times), 100 * times);
             },
+
+            getMineralOk(cost) { return p.val.resources.minerals - cost >= 0 },
+            setMineral(cost) { p.val.resources.minerals -= cost; },
+            getSupplyOk() { return p.val.resources.supplies < p.val.resources.suppliesMax },
+
             summonCat(pos) {
-                if (p.val.resources.supplies < p.val.resources.suppliesMax) {
+                const cost = 50;
+                if (this.getSupplyOk() && this.getMineralOk(cost)) {
+                    this.setMineral(cost);
                     const cat = new Cat(pos).setMeow('Eow');
                     cats.push(cat);
-                    parent.setMessage(`${cat.skin}에게 간택 당했습니다. `);
+                    parent.setMessage(`${cat.skin}에게 간택 당했습니다.`);
                     p.updateParameterValues();
+                } else if (!this.getMineralOk(cost)) {
+                    parent.setMessage('광물이 부족합니다.');
+                    return false;
                 } else {
                     parent.setMessage('보급고가 부족합니다.');
                     return false;
@@ -188,8 +210,8 @@ class Context {
             },
             summonFish(pos) {
                 const cost = 4;
-                if (p.val.resources.minerals - cost >= 0) {
-                    p.val.resources.minerals -= cost;
+                if (this.getMineralOk(cost)) {
+                    this.setMineral(cost);
                     pisces.push(new Fish(pos).setType('fish'));
                     parent.setMessage('생선을 소환했습니다.');
                     p.updateParameterValues();
@@ -199,9 +221,11 @@ class Context {
                 }
             },
             summonMassiveFishs(n) {
-                let i = 0
-                for (i; i < n; i++) {
-                    this.summonFish();
+                let i = 0; for (i = 0; i < n; i++) {
+                    if (this.summonFish() == false) {
+                        parent.setMessage('소환을 중지합니다.');
+                        break;
+                    }
                 }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
@@ -211,16 +235,13 @@ class Context {
                 p.updateParameterValues();
             },
             summonMassiveCucumbers(n) {
-                let i = 0
-                for (i; i < n; i++) {
-                    this.summonCucumber();
-                }
+                let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonMineral(pos) {
                 const cost = 0;
-                if (p.val.resources.minerals - cost >= 0) {
-                    p.val.resources.minerals -= cost;
+                if (this.getMineralOk(cost)) {
+                    this.setMineral(cost);
                     pisces.push(new Fish(pos).setType('mineral'));
                     parent.setMessage('광물을 소환했습니다.');
                     p.updateParameterValues();
@@ -230,16 +251,13 @@ class Context {
                 }
             },
             summonMassiveMinerals(n) {
-                let i = 0;
-                for (i; i < n; i++) {
-                    this.summonMineral();
-                }
+                let i = 0; for (i; i < n; i++) { this.summonMineral(); }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonYarnball(pos) {
                 const cost = 50;
-                if (p.val.resources.minerals - cost >= 0) {
-                    p.val.resources.minerals -= cost;
+                if (this.getMineralOk(cost)) {
+                    this.setMineral(cost);
                     pisces.push(new Fish(pos).setType('yarnball').startSliding());
                     parent.setMessage('털실 공을 소환했습니다.');
                     p.updateParameterValues();
@@ -274,8 +292,16 @@ class Context {
                 parent.setMessage(`(x${i + j + k} 회 소환 성공)`);
             },
             summonRandom(pos, options) {
-                pisces.push(new Fish(pos));
-                if (options == null || options.mute != true) parent.setMessage('아무거나 소환했습니다.');
+                const cost = 1;
+                if (this.getMineralOk(cost)) {
+                    this.setMineral(cost);
+                    pisces.push(new Fish(pos));
+                    if (options == null || options.mute != true) parent.setMessage('아무거나 소환했습니다.');
+                    p.updateParameterValues();
+                } else {
+                    parent.setMessage('광물이 부족합니다.');
+                    return false;
+                }
             },
             summonMassiveRandoms(n, options) {
                 let i = 0;
@@ -401,12 +427,38 @@ class Settings {
         this.loadElement(document.querySelector(settings_area), './module/settings.html');
         this.element = document.querySelector(settings_area);
 
+        this.initTimeSet();
+    }
+
+    initTimeSet() {
+        document.querySelector('#setting_bt').addEventListener("click", () => { settings.showSettings(); });
+        
         // 설정창이 켜진 상태에서 외부를 클릭하면 설정 닫기
         document.addEventListener("click", (event) => {
             const keepElements = document.querySelectorAll('#book, #context');
             const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(event.target));
             if (this.element.classList.contains('on') == true && !isClickedOnKeeps) { this.showSettings(); }
         });
+
+        const initTimeInterval = setInterval(() => {
+            if (document.querySelectorAll('[title]').length != 0) {
+                initTimeSet();
+                clearInterval(initTimeInterval);
+            }
+        }, 100);
+        const initTimeSet = () => {
+            document.querySelectorAll('#settings input').forEach((event) => {
+                // console.log(event);
+                event.addEventListener("change", (event) => {
+                    console.log(event);
+                    p.val.work_start = document.querySelector('#settings input#work_start').value;
+                    p.val.work_final = document.querySelector('#settings input#work_final').value;
+                    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
+                    p.setParaToURL();
+                    p.updateParameterValues();
+                });
+            });
+        }
     }
 
     loadElement(element, module) {

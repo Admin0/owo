@@ -402,8 +402,7 @@ class Cat {
                 if (p.val.resources.supplies == 0) {
                     context.setMessage('')
                     context.setMessage('*** 모든 고양이가 고양이 별로 떠났습니다 ***')
-                    context.setMessage('성좌 냥냥이가 당신을 원망합니다...')
-                    context.setMessage('')
+                    context.setMessage('*** 성좌 냥냥이가 당신을 원망합니다... ***')
                 }
             },
             test: () => {

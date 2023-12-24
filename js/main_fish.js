@@ -92,7 +92,7 @@ class Fish {
             this.hpBar.className = 'hp-bar';
             this.element.appendChild(this.hpBar);
 
-            // 생선 체력 바 업데이트
+            // 털실공 체력 바 업데이트
             this.updateHpBar();
         }
 
@@ -230,8 +230,8 @@ class Fish {
             const distance = this.calculateDistance(this.getPosition(), catPosition);
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
-            // 고양이와 생선을 옮길때는 이벤트 제외
-            if (distance < 32 && !cat.element.classList.contains('drag') && !this.element.classList.contains('drag')) {
+            // 고양이를 옮길때는 이벤트 제외 (생선을 옮길때는 이벤트 실행)
+            if (distance < 32 && !cat.element.classList.contains('drag')) {
                 switch (this.type) {
                     case 'fish':
                         // 고양이 체력 증가
@@ -271,13 +271,23 @@ class Fish {
                         this.remove();
                         break;
                     case 'yarnball':
+                        // 충돌한 cat이 이전과 같을 때 충돌 지점에서 거리가 어느정도 떨어지지 않았다면 이벤트
+                        const prevCollidedDistance = () => { return this.calculateDistance(this.getPosition(), this.prevCollidedPosition); }
+                        if (this.prevCollidedCat == cat && prevCollidedDistance() < 32) { return; }
+                        // 이전에 충돌한 cat, position 정보 업데이트
+                        this.prevCollidedCat = cat;
+                        this.prevCollidedPosition = this.getPosition();
+
+                        // 공을 들고있는 경우에는 손에서 공을 떨어뜨림
+                        this.stopDragging();
+
                         // 공이랑 부딪히면 고양이는 멈춤
                         cat.toggleMovement();
                         // 야옹거리는 동작
                         cat.setMeow('Nyaa!');
 
                         // 공 내구도 업데이트
-                        this.updateHp(-2);
+                        this.updateHp(-5);
                         this.updateHpBar();
 
                         // 공 움직임 시작

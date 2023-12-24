@@ -32,20 +32,7 @@ const cd = new Countdown()
 // SETTINGS
 settings = new Settings();
 
-document.querySelector('#setting_bt').addEventListener("click", () => { settings.showSettings(); });
-document.querySelectorAll('#settings input').forEach((event) => {
-  console.log(event);
-  event.addEventListener("change", (event) => {
-    console.log(event);
-    p.val.work_start = document.querySelector('#settings input#work_start').value;
-    p.val.work_final = document.querySelector('#settings input#work_final').value;
-    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
-    p.set_push();
-    p.updateParameterValues();
-  });
-});
-
-
+// 기본 이벤트 막기 (select 이벤트)
 document.addEventListener('mousedown', (e) => {
   e.preventDefault();
   p.updateParameterValues();
@@ -71,7 +58,7 @@ document.querySelector('#context').addEventListener('load', () => {
 
 
 // 고양이 객체 생성
-const cats = [new Cat().setSkin('우유')];
+const cats = [new Cat().setSkin('우유'), new Cat(), new Cat()];
 for (let i = 0; i < context.skill.getReasonableNumbers(.1); i++) { cats.push(new Cat()); }
 
 cats.forEach(cat => {
@@ -130,6 +117,7 @@ setInterval(() => {
 
   // 오늘의 한마디
   if (cd.getSecs() == '55') {
+    context.setMessage(``);
     context.setMessage(`*** 오늘의 해시태그 ***`);
     context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
     context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
@@ -139,21 +127,23 @@ setInterval(() => {
   if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
 
   const evilList = [
-    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈', '부서폭파범(KDA 2/1/3)', '눈까리', '맑눈광', '탕비실독재자'
+    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈', '카페인중독자', '키보드스매셔',
+    '부서폭파범(KDA 2/1/3)', '맑눈광', '탕비실독재자', '질문봇', '넵봇', '물음표살인마', '젊은꼰대'
   ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
 
   p.autoSummon = p.autoSummon == null ? true : p.autoSummon;
   if (!p.autoSummon) {
-    context.setMessage(`급식기 전원이 꺼져있있습니다.`);
+    context.setMessage(`급식기 전원이 꺼져있습니다.`);
     return;
   }
 
-  // 예상되는 최대 개수 계산
-  const maxFish = context.skill.getReasonableNumbers(2);
 
+  // 예상되는 최대 개수 계산
+  const maxFish = context.skill.getReasonableNumbers(2) + 10;
+  context.setMessage(``);
   if (pisces.length <= maxFish) {
-    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1 / 3), { mute: true });
+    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1 / 3) + 3, { mute: true });
     context.setMessage(`*** 자동 급식기 작동 완료 (${pisces.length}/${maxFish}) ***`);
     context.setMessage(`(사악한 ${evil}이(가) 다른 물건들도 흩뿌렸습니다.)`);
   } else {

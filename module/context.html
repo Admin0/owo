@@ -39,12 +39,24 @@
     </section>
   </li>
   <ul class="skill_wrap">
-    <li class="skill icon iconcat" onclick="context.setSkill('iconcat')" title="고양이를 소환합니다."><span>냥이</span></li>
-    <li class="skill icon random" onclick="context.setSkill('random')"><span>랜덤</span></li>
-    <li class="skill icon fish" onclick="context.setSkill('fish')"><span>생선</span></li>
-    <li class="skill icon cucumber" onclick="context.setSkill('cucumber')"><span>오이</span></li>
-    <li class="skill icon mineral" onclick="context.setSkill('mineral')"><span>미네랄</span></li>
-    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')"><span>공</span></li>
+    <li class="skill icon iconcat" onclick="context.setSkill('iconcat')" title="<ul class=resources><li class='minerals'>50</li><li class='supplies'>1</li></ul>고양이를 입양합니다.">
+      <span>냥이</span>
+    </li>
+    <li class="skill icon random" onclick="context.setSkill('random')" title="<ul class=resources><li class='minerals'>1</li></ul>아무거나 소환합니다.">
+      <span>랜덤</span>
+    </li>
+    <li class="skill icon fish" onclick="context.setSkill('fish')" title="<ul class=resources><li class='minerals'>4</li></ul>생선을 소환합니다. 고양이 체력을 회복합니다.">
+      <span>생선</span>
+    </li>
+    <li class="skill icon cucumber" onclick="context.setSkill('cucumber')" title="<ul class=resources><li class='minerals'>0</ul>오이를 소환합니다. 고양이가 싫어합니다.">
+      <span>오이</span>
+    </li>
+    <li class="skill icon mineral" onclick="context.setSkill('mineral')" title="<ul class=resources><li class='minerals'>0</ul>광물을 소환합니다.">
+      <span>미네랄</span>
+    </li>
+    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')" title="<ul class=resources><li class='minerals'>0</ul>털실공을 소환합니다. 고양이가 좋아합니다.">
+      <span>공</span>
+    </li>
   </ul>
 </ul>
 <ul>
@@ -53,7 +65,7 @@
   </li>
 </ul>
 <ul>
-  <li class="" onclick="localStorage.clear(); location.reload();">
+  <li class="" onclick="localStorage.clear(); location.reload();" title="시간 설정, 모아놓은 광물 등 모든 것을 초기값으로 설정합니다.">
     <span class="icon"></span><span>초기화</span>
   </li>
 </ul>

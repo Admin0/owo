@@ -107,7 +107,7 @@
 }
 
 #context .icon,
-#resources .icon,
+.resources li:before,
 #settings .icon {
   position: inherit;
   --sprite-block-size: 32px;
@@ -145,6 +145,7 @@
   border-color: #FFF9C4;
 }
 
+.resources .supplies:before,
 #context .icon.iconcat {
   background-position-y: calc(var(--sprite-block-size) * 0);
 }
@@ -199,7 +200,7 @@
 /**
  * RESOURCES
  */
-ul#resources {
+ul.resources {
   position: fixed;
   right: 0;
   margin: .5em 1em 0 0;
@@ -212,7 +213,7 @@ ul#resources {
   pointer-events: none;
 }
 
-#resources li {
+.resources li {
   display: inline-block;
   list-style: none;
   margin-right: 3em;
@@ -220,7 +221,8 @@ ul#resources {
   align-items: center;
 }
 
-#resources .icon {
+.resources li::before {
+  content: '';
   position: inherit;
   display: inline-block;
   --sprite-block-size: 16px;
@@ -235,11 +237,7 @@ ul#resources {
   background-color: #E8EAF6;
 }
 
-#resources .icon.iconcat {
-  background-position: calc(var(--sprite-block-size) * 0)calc(var(--sprite-block-size) * 0);
-}
-
-#resources .icon.mineral {
+.resources .minerals:before {
   background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -3);
 }
 
