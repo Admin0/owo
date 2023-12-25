@@ -94,11 +94,11 @@ class Context {
             document.getElementById(this.messages.id).appendChild(message_wrap)
             this.messages.textCheckVal = msg_string;
 
-            // 7 초 뒤 메시지 삭제
+            // 10 초 뒤 메시지 삭제
             setTimeout(() => {
                 message_wrap.remove();
-                this.messages.textCheckVal = '7 초 뒤 메시지 삭제';
-            }, 7000);
+                this.messages.textCheckVal = '10 초 뒤 메시지 삭제';
+            }, 10000);
         }
     }
 
@@ -255,7 +255,7 @@ class Context {
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonYarnball(pos) {
-                const cost = 50;
+                const cost = 100;
                 if (this.getMineralOk(cost)) {
                     this.setMineral(cost);
                     pisces.push(new Fish(pos).setType('yarnball').startSliding());
@@ -267,6 +267,49 @@ class Context {
                 }
             },
             summonMassiveYarnballs(n) {
+                let i = 0;
+                for (i; i < n; i++) {
+                    if (this.summonYarnball() == false) {
+                        parent.setMessage('소환을 중지합니다.');
+                        break;
+                    }
+                }
+                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
+            },
+            summonWaterbottle(pos) {
+                const cost = 2;
+                if (this.getMineralOk(cost)) {
+                    this.setMineral(cost);
+                    pisces.push(new Fish(pos).setType('waterbottle'));
+                    parent.setMessage('물병을 소환했습니다.');
+                    p.updateParameterValues();
+                } else {
+                    parent.setMessage('광물이 부족합니다.');
+                    return false;
+                }
+            },
+            summonWaterbottleBowlingpins(pos) {
+                const f = 10; // as factor
+                const fq = .75; // quarter view factor
+                const w = 1; // line 1
+                const h = Math.sqrt(16) / 3 * fq;
+                this.summonWaterbottle({ x: pos.x - 2 * w * f, y: pos.y - h * f });
+                this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y - h * f });
+                this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y - h * f });
+                this.summonWaterbottle({ x: pos.x + 2 * w * f, y: pos.y - h * f });
+
+                this.summonWaterbottle({ x: pos.x - 4 / 3 * f, y: pos.y });
+                this.summonWaterbottle({ x: pos.x, y: pos.y });
+                this.summonWaterbottle({ x: pos.x + 4 / 3 * w * f, y: pos.y });
+
+                this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y + h * f });
+                this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y + h * f });
+
+                this.summonWaterbottle({ x: pos.x, y: pos.y + 2 * h * f });
+
+                this.summonYarnball({ x: pos.x, y: pos.y + 20 * h * f });
+            },
+            summonMassiveYWaterbottle(n) {
                 let i = 0;
                 for (i; i < n; i++) {
                     if (this.summonYarnball() == false) {
@@ -289,7 +332,11 @@ class Context {
                 for (k; k < n; k++) {
                     this.summonMineral(undefined, { mute: true });
                 }
-                parent.setMessage(`(x${i + j + k} 회 소환 성공)`);
+                let l = 0;
+                for (l; l < n; l++) {
+                    this.summonMineral(undefined, { mute: true });
+                }
+                parent.setMessage(`(x${i + j + k + l} 회 소환 성공)`);
             },
             summonRandom(pos, options) {
                 const cost = 1;
@@ -325,7 +372,7 @@ class Context {
                 parent.setMessage(``);
                 parent.setMessage(`고양이들이 깜짝 놀랐습니다!`);
                 parent.setMessage(``);
-            }
+            },
         }
     }
 
@@ -432,7 +479,7 @@ class Settings {
 
     initTimeSet() {
         document.querySelector('#setting_bt').addEventListener("click", () => { settings.showSettings(); });
-        
+
         // 설정창이 켜진 상태에서 외부를 클릭하면 설정 닫기
         document.addEventListener("click", (event) => {
             const keepElements = document.querySelectorAll('#book, #context');

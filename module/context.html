@@ -26,7 +26,7 @@
         <li class="" onclick="context.skill.summonMassiveFishs(100);"> <span>생선 대량 소환</span> </li>
         <li class="" onclick="context.skill.summonMassiveCucumbers(100);"> <span>오이 대량 소환</span> </div>
         <li class="" onclick="context.skill.summonMassiveMinerals(100);"> <span>광물 대량 소환</span> </li>
-        <li class="" onclick="context.skill.summonMassiveCats(10); context.skill.summonAll(25);"><span>"고마 쓰까서 소환해 주이소."</span> </li>
+        <li class="" onclick="context.skill.summonMassiveCats(10); context.skill.summonMassiveRandoms(100, { mute: true });"><span>"고마 쓰까서 소환해 주이소."</span> </li>
         <li class="" onclick="context.skill.summonMassiveYarnballs(10)"> <span>공 뿌리기</span> </li>
       </ul>
       <ul>
@@ -54,8 +54,14 @@
     <li class="skill icon mineral" onclick="context.setSkill('mineral')" title="<ul class=resources><li class='minerals'>0</ul>광물을 소환합니다.">
       <span>미네랄</span>
     </li>
-    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')" title="<ul class=resources><li class='minerals'>0</ul>털실공을 소환합니다. 고양이가 좋아합니다.">
+    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')" title="<ul class=resources><li class='minerals'>50</ul>털실공을 소환합니다. 고양이가 좋아합니다.">
       <span>공</span>
+    </li>
+    <li class="skill icon waterbottle" onclick="context.setSkill('waterbottle')" title="<ul class=resources><li class='minerals'>2</ul>생수를 소환합니다.">
+      <span>생수</span>
+    </li>
+    <li class="skill icon waterbottlebowling" onclick="context.setSkill('waterbottlebowling')" title="<ul class=resources><li class='minerals'>100</ul>생수를 10개 소환하고, 볼링핀 모양으로 배열합니다.">
+      <span>생수 볼링</span>
     </li>
   </ul>
 </ul>

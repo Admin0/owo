@@ -98,6 +98,12 @@ const leftClick = event => {
       case 'yarnball':
         context.skill.summonYarnball(pos);
         break;
+      case 'waterbottle':
+        context.skill.summonWaterbottle(pos);
+        break;
+      case 'waterbottlebowling':
+        context.skill.summonWaterbottleBowlingpins(pos);
+        break;
       default:
         break;
     }

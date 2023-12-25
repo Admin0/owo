@@ -114,7 +114,7 @@
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
   background: url('../img/context.png');
-  background-size: calc(6 * var(--sprite-block-size)) calc(5 * var(--sprite-block-size));
+  background-size: calc(6 * var(--sprite-block-size)) calc(7 * var(--sprite-block-size));
   background-position-y: calc(var(--sprite-block-size) * 1);
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -168,6 +168,14 @@
 
 #context .icon.yarnball {
   background-position-y: calc(var(--sprite-block-size) * -4);
+}
+
+#context .icon.waterbottle {
+  background-position-y: calc(var(--sprite-block-size) * -5);
+}
+
+#context .icon.waterbottlebowling {
+  background-position-y: calc(var(--sprite-block-size) * -6);
 }
 
 @keyframes random {

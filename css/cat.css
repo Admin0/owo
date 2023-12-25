@@ -51,7 +51,9 @@ body.dev_mode .hp-bar,
 }
 
 .yarnball .info-window table th,
-.yarnball .info-window table td {
+.yarnball .info-window table td,
+.waterbottle .info-window table th,
+.waterbottle .info-window table td  {
     border-color: #FF5722;
     /* color: #FF5722; */
 }
@@ -106,7 +108,8 @@ body.dev_mode .pisces {
     border-radius: 4px;
 }
 
-body.dev_mode .yarnball {
+body.dev_mode .yarnball,
+body.dev_mode .waterbottle {
     outline-color: #FF5722;
 }
 
@@ -158,105 +161,6 @@ body.dev_mode .cat {
     background-position-y: calc(var(--cat-size) * -8);
 }
 
-.pisces {
-    background: url('../img/fish.png');
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    width: var(--cat-size);
-    height: var(--cat-size);
-    z-index: 9;
-    cursor: pointer;
-
-    background-size: calc(4 * var(--cat-size)) calc(6 * var(--cat-size));
-    image-rendering: pixelated;
-    --cat-size: 64px;
-
-    animation: pisces .125s steps(1);
-
-    /* for selected class */
-    transform-style: preserve-3d;
-}
-
-.pisces.drag {
-    background-position-x: calc(var(--cat-size) * -1);
-    z-index: 11;
-}
-
-@keyframes pisces {
-    from {
-        background-position-x: calc(var(--cat-size) * -1);
-    }
-
-    to {
-        background-position-x: 0;
-    }
-}
-
-.goldfish.drag,
-.richmineral.drag,
-.richraremineral.drag {
-    background-position-x: calc(var(--cat-size) * -3);
-
-}
-
-.goldfish,
-.richmineral,
-.richraremineral {
-    animation-name: pisces-col2;
-    background-position-x: calc(var(--cat-size) * -2);
-}
-
-@keyframes pisces-col2 {
-    from {
-        background-position-x: calc(var(--cat-size) * -3);
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -2);
-    }
-}
-
-
-.cucumber {
-    background-position-y: calc(var(--cat-size) * -1);
-}
-
-.mineral,
-.richmineral {
-    background-position-y: calc(var(--cat-size) * -2);
-
-}
-
-.raremineral,
-.richraremineral {
-    background-position-y: calc(var(--cat-size) * -3);
-
-}
-
-.yarnball {
-    background-position-y: calc(var(--cat-size) * -4);
-
-}
-
-.yarnball.move {
-    animation: yarnball .5s steps(4) infinite;
-}
-
-@keyframes yarnball {
-    from {
-        background-position-x: calc(var(--cat-size) * 0)
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -4);
-    }
-}
-
-.yarnball.ghost {
-    animation: yarnball .5s steps(4) infinite;
-    background-position-y: calc(var(--cat-size) * -5);
-}
 
 /*
  * 고양이 선택했을때 세부 사항 표시
@@ -281,7 +185,8 @@ body.dev_mode .cat {
     border-color: #FFC107;
 }
 
-.yarnball.selected:before {
+.yarnball.selected:before,
+.waterbottle.selected:before {
     border-color: #FF5722;
 }
 
