@@ -8,11 +8,11 @@
     z-index: 9;
     cursor: pointer;
 
-    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
     image-rendering: pixelated;
     --cat-size: 64px;
 
-    animation: pisces .125s steps(1);
+    animation: pisces .125s steps(2, jump-none);
 
     /* for selected class */
     transform-style: preserve-3d;
@@ -24,16 +24,12 @@
 }
 
 .pisces.ghost {
-    animation: pisces-col3 .25s steps(2) infinite;
+    background-position-x: calc(var(--cat-size) * -2);
     pointer-events: none;
 }
 
-.pisces.drag.ghost {
-    background-position-x: calc(var(--cat-size) * -5);
-}
-
 .goldfish.ghost {
-    animation: pisces-col4 .25s steps(2) infinite;
+    background-position-x: calc(var(--cat-size) * -5);
 }
 
 @keyframes pisces {
@@ -49,7 +45,7 @@
 .goldfish.drag,
 .richmineral.drag,
 .richraremineral.drag {
-    background-position-x: calc(var(--cat-size) * -3);
+    background-position-x: calc(var(--cat-size) * -4);
 
 }
 
@@ -57,7 +53,7 @@
 .richmineral,
 .richraremineral {
     animation-name: pisces-col2;
-    background-position-x: calc(var(--cat-size) * -2);
+    background-position-x: calc(var(--cat-size) * -3);
 }
 
 @keyframes pisces-col2 {
@@ -117,74 +113,31 @@
 }
 
 .yarnball.move {
-    animation: yarnball .5s steps(3) infinite;
+    background-position-x: 0;
+    animation: yarnball .5s steps(4, jump-none) infinite;
 }
 
 @keyframes yarnball {
-    from {
-        background-position-x: calc(var(--cat-size) * 0)
+    to {
+        background-position-x: 0;
     }
-
     to {
         background-position-x: calc(var(--cat-size) * -3);
     }
 }
 
-.yarnball.ghost {
-    animation: yarnball-ghost .5s steps(3) infinite;
-}
-
-@keyframes yarnball-ghost {
-    from {
-        background-position-x: calc(var(--cat-size) * -4)
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -7);
-    }
-}
-
 .waterbottle.down {
-    background-position-x: calc(var(--cat-size) * -7);
-    animation: waterbottle-down .25s steps(3);
+    background-position-x: calc(var(--cat-size) * -5);
+    animation: waterbottle-down .3125s steps(5, jump-none);
     z-index: 8;
 }
 
 @keyframes waterbottle-down {
     from {
-        background-position-x: calc(var(--cat-size) * -4)
+        background-position-x: calc(var(--cat-size) * -1)
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -7);
-    }
-}
-
-.waterbottle.ghost {
-    animation: waterbottle-ghost .25s steps(2) infinite;
-    z-index: 8;
-}
-
-@keyframes waterbottle-ghost {
-    from {
-        background-position-x: calc(var(--cat-size) * 0)
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -4);
-    }
-}
-
-.waterbottle.down.ghost {
-    animation-name: waterbottle-down-ghost;
-}
-
-@keyframes waterbottle-down-ghost {
-    from {
-        background-position-x: calc(var(--cat-size) * -3)
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -11);
+        background-position-x: calc(var(--cat-size) * -5);
     }
 }

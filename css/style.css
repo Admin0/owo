@@ -216,7 +216,7 @@ footer img {
   margin-right: .5em;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 425px) {
   #messages {
     max-width: 100%;
     bottom: 0;

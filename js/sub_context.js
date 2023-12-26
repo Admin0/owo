@@ -293,21 +293,27 @@ class Context {
                 const fq = .75; // quarter view factor
                 const w = 1; // line 1
                 const h = Math.sqrt(16) / 3 * fq;
+
+                // line 4th
                 this.summonWaterbottle({ x: pos.x - 2 * w * f, y: pos.y - h * f });
                 this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y - h * f });
                 this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y - h * f });
                 this.summonWaterbottle({ x: pos.x + 2 * w * f, y: pos.y - h * f });
 
+                // line 3rd
                 this.summonWaterbottle({ x: pos.x - 4 / 3 * f, y: pos.y });
                 this.summonWaterbottle({ x: pos.x, y: pos.y });
                 this.summonWaterbottle({ x: pos.x + 4 / 3 * w * f, y: pos.y });
 
+                // line 2nd
                 this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y + h * f });
                 this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y + h * f });
 
+                // line 1st
                 this.summonWaterbottle({ x: pos.x, y: pos.y + 2 * h * f });
 
-                this.summonYarnball({ x: pos.x, y: pos.y + 20 * h * f });
+                // ball
+                pisces.push(new Fish({ x: pos.x, y: pos.y + 20 * h * f }).setType('yarnball'));
             },
             summonMassiveYWaterbottle(n) {
                 let i = 0;

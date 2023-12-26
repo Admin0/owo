@@ -208,6 +208,12 @@
 /**
  * RESOURCES
  */
+
+
+#resources {
+  z-index: 15;
+}
+
 ul.resources {
   position: fixed;
   right: 0;
@@ -217,7 +223,6 @@ ul.resources {
   color: #4caf50;
   text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
   display: flex;
-  z-index: 15;
   pointer-events: none;
 }
 

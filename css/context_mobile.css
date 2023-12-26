@@ -58,6 +58,10 @@
     background-color: transparent;
   }
 
+  #context ul li:not(.disabled):hover .context {
+    display: none;
+  }
+
   #context_bt {
     display: initial;
     margin: 0.5em;

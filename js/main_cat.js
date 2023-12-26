@@ -43,6 +43,7 @@ class Cat {
     setSkin(skin) {
         this.element.classList.remove('흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도');
         const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도'];
+        // const skins = ['map'];
         const skin_index = Math.floor(Math.random() * skins.length);
         this.skin = skin == null ? skins[skin_index] : skin
         this.element.classList.add(this.skin);

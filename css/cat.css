@@ -53,7 +53,7 @@ body.dev_mode .hp-bar,
 .yarnball .info-window table th,
 .yarnball .info-window table td,
 .waterbottle .info-window table th,
-.waterbottle .info-window table td  {
+.waterbottle .info-window table td {
     border-color: #FF5722;
     /* color: #FF5722; */
 }
@@ -73,7 +73,7 @@ body.dev_mode .hp-bar,
     justify-content: center;
 
     z-index: 10;
-    animation: cat 1s steps(8) infinite;
+    animation: cat 1s steps(8, jump-none) infinite;
 
     cursor: pointer;
 
@@ -82,22 +82,14 @@ body.dev_mode .hp-bar,
 }
 
 @keyframes cat {
-    from {
-        background-position-x: calc(var(--cat-size) *0)
-    }
-
     to {
-        background-position-x: calc(var(--cat-size) * -8)
+        background-position-x: calc(var(--cat-size) * -7)
     }
 }
 
-@keyframes cat-start-again {
-    from {
-        background-position-x: calc(var(--cat-size) *0)
-    }
-
+@keyframes start-from-first-step {
     to {
-        background-position-x: calc(var(--cat-size) * -8)
+        background-position-x: calc(var(--cat-size) * -7)
     }
 }
 
@@ -152,12 +144,12 @@ body.dev_mode .cat {
 }
 
 .cat.stretch {
-    animation-name: cat-start-again;
+    animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -7);
 }
 
 .cat.surprised {
-    animation-name: cat-start-again;
+    animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -8);
 }
 
@@ -173,7 +165,7 @@ body.dev_mode .cat {
     --border-width: 2px;
     width: calc(var(--width));
     height: calc(var(--width)/2);
-    top: calc(54px - var(--width)/4 - var(--border-width));
+    top: calc(55px - var(--width)/4 - var(--border-width));
     left: calc(32px - var(--width)/2 - var(--border-width));
     border: var(--border-width) solid #4caf50;
     position: absolute;
@@ -260,12 +252,6 @@ body.dev_mode .cat {
 }
 
 @keyframes meow {
-    from {
-        opacity: 1;
-        visibility: visible;
-        margin-top: 0;
-    }
-
     to {
         opacity: 0;
         visibility: hidden;
