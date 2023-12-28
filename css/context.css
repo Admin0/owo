@@ -210,7 +210,7 @@
  */
 
 
-#resources {
+header, #resources {
   z-index: 15;
 }
 

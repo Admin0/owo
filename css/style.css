@@ -43,7 +43,7 @@ body {
 header {
   color: #212121;
   width: fit-content;
-  z-index: 2;
+  z-index: 15;
   position: relative;
   margin: 0;
 }
@@ -253,12 +253,12 @@ footer img {
 /* z-index position
 017   #toast
 016   #context
-015   #messages | #resources
+015   #messages | #resources(header)
 014   #context(mobile)
 013
 012   
 011   #book | .cat.drag | .pisces.drag | .유령
-010   .cat | 
+010   .cat | .dev_mode .pisces.selected
 009   .pisces
 008   .waterbottle.유령
 007

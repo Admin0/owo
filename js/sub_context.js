@@ -100,6 +100,7 @@ class Context {
                 this.messages.textCheckVal = '10 초 뒤 메시지 삭제';
             }, 10000);
         }
+        return this;
     }
 
     loadToastElement() {
@@ -192,10 +193,8 @@ class Context {
                     p.updateParameterValues();
                 } else if (!this.getMineralOk(cost)) {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 } else {
                     parent.setMessage('보급고가 부족합니다.');
-                    return false;
                 }
             },
             summonMassiveCats(n) {
@@ -208,17 +207,17 @@ class Context {
                 }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
-            summonFish(pos) {
+            summonFish(pos, options) {
                 const cost = 4;
                 if (this.getMineralOk(cost)) {
                     this.setMineral(cost);
                     pisces.push(new Fish(pos).setType('fish'));
-                    parent.setMessage('생선을 소환했습니다.');
+                    if (options == null || options.mute != true) parent.setMessage('생선을 소환했습니다.');
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 }
+                return this;
             },
             summonMassiveFishs(n) {
                 let i = 0; for (i = 0; i < n; i++) {
@@ -229,10 +228,11 @@ class Context {
                 }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
-            summonCucumber(pos) {
+            summonCucumber(pos, options) {
                 pisces.push(new Fish(pos).setType('cucumber'));
-                parent.setMessage('오이를 소환했습니다.');
+                if (options == null || options.mute != true) parent.setMessage('오이를 소환했습니다.');
                 p.updateParameterValues();
+                return this;
             },
             summonMassiveCucumbers(n) {
                 let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
@@ -247,24 +247,24 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 }
+                return this;
             },
             summonMassiveMinerals(n) {
                 let i = 0; for (i; i < n; i++) { this.summonMineral(); }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
-            summonYarnball(pos) {
+            summonYarnball(pos, options) {
                 const cost = 100;
                 if (this.getMineralOk(cost)) {
                     this.setMineral(cost);
-                    pisces.push(new Fish(pos).setType('yarnball').startSliding());
-                    parent.setMessage('털실 공을 소환했습니다.');
+                    pisces.push(new Fish(pos).setType('yarnball').startSliding(options));
+                    if (options == null || options.mute != true) parent.setMessage('털실 공을 소환했습니다.');
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 }
+                return this;
             },
             summonMassiveYarnballs(n) {
                 let i = 0;
@@ -285,63 +285,46 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 }
+                return this;
             },
             summonWaterbottleBowlingpins(pos) {
-                const f = 10; // as factor
+                const f = 10;   // as factor
                 const fq = .75; // quarter view factor
-                const w = 1; // line 1
+                const w = 1;    // line 1
                 const h = Math.sqrt(16) / 3 * fq;
 
-                // line 4th
-                this.summonWaterbottle({ x: pos.x - 2 * w * f, y: pos.y - h * f });
-                this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y - h * f });
-                this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y - h * f });
-                this.summonWaterbottle({ x: pos.x + 2 * w * f, y: pos.y - h * f });
+                this
+                    // line 4th
+                    .summonWaterbottle({ x: pos.x - 2 * w * f, y: pos.y - h * f })
+                    .summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y - h * f })
+                    .summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y - h * f })
+                    .summonWaterbottle({ x: pos.x + 2 * w * f, y: pos.y - h * f })
 
-                // line 3rd
-                this.summonWaterbottle({ x: pos.x - 4 / 3 * f, y: pos.y });
-                this.summonWaterbottle({ x: pos.x, y: pos.y });
-                this.summonWaterbottle({ x: pos.x + 4 / 3 * w * f, y: pos.y });
+                    // line 3rd
+                    .summonWaterbottle({ x: pos.x - 4 / 3 * f, y: pos.y })
+                    .summonWaterbottle({ x: pos.x, y: pos.y })
+                    .summonWaterbottle({ x: pos.x + 4 / 3 * w * f, y: pos.y })
 
-                // line 2nd
-                this.summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y + h * f });
-                this.summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y + h * f });
+                    // line 2nd
+                    .summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y + h * f })
+                    .summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y + h * f })
 
-                // line 1st
-                this.summonWaterbottle({ x: pos.x, y: pos.y + 2 * h * f });
+                    // line 1st
+                    .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h * f })
 
-                // ball
-                pisces.push(new Fish({ x: pos.x, y: pos.y + 20 * h * f }).setType('yarnball'));
+                    // ball
+                    .summonYarnball({ x: pos.x, y: pos.y + 20 * h * f }, { mute: true });
             },
             summonMassiveYWaterbottle(n) {
-                let i = 0;
-                for (i; i < n; i++) {
-                    if (this.summonYarnball() == false) {
-                        parent.setMessage('소환을 중지합니다.');
-                        break;
-                    }
-                }
+                let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { parent.setMessage('소환을 중지합니다.'); break; } }
                 if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
             },
             summonAll(n) {
-                let i = 0;
-                for (i; i < n; i++) {
-                    this.summonFish(undefined, { mute: true });
-                }
-                let j = 0;
-                for (j; j < n; j++) {
-                    this.summonCucumber(undefined, { mute: true });
-                }
-                let k = 0;
-                for (k; k < n; k++) {
-                    this.summonMineral(undefined, { mute: true });
-                }
-                let l = 0;
-                for (l; l < n; l++) {
-                    this.summonMineral(undefined, { mute: true });
-                }
+                let i = 0; for (i; i < n; i++) { this.summonFish(undefined, { mute: true }); }
+                let j = 0; for (j; j < n; j++) { this.summonCucumber(undefined, { mute: true }); }
+                let k = 0; for (k; k < n; k++) { this.summonMineral(undefined, { mute: true }); }
+                let l = 0; for (l; l < n; l++) { this.summonMineral(undefined, { mute: true }); }
                 parent.setMessage(`(x${i + j + k + l} 회 소환 성공)`);
             },
             summonRandom(pos, options) {
@@ -353,7 +336,6 @@ class Context {
                     p.updateParameterValues();
                 } else {
                     parent.setMessage('광물이 부족합니다.');
-                    return false;
                 }
             },
             summonMassiveRandoms(n, options) {
@@ -365,9 +347,7 @@ class Context {
             },
             clearAllPisces() {
                 const i = pisces.length;
-                while (pisces.length > 0) {
-                    pisces[pisces.length - 1].remove();
-                }
+                while (pisces.length > 0) { pisces[pisces.length - 1].remove(); }
                 if (i != 0) parent.setMessage(`${i} 개의 물건들을 치웠습니다.`);
                 else parent.setMessage(`방안에 물건이 없습니다.`);
             },
@@ -375,9 +355,10 @@ class Context {
                 cats.forEach(event => {
                     event.toggleMovement('surprised');
                 });
-                parent.setMessage(``);
-                parent.setMessage(`고양이들이 깜짝 놀랐습니다!`);
-                parent.setMessage(``);
+                parent
+                    .setMessage(``)
+                    .setMessage(`고양이들이 깜짝 놀랐습니다!`);
+
             },
         }
     }
@@ -399,9 +380,7 @@ class Context {
     getSkill(skill = p.val.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
         document.querySelectorAll('#context .skill').forEach((e) => { e.classList.remove('activated'); });
-        if (targetSkill != null) {
-            targetSkill.classList.add('activated');
-        }
+        if (targetSkill != null) { targetSkill.classList.add('activated'); }
     }
 
     /**
@@ -456,22 +435,29 @@ class Context {
                 context.sub.element.style.top = `${context.sub.y}px`;
             }, { once: true });
 
+            // 엄청난 오류가 발생하고 있어 아이디어를 짜내서 해결해보자
             sub_context.parentElement.addEventListener('click', (e) => {
                 const check_is_not_null = e.target.querySelector('section.context');
                 if (check_is_not_null != null) {
+                    // check_is_not_null.style.height = !check_is_not_null.classList.contains('on') ? `${check_is_not_null.scrollHeight}px` : 0;
+                    console.log(e.target.querySelector('section.context'));
                     check_is_not_null.classList.toggle('on');
                 }
-            })
+            });
         });
+
     }
 
     setSelectCatOrSometing() {
         document.addEventListener('click', event => {
-            document.querySelectorAll('.cat, .pisces').forEach(event => { event.classList.remove('selected'); });
-            if (event.target.matches('.cat, .pisces')) {
-                event.target.classList.add('selected');
-            }
+            document.querySelectorAll('.cat, .pisces, .pisces figure').forEach(event => {
+                if (event.matches('.cat, .pisces')) event.classList.remove('selected');
+                if (event.parentElement.matches('.pisces')) event.classList.remove('selected');
+            });
+            if (event.target.matches('.cat, .pisces')) { event.target.classList.add('selected'); }
+            if (event.target.parentElement.matches('.pisces')) { event.target.parentElement.classList.add('selected'); }
         });
+
     }
 }
 

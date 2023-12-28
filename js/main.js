@@ -69,6 +69,9 @@ cats.forEach(cat => {
 const pisces = [];
 
 const leftClick = event => {
+  // 생선을 고양이에게 뺏긴 경우 이벤트 중단
+  if (p.fishInterceptedByCat) return;
+
   // {고양이 객체 = 클릭의 영향을 받지 않는 요소} 정의
   const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, footer');
   // 클릭된 요소가 고양이 객체인지 확인
@@ -109,8 +112,8 @@ const leftClick = event => {
     }
   }
 }
-document.addEventListener('mouseup', (event) => { leftClick(event); });
-document.addEventListener('touchend', (event) => { leftClick(event); });
+document.addEventListener('mouseup', (event) => { leftClick(event); p.fishInterceptedByCat = false; });
+document.addEventListener('touchend', (event) => { leftClick(event); p.fishInterceptedByCat = false; });
 
 setInterval(() => {
   function shouldSummonEvil() {

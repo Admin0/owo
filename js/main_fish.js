@@ -5,6 +5,10 @@ class Fish {
         document.getElementById('basket').appendChild(this.element);
         // document.body.appendChild(this.element);
 
+        // 본체 이미지를 표시할 공간
+        this.figure = document.createElement('figure');
+        this.element.appendChild(this.figure);
+
         // 생선 정보를 표시할 창
         this.infoWindow = document.createElement('div');
         this.infoWindow.className = 'info-window';
@@ -58,21 +62,43 @@ class Fish {
     }
 
     setType(type) {
+
         const types = [
+            'fish', 'goldfish',
+            'cucumber',
+            'mineral', 'richmineral', 'raremineral', 'richraremineral',
+            'yarnball', 'waterbottle',
+
+            'irochi',
+        ]
+
+        const types_applied_prequency = [
             'fish', 'fish', 'fish', 'fish', 'fish',
             'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber',
             'mineral', 'mineral', 'mineral', 'mineral', 'mineral',
             'yarnball',
             'waterbottle', 'waterbottle', 'waterbottle', 'waterbottle', 'waterbottle',
         ];
-        const type_index = Math.floor(Math.random() * types.length);
+        const type_index = Math.floor(Math.random() * types_applied_prequency.length);
 
-        // 기존 클래스 삭제
-        types.forEach(type => { this.element.classList.remove(type); });
-        this.element.classList.remove('goldfish', 'richmineral', 'raremineral', 'richraremineral', 'yarnball', 'waterbottle');
+        // type을 지정받은 경우 초기화
+        const breakDown = () => {
+            // 기존 클래스 삭제
+            types.forEach(type => { this.element.classList.remove(type); });
+
+            // 체력 바 삭제
+            if (this.element.hpBar != null) { this.element.hpBar.remove(); }
+
+            // 필터 제거
+            this.figure.style.filter = 'none';
+
+            // 이펙트 제거
+            if (this.element.effect != null) { this.element.effect.remove(); }
+        }
+        if (type != null) { breakDown(); }
 
         // 파라미터 전달 안 받았으면 랜덤값 지정
-        this.type = type == null ? types[type_index] : type;
+        this.type = type == null ? types_applied_prequency[type_index] : type;
 
         // 생선은 1/10 확률로 금붕어가 된다
         if (this.type == 'fish') { this.type = Math.floor(Math.random() * 10) != 0 ? 'fish' : 'goldfish' }
@@ -83,34 +109,59 @@ class Fish {
         // 희귀광물이 1/10 확률로 풍부한희귀광물이 된다
         if (this.type == 'raremineral') { this.type = Math.floor(Math.random() * 10) != 0 ? 'raremineral' : 'richraremineral' }
 
-        const setInfo = (params = { hp: 30 }) => {
-            // 체력 추가
-            this.hp = params.hp;
-            this.hp_max = params.hp;
 
+        // 야생의 색이 다른 생선이 나타났다!
+        if (Math.random() < 1 / 32) {
+        // if (Math.random() < 1 / 2) {
+            this.figure.style.filter = `hue-rotate(${Math.ceil(Math.random() * 5) * 60}deg`;
+            this.irochi = true;
+            this.element.classList.add('irochi');
+        }
+
+        // 특별한 타입이면 요소 추가
+        const buildUp = () => {
+
+            // 이동 관련
             this.speed = 0;
             this.angle = 0;
 
             // 체력바를 표시할 창
-            this.hpBar = document.createElement('div');
-            this.hpBar.className = 'hp-bar';
-            this.element.appendChild(this.hpBar);
+            if (this.hp != null) {
+                this.hpBar = document.createElement('div');
+                this.hpBar.className = 'hp-bar';
+                this.element.appendChild(this.hpBar);
 
-            // 체력 바 업데이트
-            this.updateHpBar();
+                // 체력 바 업데이트
+                this.updateHpBar();
+            }
+
+            // 이로치 발생 시 이펙트 요소 추가
+            if (this.irochi == true) {
+                this.effect = document.createElement('div');
+                this.effect.className = 'effect';
+                this.element.appendChild(this.effect);
+            }
         }
+
         switch (this.type) {
             case 'yarnball':
-                setInfo();
+                // 체력 추가
+                this.hp = this.hp_max = 30;
+
+                // 색깔 바꾸기
+                this.figure.style.filter = `brightness(150%) hue-rotate(${Math.floor(Math.random() * 60) * 6}deg`;
                 break;
 
             case 'waterbottle':
-                setInfo();
+                // 체력 추가
+                this.hp = this.hp_max = 30;
                 break;
 
             default:
                 break;
         }
+        buildUp();
+
 
         this.element.classList.add(this.type);
         this.updateInfoWindow();
@@ -266,34 +317,45 @@ class Fish {
             const prevCollidedDistance = () => { return this.calculateDistance(this.getPosition(), this.prevCollidedPosition); }
 
             // 생선을 들고있는 경우(drag)에는 손에서 떨어뜨림
-            if (this.element.classList.contains('drag')) this.stopDragging();
+            if (this.element.classList.contains('drag')) {
+                this.stopDragging();
+
+                // left click 이벤트 방지
+                p.fishInterceptedByCat = true;
+            }
+
+            // 완전 멈추지는 않고 속도가 줄어든다
+            this.speed = this.speed / 2;
 
             // 생선 새로운 각도 구함: 고양이 반대편에서 90도 랜덤 값
-            const a_new = Math.atan2(catRect.y - this.position.y, catRect.x - this.position.x) + Math.PI - Math.PI / 4 + Math.PI / 2 * Math.random();
-
+            const a_new = Math.atan2(catRect.y - this.position.y, catRect.x - this.position.x) + Math.PI - (Math.PI / 4) + (Math.random() * Math.PI / 2);
+            const v_new = 2 + (cat.speed * 1 / 2) + (this.speed) + (3 * Math.random());
+            const damage_for_cat = -(1 + (this.speed || 0))
             switch (this.type) {
                 case 'fish':
                     // 고양이 체력 증가
                     cat.updateHp(10);
                 case 'goldfish':
-                    // 생선을 먹는 움직임
-                    cat.toggleMovement('lick');
-                    // 야옹거리는 동작
-                    cat.setMeow('Meow ♥️');
-                    // 고양이 체력 증가
-                    cat.updateHp(10);
+
+                    // 고양이 움직임 정의
+                    cat
+                        .toggleMovement('lick')     // 셍선를 먹는 움직임
+                        .setMeow('Meow ♥️!')         // 야옹거리는 동작
+                        .updateHp(10);              // 체력 업데이트
+
                     // 생선 객체 삭제
                     this.kill();
                     break;
                 case 'cucumber':
-                    // 오이를 먹는 움직임
-                    cat.toggleMovement('surprised');
-                    // 야옹거리는 동작
-                    cat.setMeow('Grrrr!');
-                    // 고양이 체력 감소
-                    cat.updateHp(-10);
-                    this.kill();
+                    // 고양이 움직임 정의
+                    cat
+                        .toggleMovement('surprised')     // 오이를 먹는 움직임
+                        .setMeow('Grrrr!')               // 야옹거리는 동작
+                        .updateHp(damage_for_cat - 10);                   // 체력 업데이트
+
                     // 오이 객체 삭제
+                    this.kill();
+
                     break;
                 case 'richraremineral': p.resources.setMinerals(8);
                 case 'raremineral': p.resources.setMinerals(8);
@@ -302,12 +364,14 @@ class Fish {
                     p.resources.setMinerals(8);
                     p.updateParameterValues();
 
-                    // 오이를 먹는 움직임
-                    cat.toggleMovement('surprised');
-                    // 야옹거리는 동작
-                    cat.setMeow('Grrrr!');
+                    // 고양이 움직임 정의
+                    cat
+                        .toggleMovement('surprised')   // 오이를 먹는 움직임
+                        .setMeow('Grrrr!');            // 야옹거리는 동작
+
                     // 객체 삭제
-                    this.remove();
+                    this.kill();
+
                     break;
                 case 'yarnball':
                     if (this.prevCollidedCat == cat && prevCollidedDistance() < 32) { return; }
@@ -315,44 +379,43 @@ class Fish {
                     this.prevCollidedCat = cat;
                     this.prevCollidedPosition = this.getPosition();
 
-                    // 공이랑 부딪히면 고양이는 멈춤
-                    cat.toggleMovement();
-                    // 야옹거리는 동작
-                    cat.setMeow('Nyaa!');
+                    // 고양이 움직임 정의
+                    cat
+                        .toggleMovement()    // 공이랑 부딪히면 고양이는 멈춤
+                        .setMeow('Nyaa!')    // 야옹거리는 동작
+                        .updateHp(damage_for_cat);       // 체력 업데이트
 
-                    // 공 내구도 업데이트
-                    this.updateHp(-5);
-                    cat.updateHp(-1);
-
-                    // 공 움직임 시작
-                    this.startSliding({
-                        v: this.speed != 0 ? this.speed * 4 / 5 : 5 * Math.random() + 3,
-                        a: a_new
-                    });
+                    // 생선 움직임 정의
+                    this
+                        .startSliding({
+                            v: v_new,
+                            a: a_new
+                        })              // 공 움직임 시작
+                        .updateHp(-5);  // 공 내구도 업데이트
 
                     break;
                 case 'waterbottle':
                     // 누운채로 멈춰있으면 작동 안 함
                     if (this.prevCollidedCat == cat && prevCollidedDistance() < 32
                         || (this.element.classList.contains('down') && this.speed == 0)) { return; }
+
                     // 이전에 충돌한 cat, position 정보 업데이트
                     this.prevCollidedCat = cat;
                     this.prevCollidedPosition = this.getPosition();
-                    console.log(this.speed);
-                    // 물병이랑 부딪히면 고양이는 멈춤
-                    cat.toggleMovement(this.speed != 0 ? 'surprised' : null);
-                    // 야옹거리는 동작
-                    cat.setMeow('Grrrr!');
 
-                    // 내구도 업데이트
-                    this.updateHp(-5);
-                    cat.updateHp(-1);
+                    // 고양이 움직임 정의
+                    cat
+                        .toggleMovement(this.speed > 3 ? 'surprised' : null)     // 물병이랑 부딪히면 고양이는 멈춤
+                        .setMeow('Grrrr!')    // 야옹거리는 동작
+                        .updateHp(damage_for_cat);        // 체력 업데이트
 
-                    // 물병 움직임 시작
-                    this.startSliding({
-                        v: this.speed != 0 ? this.speed * 3 / 5 : 3 * Math.random() + 3,
-                        a: a_new
-                    });
+                    // 생선 움직임 정의
+                    this
+                        .startSliding({
+                            v: this.speed != 0 ? this.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
+                            a: a_new
+                        })              // 물병 움직임 시작
+                        .updateHp(-5);  // 물병 내구도 업데이트
 
                     break;
                 default:
@@ -460,12 +523,12 @@ class Fish {
         if (newX < 0 || newX + rect.width > window.innerWidth) {
             this.angle = Math.PI - this.angle;
             // 벽에 부딪히면 체력 감소
-            this.updateHp(-this.speed / 5);
+            this.updateHp(-3 - this.speed / 10);
         }
         if (newY < 0 || newY + rect.height > window.innerHeight) {
             this.angle = -this.angle;
             // 벽에 부딪히면 체력 감소
-            this.updateHp(-this.speed / 5);
+            this.updateHp(-3 - this.speed / 10);
         }
 
         this.position.x = newX;
@@ -573,10 +636,10 @@ class Fish {
         this.infoWindow.innerHTML = tableHTML;
     }
 
-    kill() {
-        // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
+    kill() {    // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
+        if (this.element.classList.contains('ghost')) { return }
         this.element.classList.add('ghost');
-        this.element.animate({ filter: ['brightness(.75)', 'brightness(2)'] }, {
+        this.figure.animate({ filter: ['brightness(.75)', 'brightness(2)'] }, {
             duration: 250,
             iterations: Infinity,
             composite: 'add',
@@ -584,7 +647,7 @@ class Fish {
         setTimeout(() => { this.remove(); }, 1000);
     }
     updateHp(val) {
-        if (this.hp == undefined) { return; }
+        if (this.hp == undefined) { return }
         const hp = this.hp;
         const hp_max = this.hp_max;
         if (hp + val < hp_max && hp + val > 0) {

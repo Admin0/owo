@@ -1,5 +1,4 @@
 .pisces {
-    background: url('../img/fish.png');
     position: absolute;
     display: flex;
     justify-content: center;
@@ -7,28 +6,47 @@
     height: var(--cat-size);
     z-index: 9;
     cursor: pointer;
-
-    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
-    image-rendering: pixelated;
     --cat-size: 64px;
 
+    background-image: url('../img/fish.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
+    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
+    /* for selected class */
+}
+
+.pisces figure {
+    margin: 0;
+    width: inherit;
+    height: inherit;
+
+    background-image: inherit;
+    background-size: inherit;
+
     animation: pisces .125s steps(2, jump-none);
+    background-position-x: 0;
 
     /* for selected class */
     transform-style: preserve-3d;
 }
 
 .pisces.drag {
-    background-position-x: calc(var(--cat-size) * -1);
     z-index: 11;
 }
 
-.pisces.ghost {
+.pisces.drag figure {
+    background-position-x: calc(var(--cat-size) * -1);
+}
+
+.pisces.ghost figure {
     background-position-x: calc(var(--cat-size) * -2);
     pointer-events: none;
 }
 
-.goldfish.ghost {
+.goldfish.ghost figure,
+.richmineral.ghost figure,
+.richraremineral.ghost figure {
     background-position-x: calc(var(--cat-size) * -5);
 }
 
@@ -36,33 +54,29 @@
     from {
         background-position-x: calc(var(--cat-size) * -1);
     }
-
-    to {
-        background-position-x: 0;
-    }
 }
 
-.goldfish.drag,
-.richmineral.drag,
-.richraremineral.drag {
+.goldfish.drag figure,
+.richmineral.drag figure,
+.richraremineral.drag figure {
     background-position-x: calc(var(--cat-size) * -4);
 
 }
 
-.goldfish,
-.richmineral,
-.richraremineral {
+.goldfish figure,
+.richmineral figure,
+.richraremineral figure {
     animation-name: pisces-col2;
     background-position-x: calc(var(--cat-size) * -3);
 }
 
 @keyframes pisces-col2 {
     from {
-        background-position-x: calc(var(--cat-size) * -3);
+        background-position-x: calc(var(--cat-size) * -4);
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -2);
+        background-position-x: calc(var(--cat-size) * -3);
     }
 }
 
@@ -88,31 +102,31 @@
     }
 }
 
-.cucumber {
+.cucumber figure {
     background-position-y: calc(var(--cat-size) * -1);
 }
 
-.mineral,
-.richmineral {
+.mineral figure,
+.richmineral figure {
     background-position-y: calc(var(--cat-size) * -2);
 
 }
 
-.raremineral,
-.richraremineral {
+.raremineral figure,
+.richraremineral figure {
     background-position-y: calc(var(--cat-size) * -3);
 
 }
 
-.yarnball {
+.yarnball figure {
     background-position-y: calc(var(--cat-size) * -4);
 }
 
-.waterbottle {
+.waterbottle figure {
     background-position-y: calc(var(--cat-size) * -7);
 }
 
-.yarnball.move {
+.yarnball.move figure {
     background-position-x: 0;
     animation: yarnball .5s steps(4, jump-none) infinite;
 }
@@ -121,12 +135,13 @@
     to {
         background-position-x: 0;
     }
+
     to {
         background-position-x: calc(var(--cat-size) * -3);
     }
 }
 
-.waterbottle.down {
+.waterbottle.down figure {
     background-position-x: calc(var(--cat-size) * -5);
     animation: waterbottle-down .3125s steps(5, jump-none);
     z-index: 8;
@@ -135,6 +150,46 @@
 @keyframes waterbottle-down {
     from {
         background-position-x: calc(var(--cat-size) * -1)
+    }
+
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}
+
+/* shiny effect */
+.irochi .effect {
+    background-position: calc(var(--cat-size) * 1) calc(var(--cat-size) * -9);
+    animation: irochi .5s steps(6, jump-none);
+
+    position: absolute;
+    background-repeat: no-repeat;
+    width: inherit;
+    height: inherit;
+
+    background-image: inherit;
+    background-size: inherit;
+}
+
+.irochi.drag .effect {
+    animation: irochi2 .5s steps(6, jump-none);
+    animation-iteration-count: 2;
+    animation-play-state: running;
+}
+
+@keyframes irochi {
+    from {
+        background-position-x: 0
+    }
+
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}
+
+@keyframes irochi2 {
+    from {
+        background-position-x: 0
     }
 
     to {

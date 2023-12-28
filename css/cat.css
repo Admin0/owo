@@ -21,7 +21,7 @@ body.dev_mode .hp-bar,
     display: initial;
 }
 
-.left .info-window {
+.cat.left .info-window {
     left: initial;
     right: calc(var(--cat-size) + 8px);
 }
@@ -37,12 +37,11 @@ body.dev_mode .hp-bar,
     border: 2px dashed #4caf50;
     color: #212121;
     padding: 2px 4px;
+    background-color: #ffffff60;
 }
 
 .cat .info-window table th,
-.cat .info-window table td {
-    background-color: #ffffff60;
-}
+.cat .info-window table td {}
 
 .pisces .info-window table th,
 .pisces .info-window table td {
@@ -81,6 +80,18 @@ body.dev_mode .hp-bar,
     transform-style: preserve-3d;
 }
 
+/* shadow */
+.cat:not(.유령):after {
+    content: '';
+    background: url('../img/cat_skin_그림자.png');
+    width: inherit;
+    height: inherit;
+    background-size: inherit;
+    image-rendering: inherit;
+    animation: cat 1s steps(8, jump-none) infinite;
+    filter: none;
+}
+
 @keyframes cat {
     to {
         background-position-x: calc(var(--cat-size) * -7)
@@ -111,44 +122,52 @@ body.dev_mode .cat {
 }
 
 .cat.left,
-.pisces.left,
-.left .info-window,
-.left .hp-bar {
+.pisces.left figure,
+.cat.left .info-window {
     transform: scaleX(-1);
 }
 
 
-.cat.watch {
+
+.cat.watch,
+.cat.watch:after {
     background-position-y: calc(var(--cat-size) * -1);
 }
 
-.cat.walk {
+.cat.walk,
+.cat.walk:after {
     background-position-y: calc(var(--cat-size) * -2);
 }
 
-.cat.run {
+.cat.run,
+.cat.run:after {
     background-position-y: calc(var(--cat-size) * -3);
 }
 
-.cat.drag {
+.cat.drag,
+.cat.drag:after {
     background-position-y: calc(var(--cat-size) * -4);
     z-index: 11;
 }
 
-.cat.lick {
+.cat.lick,
+.cat.lick:after {
     background-position-y: calc(var(--cat-size) * -5);
 }
 
-.cat.wash {
+.cat.wash,
+.cat.wash:after {
     background-position-y: calc(var(--cat-size) * -6);
 }
 
-.cat.stretch {
+.cat.stretch,
+.cat.stretch:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -7);
 }
 
-.cat.surprised {
+.cat.surprised,
+.cat.surprised:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -8);
 }
@@ -173,6 +192,11 @@ body.dev_mode .cat {
     transform: translateZ(-1px);
 }
 
+body.dev_mode .pisces.selected {
+    background-color: #ffffff60;
+    z-index: 10;
+}
+
 .pisces.selected:before {
     border-color: #FFC107;
 }
@@ -187,6 +211,11 @@ body.dev_mode .cat {
     position: absolute;
     display: none;
     top: calc(100% + 4px);
+    filter: brightness(100%) hue-rotate(0);
+}
+
+.hp-bar.show {
+    display: initial;
 }
 
 .cat:hover .hp-bar,

@@ -102,14 +102,12 @@ class Cat {
             this.toggleMovement('stop');
         }, 250);
 
-        // 초기 이동 시작
-        this.startMoving();
+        this
+            .startMoving()          // 초기 이동 시작
+            .updateInfoWindow()     // 고양이 정보 창 업데이트
+            .updateHpBar();         // 고양이 체력 바 업데이트
 
-        // 고양이 정보 창 업데이트
-        this.updateInfoWindow();
-
-        // 고양이 체력 바 업데이트
-        this.updateHpBar();
+        return this;
     }
 
     moveCat() {
@@ -199,6 +197,8 @@ class Cat {
 
         // 고양이 정보 창 업데이트
         this.updateInfoWindow();
+
+        return this;
     }
 
     startMoving() {
@@ -209,6 +209,8 @@ class Cat {
 
         // 일정한 간격으로 움직임 토글
         this.toggleMovementInterval = setInterval(() => this.toggleMovement(), Math.random() * 5000 + 1000);
+
+        return this;
     }
 
     stopMoving() {
@@ -325,7 +327,7 @@ class Cat {
 
         // 고양이 정보 추가
         tableHTML += addRowToTable('type', `${this.skin}`);
-        tableHTML += addRowToTable('HP', `${this.hp}/${this.hp_max}`);
+        tableHTML += addRowToTable('HP', `${Math.round(this.hp)}/${this.hp_max}`);
         tableHTML += addRowToTable('position', `x: ${Math.floor(this.position.x)}, y: ${Math.floor(this.position.y)}`);
         tableHTML += addRowToTable('vector', `v: ${this.speed.toFixed(1)}, a: ${this.angle.toFixed(1)}`);
         tableHTML += addRowToTable('move', this.isMoving ? this.speed > 3 ? 'run' : 'walk' : 'stop');
@@ -342,6 +344,8 @@ class Cat {
 
         // 정보 창에 HTML 설정
         this.infoWindow.innerHTML = tableHTML;
+
+        return this;
     }
 
     updateHp(val) {
@@ -356,9 +360,9 @@ class Cat {
                 // 고양이 쥬금 ㅠㅠ
                 this.hp = 0;
                 this.setMeow('Woem...');
-                context.setMessage('');
-                context.setMessage(`*** ${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다. ***`);
-                context.setMessage('');
+                context
+                    .setMessage('')
+                    .setMessage(`*** ${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다. ***`);
                 const i = cats.findIndex(cat => cat == this);
 
                 // 고양이 객체 제거
@@ -371,6 +375,7 @@ class Cat {
                 this.getShouldEvent()
             }
         }
+        return this;
     }
     updateHpBar() {
         const hp = this.hp;
@@ -379,11 +384,7 @@ class Cat {
         let tableHTML = hp / hp_max * 100 > 50 ? '<table class="high"><tr>' : hp / hp_max * 100 > 25 ? '<table class="mid"><tr>' : '<table class="low"><tr>';
 
         for (let i = 0; i < Math.ceil(hp_max / 10); i++) {
-            if (i < Math.ceil(hp / 10)) {
-                tableHTML += '<td class="on"></td>';
-            } else {
-                tableHTML += '<td class=""></td>';
-            }
+            tableHTML += i < Math.ceil(hp / 10) ? '<td class="on"></td>' : '<td class=""></td>';
         }
 
         // 테이블을 닫음
@@ -391,6 +392,10 @@ class Cat {
 
         // 정보 창에 HTML 설정
         this.hpBar.innerHTML = tableHTML;
+
+        // 잠깐동안 보였다가 사라지기
+        this.hpBar.classList.add('show');
+        setTimeout(() => { this.hpBar.classList.remove('show') }, 1000);
     }
 
     getShouldEvent() {

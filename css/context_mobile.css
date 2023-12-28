@@ -40,18 +40,28 @@
     top: 0 !important;
     left: 0 !important;
     height: 0;
+    opacity: 0;
     border: none;
     background-color: rgba(0, 0, 0, .05);
+    transition: .5s;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .25) inset;
   }
 
   .sub:hover .context,
-  .context.on {
+  .context.on,
+  #context ul li:not(.disabled):hover .context.on {
+    display: block;
     visibility: visible;
     opacity: 1;
     height: fit-content;
     margin-top: 1em;
     max-width: calc(100% + 5em);
+    margin-left: -1em;
+    margin-right: -1em;
+
+
+    border-top: 1px solid #ddd;
+    visibility: visible;
   }
 
   #context ul li:not(.disabled):hover {
@@ -75,4 +85,5 @@
   #resources li {
     margin-right: 1em;
   }
+
 }
