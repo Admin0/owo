@@ -51,10 +51,8 @@ let engine_timeout;
 const context = new Context();
 context.setDevMode();
 
-document.querySelector('#context').addEventListener('load', () => {
-  console.log(context);
-  context.loadToasts();
-});
+// 카운트다운 이동
+context.dragElement(document.getElementById("book"));
 
 
 // 고양이 객체 생성

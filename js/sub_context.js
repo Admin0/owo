@@ -289,32 +289,31 @@ class Context {
                 return this;
             },
             summonWaterbottleBowlingpins(pos) {
-                const f = 10;   // as factor
-                const fq = .75; // quarter view factor
-                const w = 1;    // line 1
-                const h = Math.sqrt(16) / 3 * fq;
+                const quarterViewFactor = .75;
+                const w = 10;
+                const h = Math.sqrt(16) / 3 * w * quarterViewFactor;
 
                 this
                     // line 4th
-                    .summonWaterbottle({ x: pos.x - 2 * w * f, y: pos.y - h * f })
-                    .summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y - h * f })
-                    .summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y - h * f })
-                    .summonWaterbottle({ x: pos.x + 2 * w * f, y: pos.y - h * f })
+                    .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - h })
+                    .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y - h })
+                    .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y - h })
+                    .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - h })
 
                     // line 3rd
-                    .summonWaterbottle({ x: pos.x - 4 / 3 * f, y: pos.y })
+                    .summonWaterbottle({ x: pos.x - 4 / 3 * w, y: pos.y })
                     .summonWaterbottle({ x: pos.x, y: pos.y })
-                    .summonWaterbottle({ x: pos.x + 4 / 3 * w * f, y: pos.y })
+                    .summonWaterbottle({ x: pos.x + 4 / 3 * w, y: pos.y })
 
                     // line 2nd
-                    .summonWaterbottle({ x: pos.x - 2 / 3 * w * f, y: pos.y + h * f })
-                    .summonWaterbottle({ x: pos.x + 2 / 3 * w * f, y: pos.y + h * f })
+                    .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y + h })
+                    .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y + h })
 
                     // line 1st
-                    .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h * f })
+                    .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h })
 
                     // ball
-                    .summonYarnball({ x: pos.x, y: pos.y + 20 * h * f }, { mute: true });
+                    .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
             },
             summonMassiveYWaterbottle(n) {
                 let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { parent.setMessage('소환을 중지합니다.'); break; } }
@@ -458,6 +457,52 @@ class Context {
             if (event.target.parentElement.matches('.pisces')) { event.target.parentElement.classList.add('selected'); }
         });
 
+    }
+
+    dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            /* if present, the header is where you move the DIV from:*/
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            /* otherwise, move the DIV from anywhere inside the DIV:*/
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+
+            const rect = elmnt.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width / 2;
+            const maxY = window.innerHeight - rect.height / 2;
+
+            // set the element's new position:
+            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop - pos2, maxY)) + "px";
+            elmnt.style.left = Math.max(rect.width / 2, Math.min(elmnt.offsetLeft - pos1, maxX)) + "px";
+        }
+
+        function closeDragElement() {
+            /* stop moving when mouse button is released:*/
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
     }
 }
 

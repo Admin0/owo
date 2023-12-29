@@ -74,7 +74,7 @@ body.dev_mode .hp-bar,
     z-index: 10;
     animation: cat 1s steps(8, jump-none) infinite;
 
-    cursor: pointer;
+    cursor: grab;
 
     /* for selected class */
     transform-style: preserve-3d;
@@ -148,6 +148,7 @@ body.dev_mode .cat {
 .cat.drag:after {
     background-position-y: calc(var(--cat-size) * -4);
     z-index: 11;
+    cursor: grabbing;
 }
 
 .cat.lick,
@@ -291,6 +292,7 @@ body.dev_mode .pisces.selected {
 /* 유령 */
 .cat.유령 {
     z-index: 11;
+    cursor: default;
     /* pointer-events: none; */
 }
 
