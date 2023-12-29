@@ -8,7 +8,6 @@ class Cat {
     constructor(position, skin) {
         // 초기화 메서드 호출
         this.initialize(position, skin);
-        this.initIvents(this);
 
         // 드래그 앤 드롭 관련 속성 추가
         this.isDragging = false;
@@ -372,7 +371,7 @@ class Cat {
 
                 p.updateParameterValues();
 
-                this.getShouldEvent()
+                p.getShouldEvent()
             }
         }
         return this;
@@ -396,25 +395,6 @@ class Cat {
         // 잠깐동안 보였다가 사라지기
         this.hpBar.classList.add('show');
         setTimeout(() => { this.hpBar.classList.remove('show') }, 1000);
-    }
-
-    getShouldEvent() {
-        this.event.allCatsDead();
-    }
-    initIvents(parent) {
-        this.event = {
-            allCatsDead: () => {
-                console.log('allCatsDead check');
-                if (p.val.resources.supplies == 0) {
-                    context.setMessage('')
-                    context.setMessage('*** 모든 고양이가 고양이 별로 떠났습니다 ***')
-                    context.setMessage('*** 성좌 냥냥이가 당신을 원망합니다... ***')
-                }
-            },
-            test: () => {
-                console.log('test');
-            }
-        }
     }
 
 }

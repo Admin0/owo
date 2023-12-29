@@ -7,18 +7,15 @@ class Context {
 
         this.setSelectCatOrSometing();
 
-        this.initializeSkills(this);
-
         // 컨텍스트 메뉴 불러오기
-        document.addEventListener("contextmenu", (event) => {
+        oncontextmenu = (event) => {
             event.preventDefault();
 
             this.setDevMode();
             this.getSkill();
             this.showContext(event);
-        }, false);
+        }
         document.querySelector('#context_bt').addEventListener("click", (event) => {
-            console.log('1');
             this.setDevMode();
             this.getSkill();
             this.showContext(event)
@@ -173,195 +170,6 @@ class Context {
         p.autoSummon = isAutoSummon;
     }
 
-    initializeSkills(parent) {
-        this.skill = {
-            getReasonableNumbers(times = 1) {
-                return Math.min(Math.floor(window.innerWidth * window.innerHeight / 33333 * times), 100 * times);
-            },
-
-            getMineralOk(cost) { return p.val.resources.minerals - cost >= 0 },
-            setMineral(cost) { p.val.resources.minerals -= cost; },
-            getSupplyOk() { return p.val.resources.supplies < p.val.resources.suppliesMax },
-
-            summonCat(pos) {
-                const cost = 50;
-                if (this.getSupplyOk() && this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    const cat = new Cat(pos).setMeow('Eow');
-                    cats.push(cat);
-                    parent.setMessage(`${cat.skin}에게 간택 당했습니다.`);
-                    p.updateParameterValues();
-                } else if (!this.getMineralOk(cost)) {
-                    parent.setMessage('광물이 부족합니다.');
-                } else {
-                    parent.setMessage('보급고가 부족합니다.');
-                }
-            },
-            summonMassiveCats(n) {
-                let i = 0
-                for (i; i < n; i++) {
-                    if (this.summonCat() == false) {
-                        parent.setMessage('소환을 중지합니다.');
-                        break;
-                    }
-                }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonFish(pos, options) {
-                const cost = 4;
-                if (this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    pisces.push(new Fish(pos).setType('fish'));
-                    if (options == null || options.mute != true) parent.setMessage('생선을 소환했습니다.');
-                    p.updateParameterValues();
-                } else {
-                    parent.setMessage('광물이 부족합니다.');
-                }
-                return this;
-            },
-            summonMassiveFishs(n) {
-                let i = 0; for (i = 0; i < n; i++) {
-                    if (this.summonFish() == false) {
-                        parent.setMessage('소환을 중지합니다.');
-                        break;
-                    }
-                }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonCucumber(pos, options) {
-                pisces.push(new Fish(pos).setType('cucumber'));
-                if (options == null || options.mute != true) parent.setMessage('오이를 소환했습니다.');
-                p.updateParameterValues();
-                return this;
-            },
-            summonMassiveCucumbers(n) {
-                let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonMineral(pos) {
-                const cost = 0;
-                if (this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    pisces.push(new Fish(pos).setType('mineral'));
-                    parent.setMessage('광물을 소환했습니다.');
-                    p.updateParameterValues();
-                } else {
-                    parent.setMessage('광물이 부족합니다.');
-                }
-                return this;
-            },
-            summonMassiveMinerals(n) {
-                let i = 0; for (i; i < n; i++) { this.summonMineral(); }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonYarnball(pos, options) {
-                const cost = 100;
-                if (this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    pisces.push(new Fish(pos).setType('yarnball').startSliding(options));
-                    if (options == null || options.mute != true) parent.setMessage('털실 공을 소환했습니다.');
-                    p.updateParameterValues();
-                } else {
-                    parent.setMessage('광물이 부족합니다.');
-                }
-                return this;
-            },
-            summonMassiveYarnballs(n) {
-                let i = 0;
-                for (i; i < n; i++) {
-                    if (this.summonYarnball() == false) {
-                        parent.setMessage('소환을 중지합니다.');
-                        break;
-                    }
-                }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonWaterbottle(pos) {
-                const cost = 2;
-                if (this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    pisces.push(new Fish(pos).setType('waterbottle'));
-                    parent.setMessage('물병을 소환했습니다.');
-                    p.updateParameterValues();
-                } else {
-                    parent.setMessage('광물이 부족합니다.');
-                }
-                return this;
-            },
-            summonWaterbottleBowlingpins(pos) {
-                const quarterViewFactor = .75;
-                const w = 10;
-                const h = Math.sqrt(16) / 3 * w * quarterViewFactor;
-
-                this
-                    // line 4th
-                    .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - h })
-                    .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y - h })
-                    .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y - h })
-                    .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - h })
-
-                    // line 3rd
-                    .summonWaterbottle({ x: pos.x - 4 / 3 * w, y: pos.y })
-                    .summonWaterbottle({ x: pos.x, y: pos.y })
-                    .summonWaterbottle({ x: pos.x + 4 / 3 * w, y: pos.y })
-
-                    // line 2nd
-                    .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y + h })
-                    .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y + h })
-
-                    // line 1st
-                    .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h })
-
-                    // ball
-                    .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
-            },
-            summonMassiveYWaterbottle(n) {
-                let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { parent.setMessage('소환을 중지합니다.'); break; } }
-                if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            summonAll(n) {
-                let i = 0; for (i; i < n; i++) { this.summonFish(undefined, { mute: true }); }
-                let j = 0; for (j; j < n; j++) { this.summonCucumber(undefined, { mute: true }); }
-                let k = 0; for (k; k < n; k++) { this.summonMineral(undefined, { mute: true }); }
-                let l = 0; for (l; l < n; l++) { this.summonMineral(undefined, { mute: true }); }
-                parent.setMessage(`(x${i + j + k + l} 회 소환 성공)`);
-            },
-            summonRandom(pos, options) {
-                const cost = 1;
-                if (this.getMineralOk(cost)) {
-                    this.setMineral(cost);
-                    pisces.push(new Fish(pos));
-                    if (options == null || options.mute != true) parent.setMessage('아무거나 소환했습니다.');
-                    p.updateParameterValues();
-                } else {
-                    parent.setMessage('광물이 부족합니다.');
-                }
-            },
-            summonMassiveRandoms(n, options) {
-                let i = 0;
-                for (i; i < n; i++) {
-                    this.summonRandom(undefined, options);
-                }
-                if (options == null || options.mute != true) if (i != 0) parent.setMessage(`(x${i} 회 소환 성공)`);
-            },
-            clearAllPisces() {
-                const i = pisces.length;
-                while (pisces.length > 0) { pisces[pisces.length - 1].remove(); }
-                if (i != 0) parent.setMessage(`${i} 개의 물건들을 치웠습니다.`);
-                else parent.setMessage(`방안에 물건이 없습니다.`);
-            },
-            surpriseCats() {
-                cats.forEach(event => {
-                    event.toggleMovement('surprised');
-                });
-                parent
-                    .setMessage(``)
-                    .setMessage(`고양이들이 깜짝 놀랐습니다!`);
-
-            },
-        }
-    }
-
     setSkill(skill = p.val.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
 
@@ -387,28 +195,19 @@ class Context {
      * @param {Event} e - 컨텍스트 메뉴를 트리거한 이벤트입니다.
      */
     showContext(e) {
-        // if (!is_mobile) {
-        if (true) {
-            // 컨텍스트 메위 생성 위치 계산
-            const rect = context.element.getBoundingClientRect();
-            context.x = window.innerWidth - rect.width > e.pageX ? e.pageX : window.innerWidth - rect.width;
+        // 컨텍스트 메뉴 생성 위치 계산
+        const rect = context.element.getBoundingClientRect();
+        context.x = window.innerWidth - rect.width > e.pageX ? e.pageX : window.innerWidth - rect.width;
 
-            if (window.innerHeight - rect.height > e.pageY - document.documentElement.scrollTop) {
-                context.y = e.pageY - document.documentElement.scrollTop;
-            } else {
-                context.y = window.innerHeight - rect.height;
-            }
-            context.element.style.left = `${context.x}px`;
-            context.element.style.top = `${context.y}px`;
-            context.element.classList.add("on");
+        if (window.innerHeight - rect.height > e.pageY - document.documentElement.scrollTop) {
+            context.y = e.pageY - document.documentElement.scrollTop;
         } else {
-            // 모바일 네비게이션 메뉴 토글
-            if ($('nav').attr('class') != 'on') {
-                $('nav, #nav_bg').classList.add('on');
-            } else {
-                $('nav, #nav_bg').classList.remove('on');
-            }
+            context.y = window.innerHeight - rect.height;
         }
+        context.element.style.left = `${context.x}px`;
+        context.element.style.top = `${context.y}px`;
+        context.element.classList.add("on");
+
         // 하위 메뉴 항목 위치 계산
         context.element.querySelectorAll('.context').forEach(sub_context => {
             sub_context.parentElement.addEventListener('mouseenter', (e) => {
@@ -434,15 +233,10 @@ class Context {
                 context.sub.element.style.top = `${context.sub.y}px`;
             }, { once: true });
 
-            // 엄청난 오류가 발생하고 있어 아이디어를 짜내서 해결해보자
-            sub_context.parentElement.addEventListener('click', (e) => {
-                const check_is_not_null = e.target.querySelector('section.context');
-                if (check_is_not_null != null) {
-                    // check_is_not_null.style.height = !check_is_not_null.classList.contains('on') ? `${check_is_not_null.scrollHeight}px` : 0;
-                    console.log(e.target.querySelector('section.context'));
-                    check_is_not_null.classList.toggle('on');
-                }
-            });
+            sub_context.parentElement.onclick = (event) => {
+                const check_is_not_null = event.target.querySelector('section.context');
+                if (check_is_not_null != null) { check_is_not_null.classList.toggle('on'); }
+            };
         });
 
     }
@@ -460,30 +254,37 @@ class Context {
     }
 
     dragElement(elmnt) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        if (document.getElementById(elmnt.id + "header")) {
-            /* if present, the header is where you move the DIV from:*/
-            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-        } else {
-            /* otherwise, move the DIV from anywhere inside the DIV:*/
-            elmnt.onmousedown = dragMouseDown;
-        }
+        let isDragging = false;
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        elmnt.onmousedown = dragMouseDown;
+        elmnt.addEventListener('touchstart', (event) => dragMouseDown({
+            clientX: event.touches[0].clientX,
+            clientY: event.touches[0].clientY
+        }), { passive: true });
+
+        document.onmousemove = elementDrag;
+        document.addEventListener('touchmove', (event) => elementDrag({
+            clientX: event.touches[0].clientX,
+            clientY: event.touches[0].clientY
+        }), { passive: true });
+
+        elmnt.onmouseup = closeDragElement;
+        elmnt.ontouchend = closeDragElement;
+
+
+        // 윈도 크기 변화할 경우 처리
+        window.onresize = handleWindowResize;
 
         function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
+            isDragging = true;
             pos3 = e.clientX;
             pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
         }
 
         function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
+            if (!isDragging) return;
+
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
@@ -494,14 +295,25 @@ class Context {
             const maxY = window.innerHeight - rect.height / 2;
 
             // set the element's new position:
-            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop - pos2, maxY)) + "px";
             elmnt.style.left = Math.max(rect.width / 2, Math.min(elmnt.offsetLeft - pos1, maxX)) + "px";
+            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop - pos2, maxY)) + "px";
+        }
+
+        function handleWindowResize() {
+            // 위치 변경이 한 번도 없을 경우 이벤트 무시
+            if (elmnt.style.left === '') return;
+
+            const rect = elmnt.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width / 2;
+            const maxY = window.innerHeight - rect.height / 2;
+
+            // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
+            elmnt.style.left = Math.max(rect.width / 2, Math.min(elmnt.offsetLeft, maxX)) + "px";
+            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop, maxY)) + "px";
         }
 
         function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            document.onmouseup = null;
-            document.onmousemove = null;
+            isDragging = false;
         }
     }
 }

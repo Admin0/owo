@@ -1,40 +1,40 @@
 <ul class="">
   <li class="" onclick="settings.showSettings();">
-    <span class="icon timer"></span><span>타이머 설정</span>
+    <span class="icon timer"></span><span class="text">타이머 설정</span>
     <!-- <span class="shortcut">T</span> -->
   </li>
 </ul>
 <ul>
   <li class="dev_mode" onclick="context.setDevMode(true)">
-    <span class="icon iconcat"></span><span>개발자 모드</span>
+    <span class="icon iconcat"></span class="text"><span>개발자 모드</span>
     <!-- <span class="shortcut">D</span> -->
   </li>
   <li class="auto_summon" onclick="context.setAutoSummon()">
-    <span class="icon"></span><span>자동 급식기 끄기</span>
+    <span class="icon"></span><span class="text">자동 급식기 끄기</span>
     <!-- <span class="shortcut">D</span> -->
   </li>
   <li class="sub">
-    <span class="icon"></span><span>스킬</span>
+    <span class="icon"></span><span class="text">스킬</span>
     <!-- <span class="shortcut">S</span> -->
-    <span style="position:absolute; right:1em;">▸</span>
+    <span class="arrow">▸</span>
     <section class="context">
       <ul>
-        <li class="" onclick="context.skill.summonMassiveCats(10);"> <span>길냥이 부르기</span> </li>
-        <li class="" onclick="context.skill.surpriseCats();"> <span>야옹이 놀래키기</span> </li>
+        <li class="" onclick="skills.summonMassiveCats(10);"> <span class="icon iconcat"></span><span>길냥이들 납치해오기</span> </li>
+        <li class="" onclick="skills.surpriseCats();"> <span class="icon"></span><span>야옹이 놀래키기</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="context.skill.summonMassiveFishs(100);"> <span>생선 대량 소환</span> </li>
-        <li class="" onclick="context.skill.summonMassiveCucumbers(100);"> <span>오이 대량 소환</span> </div>
-        <li class="" onclick="context.skill.summonMassiveMinerals(100);"> <span>광물 대량 소환</span> </li>
-        <li class="" onclick="context.skill.summonMassiveCats(10); context.skill.summonMassiveRandoms(100, { mute: true });"><span>"고마 쓰까서 소환해 주이소."</span> </li>
-        <li class="" onclick="context.skill.summonMassiveYarnballs(10)"> <span>공 뿌리기</span> </li>
+        <li class="" onclick="skills.summonMassiveFishs(100);"> <span class="icon fish"></span><span>생선 대량 소환</span> </li>
+        <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div>
+        <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
+        <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
+        <li class="" onclick="skills.summonMassiveCats(10); skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="context.skill.clearAllPisces();"> <span>물건 치우기</span> </li>
+        <li class="" onclick="skills.clearAllPisces();"><span class="icon"></span> <span>물건 치우기</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span>Show me the money</span> </li>
-        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span>Food for thought</span> </li>
+        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span class="icon"></span><span>Show me the money</span> </li>
+        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span class="icon"></span><span>Food for thought</span> </li>
       </ul>
     </section>
   </li>
@@ -67,11 +67,11 @@
 </ul>
 <ul>
   <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank');">
-    <span class="icon bucket"></span><span>버킷리스트 바로가기 (외부 링크)</span>
+    <span class="icon bucket"></span><span class="text">버킷리스트 바로가기 (외부 링크)</span>
   </li>
 </ul>
 <ul>
   <li class="" onclick="localStorage.clear(); location.reload();" title="시간 설정, 모아놓은 광물 등 모든 것을 초기값으로 설정합니다.">
-    <span class="icon"></span><span>초기화</span>
+    <span class="icon"></span><span class="text">초기화</span>
   </li>
 </ul>

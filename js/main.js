@@ -1,19 +1,19 @@
 // Project owo (off work on-time) 
 // A cat that tells you when to leave work
 
-const time = new Time();
+const time = new Time();  // 시간 객체 생성
 // time.log("init");
 
 // 모바일에서 접속했는지 확인
 const is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+// 스크립트 로드 함수
 function loadScript(src, handler) {
   const js = document.createElement('script');
   js.src = src;
   document.head.appendChild(js);
   js.onload = handler;
 }
-// time.log("set_tags");
 
 // 바라보기 생성
 // const st = new Stare('.cat');
@@ -21,7 +21,14 @@ function loadScript(src, handler) {
 // loadScript('/js/main_parameter.js', () => {
 const p = new Parameter();
 
-// 카운트다운 생성
+// 컨텍스트 메뉴 객체 생성
+const context = new Context();
+context.setDevMode();
+
+// 카운트다운 이동
+context.dragElement(document.getElementById("book"));
+
+// 카운트다운 객체 생성
 const cd = new Countdown()
   .setTarget('.countdown')
   .setTime(p.val.work_final)
@@ -29,7 +36,7 @@ const cd = new Countdown()
   .start();
 
 
-// SETTINGS
+// 설정 객체 생성
 settings = new Settings();
 
 // 기본 이벤트 막기 (select 이벤트)
@@ -42,22 +49,10 @@ document.addEventListener('touchend', (e) => {
   p.updateParameterValues();
 });
 
-// });
-
-let IS_WEEKDAYS = new Date().getDay() != 0 && new Date().getDay() != 6 ? true : false;
-let engine_timeout;
-
-// CONTEXT MENU
-const context = new Context();
-context.setDevMode();
-
-// 카운트다운 이동
-context.dragElement(document.getElementById("book"));
-
 
 // 고양이 객체 생성
 const cats = [new Cat().setSkin('우유'), new Cat(), new Cat()];
-for (let i = 0; i < context.skill.getReasonableNumbers(.1); i++) { cats.push(new Cat()); }
+for (let i = 0; i < skills.getReasonableNumbers(.1); i++) { cats.push(new Cat()); }
 
 cats.forEach(cat => {
 
@@ -82,28 +77,28 @@ const leftClick = event => {
     }
     switch (p.val.skill) {
       case 'iconcat':
-        context.skill.summonCat(pos);
+        skills.summonCat(pos);
         break;
       case 'fish':
-        context.skill.summonFish(pos);
+        skills.summonFish(pos);
         break;
       case 'cucumber':
-        context.skill.summonCucumber(pos);
+        skills.summonCucumber(pos);
         break;
       case 'mineral':
-        context.skill.summonMineral(pos);
+        skills.summonMineral(pos);
         break;
       case 'random':
-        context.skill.summonRandom(pos);
+        skills.summonRandom(pos);
         break;
       case 'yarnball':
-        context.skill.summonYarnball(pos);
+        skills.summonYarnball(pos);
         break;
       case 'waterbottle':
-        context.skill.summonWaterbottle(pos);
+        skills.summonWaterbottle(pos);
         break;
       case 'waterbottlebowling':
-        context.skill.summonWaterbottleBowlingpins(pos);
+        skills.summonWaterbottleBowlingpins(pos);
         break;
       default:
         break;
@@ -113,29 +108,31 @@ const leftClick = event => {
 document.addEventListener('mouseup', (event) => { leftClick(event); p.fishInterceptedByCat = false; });
 document.addEventListener('touchend', (event) => { leftClick(event); p.fishInterceptedByCat = false; });
 
+// 초기 이벤트 시작
+events.titleEvent();
+
+// 연속 이벤트 정의
+let isOnTitleEvent = true;
 setInterval(() => {
   function shouldSummonEvil() {
     const seconds = cd.getSecs();
-    // const validTimes = [58, 55, 53, 50, 48, 45, 43, 30, 15, '00'];  // 테스트 코드
     const validTimes = [45, 30, 15, '00'];  // 10 초 미만이면 앞에 0 붙이고 문자열로 바뀜
 
     return validTimes.includes(seconds);
   }
+  
+  if (isOnTitleEvent) { return; }
 
   // 오늘의 한마디
-  if (cd.getSecs() == '55') {
-    context.setMessage(``);
-    context.setMessage(`*** 오늘의 해시태그 ***`);
-    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
-    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
-    context.setMessage(`#${tag[dice(1, tag.length, -1)]}`);
-  }
+  events.todaysHashtags('55', 3);
 
   if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
 
   const evilList = [
-    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈', '카페인중독자', '키보드스매셔',
-    '부서폭파범(KDA 2/1/3)', '맑눈광', '탕비실독재자', '질문봇', '넵봇', '물음표살인마', '젊은꼰대'
+    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈',
+    '카페인중독자', '키보드스매셔', '자료요청독촉맨', '회신기한ASAP맨', '포스트잇도배꾼',
+    '부서폭파범(KDA 2/1/3)', '맑눈광', '탕비실독재자', '질문봇', '넵봇',
+    '물음표살인마', '젊은꼰대', '책상위서류탑쌓기'
   ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
 
@@ -147,10 +144,10 @@ setInterval(() => {
 
 
   // 예상되는 최대 개수 계산
-  const maxFish = context.skill.getReasonableNumbers(2) + 10;
+  const maxFish = skills.getReasonableNumbers(2) + 10;
   context.setMessage(``);
   if (pisces.length <= maxFish) {
-    context.skill.summonMassiveRandoms(context.skill.getReasonableNumbers(1 / 3) + 3, { mute: true });
+    skills.summonMassiveRandoms(skills.getReasonableNumbers(1 / 3) + 3, { mute: true, free: true });
     context.setMessage(`*** 자동 급식기 작동 완료 (${pisces.length}/${maxFish}) ***`);
     context.setMessage(`(사악한 ${evil}이(가) 다른 물건들도 흩뿌렸습니다.)`);
   } else {

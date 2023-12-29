@@ -108,6 +108,7 @@ body.dev_mode .cat,
 body.dev_mode .cat.유령,
 body.dev_mode .pisces {
     outline: 2px dashed #FFC107;
+    background-color: #00000001;
     border-radius: 4px;
 }
 
@@ -257,7 +258,7 @@ body.dev_mode .pisces.selected {
     position: absolute;
     background-color: #fff;
     font-size: 12px;
-    animation: meow 2s;
+    animation: meow 2s forwards;
     padding: 4px;
     border: 2px solid #777;
     border-radius: 4px;
