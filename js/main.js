@@ -25,8 +25,9 @@ const p = new Parameter();
 const context = new Context();
 context.setDevMode();
 
-// 카운트다운 이동
-context.dragElement(document.getElementById("book"));
+// 이동할 요소들 지정 (카운트다운 | 도감)
+new Dragable(document.getElementById("dex"));
+new Dragable(document.getElementById("book"));
 
 // 카운트다운 객체 생성
 const cd = new Countdown()
@@ -61,6 +62,9 @@ cats.forEach(cat => {
 // 생선 객체 생성
 const pisces = [];
 
+// 도감 생성
+pisces.push(new Fish().setType('dex'));
+
 const leftClick = event => {
   // 생선을 고양이에게 뺏긴 경우 이벤트 중단
   if (p.fishInterceptedByCat) return;
@@ -76,7 +80,7 @@ const leftClick = event => {
       y: event.pageY - 86 + 64 * Math.random()
     }
     switch (p.val.skill) {
-      case 'iconcat':
+      case 'cat':
         skills.summonCat(pos);
         break;
       case 'fish':
@@ -112,7 +116,6 @@ document.addEventListener('touchend', (event) => { leftClick(event); p.fishInter
 events.titleEvent();
 
 // 연속 이벤트 정의
-let isOnTitleEvent = true;
 setInterval(() => {
   function shouldSummonEvil() {
     const seconds = cd.getSecs();
@@ -120,8 +123,6 @@ setInterval(() => {
 
     return validTimes.includes(seconds);
   }
-  
-  if (isOnTitleEvent) { return; }
 
   // 오늘의 한마디
   events.todaysHashtags('55', 3);
@@ -129,10 +130,10 @@ setInterval(() => {
   if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
 
   const evilList = [
-    '잼민이', '헤드헌터', '월급루팡', '생계형월급채굴꾼', '버즈도둑놈',
-    '카페인중독자', '키보드스매셔', '자료요청독촉맨', '회신기한ASAP맨', '포스트잇도배꾼',
-    '부서폭파범(KDA 2/1/3)', '맑눈광', '탕비실독재자', '질문봇', '넵봇',
-    '물음표살인마', '젊은꼰대', '책상위서류탑쌓기'
+    '잼민이', '헤드헌터', '월급루팡', '생계형 월급 채굴꾼', '버즈도둑놈',
+    '카페인 중독자', '키보드 스매셔', '자료요청 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
+    '부서폭파범(KDA 2/1/3)', '맑은 눈의 광인', '탕비실 독재자', '질문봇', '넵봇',
+    '물음표 살인마', '젊은 꼰대', '책상위 서류탑 맨'
   ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
 
@@ -149,10 +150,10 @@ setInterval(() => {
   if (pisces.length <= maxFish) {
     skills.summonMassiveRandoms(skills.getReasonableNumbers(1 / 3) + 3, { mute: true, free: true });
     context.setMessage(`*** 자동 급식기 작동 완료 (${pisces.length}/${maxFish}) ***`);
-    context.setMessage(`(사악한 ${evil}이(가) 다른 물건들도 흩뿌렸습니다.)`);
+    context.setMessage(`(사악한 <span class="villain">${evil}</span>이(가) 다른 <span class="pisces">물건</span>들도 흩뿌렸습니다.)`);
   } else {
     context.setMessage(`*** 자동 급식기 작동 실패 (${pisces.length}/${maxFish}) ***`);
-    context.setMessage(`(선량한 ${evil}이(가) 어질러진 꼴을 보고 급식기 작동을 막았습니다.)`);
+    context.setMessage(`(선량한 <span class="villain">${evil}</span>이(가) 어질러진 꼴을 보고 급식기 작동을 막았습니다.)`);
   }
 }, 1000);
 

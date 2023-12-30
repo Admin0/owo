@@ -37,6 +37,9 @@ class Parameter {
         }
     }
 
+    // 도전 과제를 위한 객체
+    achievement = {}
+
     // URL에 파라미터 값을 설정하는 메서드
     setParaToURL(params) {
         this.val.work_start = params.work_start;
@@ -77,28 +80,33 @@ class Parameter {
     }
 }
 
+
+// 이벤트 메시지의 색을 쉽게 설정해주는 서브 이벤트 
+/**
+ * cat: green
+ * pisces: yellow
+ * vaillan: red
+ * time, num: light green
+ * special: pink - sky blue
+ */
+const strong = (content, cls) => {
+    return `<span class="${cls}">${content}</span>`
+}
+
 const events = {
     titleEvent: () => {
         const messages = [
-            '***********************************',
-            '*** 퇴근 시간을 알려주는 고양이 ***',
-            '*** owo: Off Work On-time v.2.2 ***',
-            '***********************************',
-            '',
-            '*** 오늘의 해시태그 ***',
-            `#${tag[dice(1, tag.length, -1)]}`,
-            `#${tag[dice(1, tag.length, -1)]}`,
-            `#${tag[dice(1, tag.length, -1)]}`
+            ``,
+            `*** ${strong('퇴근 시간을 알려주는 고양이', 'special')} ***`,
+            `- Project ${strong('OwO', 'special')} as Off Work On-time v.2.2`,
         ];
 
         let i = 0;
         showMessage = () => {
             context.setMessage(messages[i]);
             i++;
-            if (i < messages.length) { 
-                setTimeout(showMessage, 1000); 
-            } else {
-                isOnTitleEvent = false;
+            if (i < messages.length) {
+                setTimeout(showMessage, 1000);
             }
         }
         showMessage();
@@ -110,22 +118,50 @@ const events = {
             .setMessage(`*** 오늘의 해시태그 ***`)
         for (let i = 0; i < tagCount; i++) { context.setMessage(`#${tag[dice(1, tag.length, -1)]}`); }
     },
+    catDead: (cat) => {
+        cat.hp = 0;
+        cat.setMeow('Woem...');
+        context
+            .setMessage('')
+            .setMessage(`*** ${strong(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}가 ${strong('고양이 별', 'special')}로 떠났습니다. 
+            당신은 ${strong(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. ***`);
+        const i = cats.findIndex(target => target == cat);
+
+        // 고양이 객체 제거
+        cat.setSkin('유령');
+        // cats[i].element.remove();
+        cats.splice(i, 1);
+
+        p.val.achievement.cat_dead++;
+        p.updateParameterValues();
+
+        p.getShouldEvent();
+    },
     allCatsDead: () => {
         console.info(`[owo][event] allCatsDead (${p.val.resources.supplies}/${p.val.resources.suppliesMax})`);
+        // 고양이들이 다 냥이별로 갔는지 체크 후 실행
         if (p.val.resources.supplies == 0) {
             console.info(`[owo][event] *** allCatsDead ***`);
             context
-                .setMessage('')
-                .setMessage('*** 모든 고양이가 고양이 별로 떠났습니다 ***')
-                .setMessage('*** 성좌 냥냥이가 당신을 원망합니다... ***')
+                .setMessage(``)
+                .setMessage(`*** 모든 ${strong(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
+                .setMessage(`*** ${strong(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
+
+
+            p.val.achievement.cat_dead_all++;
+            p.updateParameterValues();
         }
     },
-    test: () => {
-        console.log('test');
+    setDex: () => {
+
+    },
+    showDex: () => {
+        document.getElementById('dex').classList.add('on');
     }
 
 }
 
+// 기술은 사용자가 동적으로 발생시킬 수 있는 간단한 이벤트입니다
 const skills = {
     getReasonableNumbers(times = 1) {
         return Math.min(Math.floor(window.innerWidth * window.innerHeight / 33333 * times), 100 * times);
@@ -141,12 +177,12 @@ const skills = {
             this.setMineral(cost);
             const cat = new Cat(pos).setMeow('Eow');
             cats.push(cat);
-            context.setMessage(`${cat.skin}에게 간택 당했습니다.`);
+            context.setMessage(`${strong(cat.skin, 'cat')}에게 간택 당했습니다.`);
             p.updateParameterValues();
         } else if (!this.getMineralOk(cost)) {
-            context.setMessage('광물이 부족합니다.');
+            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
         } else {
-            context.setMessage('보급고가 부족합니다.');
+            context.setMessage(`${strong('보급고', 'pisces')}가 부족합니다.`);
         }
     },
     summonMassiveCats(n) {
@@ -157,17 +193,17 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
     },
     summonFish(pos, options) {
         const cost = 4;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('fish'));
-            if (options == null || options.mute != true) context.setMessage('생선을 소환했습니다.');
+            if (options == null || options.mute != true) context.setMessage(`${strong('생선', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage('광물이 부족합니다.');
+            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -178,43 +214,43 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
     },
     summonCucumber(pos, options) {
         pisces.push(new Fish(pos).setType('cucumber'));
-        if (options == null || options.mute != true) context.setMessage('오이를 소환했습니다.');
+        if (options == null || options.mute != true) context.setMessage('<span class="pisces">오이</span>를 소환했습니다.');
         p.updateParameterValues();
         return this;
     },
     summonMassiveCucumbers(n) {
         let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
-        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
     },
     summonMineral(pos) {
         const cost = 0;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('mineral'));
-            context.setMessage('광물을 소환했습니다.');
+            context.setMessage(`${strong('광물', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage('광물이 부족합니다.');
+            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
     summonMassiveMinerals(n) {
         let i = 0; for (i; i < n; i++) { this.summonMineral(); }
-        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
     },
     summonYarnball(pos, options) {
         const cost = 100;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('yarnball').startSliding(options));
-            if (options == null || options.mute != true) context.setMessage('털실 공을 소환했습니다.');
+            if (options == null || options.mute != true) context.setMessage('<span class="pisces">털실 공</span>을 소환했습니다.');
             p.updateParameterValues();
         } else {
-            context.setMessage('광물이 부족합니다.');
+            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -226,17 +262,17 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
     },
-    summonWaterbottle(pos) {
+    summonWaterbottle(pos, options) {
         const cost = 2;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('waterbottle'));
-            context.setMessage('물병을 소환했습니다.');
+            context.setMessage(`${strong('물병', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage('광물이 부족합니다.');
+            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -267,6 +303,46 @@ const skills = {
             // ball
             .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
     },
+    summonWaterbottleDelivery(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
+        const quarterViewFactor = .75;
+        const w = 12;
+        const h = w * quarterViewFactor;
+
+        const maxX = window.innerWidth - 2 * w;
+        const maxY = window.innerHeight - 2 * w;
+        this.pos = {
+            x: Math.max(2 * w, Math.min(pos.x, maxX)),
+            y: Math.max(2 * w, Math.min(pos.y, maxY))
+        };
+
+        this
+            // line 4th
+            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - 2 * h })
+            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y - 2 * h })
+            .summonWaterbottle({ x: pos.x, y: pos.y - 2 * h })
+            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y - 2 * h })
+            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - 2 * h })
+            // line 3th
+            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - 1 * h })
+            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y - 1 * h })
+            .summonWaterbottle({ x: pos.x, y: pos.y - 1 * h })
+            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y - 1 * h })
+            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - 1 * h })
+            // line 2th
+            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y })
+            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y })
+            .summonWaterbottle({ x: pos.x, y: pos.y })
+            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y })
+            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y })
+            // line 1th
+            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y + h })
+            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y + h })
+            .summonWaterbottle({ x: pos.x, y: pos.y + h })
+            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y + h })
+            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y + h });
+
+        context.setMessage(`[냥냥택배] 주문하신 ${strong('생수', 'pisces')}${strong('2 L x 20 개', 'num')}, 문앞에 배송 완료 되었습니다.`)
+    },
     summonMassiveYWaterbottle(n) {
         let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { context.setMessage('소환을 중지합니다.'); break; } }
         if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
@@ -276,7 +352,7 @@ const skills = {
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos));
-            if (options == null || options.mute != true) context.setMessage('아무거나 소환했습니다.');
+            if (options == null || options.mute != true) context.setMessage('<span class="pisces">아무거나</span> 소환했습니다.');
             p.updateParameterValues();
         } else {
             context.setMessage('광물이 부족합니다.');
@@ -307,7 +383,7 @@ const skills = {
         });
         context
             .setMessage(``)
-            .setMessage(`고양이들이 깜짝 놀랐습니다!`);
+            .setMessage(`${strong('고양이', 'cat')}들이 깜짝 놀랐습니다!`);
 
     },
 }

@@ -14,14 +14,14 @@ body {
     display: none;
 }
 
-body.dev_mode .pisces.selected .info-window,
-body.dev_mode .cat.selected .info-window,
+body.dev_mode #basket .pisces.selected .info-window,
+body.dev_mode #cage .cat.selected .info-window,
 body.dev_mode .hp-bar,
 .selected .hp-bar {
     display: initial;
 }
 
-.cat.left .info-window {
+#cage .cat.left .info-window {
     left: initial;
     right: calc(var(--cat-size) + 8px);
 }
@@ -40,19 +40,19 @@ body.dev_mode .hp-bar,
     background-color: #ffffff60;
 }
 
-.cat .info-window table th,
-.cat .info-window table td {}
+#cage .cat .info-window table th,
+#cage .cat .info-window table td {}
 
-.pisces .info-window table th,
-.pisces .info-window table td {
+#basket .pisces .info-window table th,
+#basket .pisces .info-window table td {
     border-color: #FFC107;
     /* color: #FFC107; */
 }
 
-.yarnball .info-window table th,
-.yarnball .info-window table td,
-.waterbottle .info-window table th,
-.waterbottle .info-window table td {
+#basket .yarnball .info-window table th,
+#basket .yarnball .info-window table td,
+#basket .waterbottle .info-window table th,
+#basket .waterbottle .info-window table td {
     border-color: #FF5722;
     /* color: #FF5722; */
 }
@@ -61,7 +61,7 @@ body.dev_mode .hp-bar,
     width: 50px;
 }
 
-.cat {
+#cage .cat {
     width: var(--cat-size);
     height: var(--cat-size);
     background: url('../img/cat_skin_우유.png');
@@ -81,7 +81,7 @@ body.dev_mode .hp-bar,
 }
 
 /* shadow */
-.cat:not(.유령):after {
+#cage .cat:not(.유령):after {
     content: '';
     background: url('../img/cat_skin_그림자.png');
     width: inherit;
@@ -104,72 +104,72 @@ body.dev_mode .hp-bar,
     }
 }
 
-body.dev_mode .cat,
-body.dev_mode .cat.유령,
-body.dev_mode .pisces {
+body.dev_mode #cage .cat,
+body.dev_mode #cage .cat.유령,
+body.dev_mode #basket .pisces {
     outline: 2px dashed #FFC107;
     background-color: #00000001;
     border-radius: 4px;
 }
 
-body.dev_mode .yarnball,
-body.dev_mode .waterbottle {
+body.dev_mode #basket .yarnball,
+body.dev_mode #basket .waterbottle {
     outline-color: #FF5722;
 }
 
-body.dev_mode .cat {
+body.dev_mode #cage .cat {
     outline-color: #4caf50;
     background-color: #ffffff60;
 }
 
-.cat.left,
-.pisces.left figure,
-.cat.left .info-window {
+#cage .cat.left,
+#basket .pisces.left figure,
+#cage .cat.left .info-window {
     transform: scaleX(-1);
 }
 
 
 
-.cat.watch,
-.cat.watch:after {
+#cage .cat.watch,
+#cage .cat.watch:after {
     background-position-y: calc(var(--cat-size) * -1);
 }
 
-.cat.walk,
-.cat.walk:after {
+#cage .cat.walk,
+#cage .cat.walk:after {
     background-position-y: calc(var(--cat-size) * -2);
 }
 
-.cat.run,
-.cat.run:after {
+#cage .cat.run,
+#cage .cat.run:after {
     background-position-y: calc(var(--cat-size) * -3);
 }
 
-.cat.drag,
-.cat.drag:after {
+#cage .cat.drag,
+#cage .cat.drag:after {
     background-position-y: calc(var(--cat-size) * -4);
     z-index: 11;
     cursor: grabbing;
 }
 
-.cat.lick,
-.cat.lick:after {
+#cage .cat.lick,
+#cage .cat.lick:after {
     background-position-y: calc(var(--cat-size) * -5);
 }
 
-.cat.wash,
-.cat.wash:after {
+#cage .cat.wash,
+#cage .cat.wash:after {
     background-position-y: calc(var(--cat-size) * -6);
 }
 
-.cat.stretch,
-.cat.stretch:after {
+#cage .cat.stretch,
+#cage .cat.stretch:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -7);
 }
 
-.cat.surprised,
-.cat.surprised:after {
+#cage .cat.surprised,
+#cage .cat.surprised:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -8);
 }
@@ -179,8 +179,8 @@ body.dev_mode .cat {
  * 고양이 선택했을때 세부 사항 표시
  */
 
-.cat.selected:before,
-.pisces.selected:before {
+#cage .cat.selected:before,
+#basket .pisces.selected:before {
     content: '';
     --width: 32px;
     --border-width: 2px;
@@ -194,18 +194,22 @@ body.dev_mode .cat {
     transform: translateZ(-1px);
 }
 
-body.dev_mode .pisces.selected {
+body.dev_mode #basket .pisces.selected {
     background-color: #ffffff60;
     z-index: 10;
 }
 
-.pisces.selected:before {
+#basket .pisces.selected:before {
     border-color: #FFC107;
 }
 
-.yarnball.selected:before,
-.waterbottle.selected:before {
+#basket .yarnball.selected:before,
+#basket .waterbottle.selected:before {
     border-color: #FF5722;
+}
+
+#cage .cat.selected:before {
+    border-color: #4caf50;
 }
 
 /* hp bar */
@@ -220,8 +224,8 @@ body.dev_mode .pisces.selected {
     display: initial;
 }
 
-.cat:hover .hp-bar,
-.pisces:hover .hp-bar {
+#cage .cat:hover .hp-bar,
+#basket .pisces:hover .hp-bar {
     display: initial;
 }
 
@@ -291,22 +295,39 @@ body.dev_mode .pisces.selected {
 }
 
 /* 유령 */
-.cat.유령 {
+#cage .cat.유령 {
     z-index: 11;
     cursor: default;
     /* pointer-events: none; */
 }
 
-.cat.유령:before {
+#cage .cat.유령:before {
     border: 2px dashed #2196F3;
 }
 
-body.dev_mode .cat.유령 {
+body.dev_mode #cage .cat.유령 {
     background-color: transparent;
     outline: none;
 }
 
-body.dev_mode .cat.유령 .info-window,
-.cat.유령 .hp-bar {
+body.dev_mode #cage .cat.유령 .info-window,
+#cage .cat.유령 .hp-bar {
     display: none;
+}
+
+/* special */
+
+#cage .special .info-window table th,
+#cage .special .info-window table td,
+#basket .special .info-window table th,
+#basket .special .info-window table td,
+
+#cage .special.selected:before,
+#basket .special.selected:before {
+    border-color: #FF4081;
+}
+
+body.dev_mode #cage .special,
+body.dev_mode #basket .special {
+    outline-color: #FF4081;
 }

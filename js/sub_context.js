@@ -4,6 +4,7 @@ class Context {
         this.loadMessagesElement();
         this.loadToastElement();
         this.setToasts();
+        this.loadDexElement();
 
         this.setSelectCatOrSometing();
 
@@ -67,33 +68,35 @@ class Context {
         // setMessage 에서 이전 메시지와 같은 지 확인 목적
         this.messages.textCheckVal = '이전 메시지와 같은 지 확인할 거에요';
     }
-    setMessage(msg_string) {
+    
+    setMessage(somethingToSay) {
         // 이전 메시지와 다른 값인 경우 메시지 출력
-        if (this.messages.textCheckVal != msg_string) {
-            // 바깥 구조 생성
-            const message_wrap = document.createElement('div');
-            message_wrap.className = 'message_wrap'
+        if (this.messages.textCheckVal != somethingToSay) {
+
+            // 바깥 구조 생성 (messages > message > 1 time & 2 text)
+            const message = document.createElement('div');
+            message.className = 'message'
+            messages.appendChild(message);
 
             // 내부 중 시간 부분 생성
             const time = document.createElement('div');
             time.className = 'time';
             const d = new Date();
             const z = number => (number < 10 ? '0' : '') + number;
-            time.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}]`;
-            message_wrap.appendChild(time);
+            time.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}] `;
+            message.appendChild(time);
 
             // 내부 중 메시지 부분 생성
-            const message = document.createElement('div');
-            message.className = 'message';
-            message.innerText = msg_string;
-            message_wrap.appendChild(message);
+            const text = document.createElement('div');
+            text.className = 'text';
+            text.innerHTML = somethingToSay;
+            message.appendChild(text);
 
-            document.getElementById(this.messages.id).appendChild(message_wrap)
-            this.messages.textCheckVal = msg_string;
+            this.messages.textCheckVal = somethingToSay;
 
             // 10 초 뒤 메시지 삭제
             setTimeout(() => {
-                message_wrap.remove();
+                message.remove();
                 this.messages.textCheckVal = '10 초 뒤 메시지 삭제';
             }, 10000);
         }
@@ -132,6 +135,14 @@ class Context {
                 })
             });
         }
+    }
+    loadDexElement() {
+        const dex = document.createElement('section');
+        dex.id = 'dex';
+        document.body.appendChild(dex);
+
+        // 컨텍스트 메뉴 로드
+        this.loadElement(dex, "./module/dex.html");
     }
 
     setDevMode(wannaToggle = false) {
@@ -253,69 +264,6 @@ class Context {
 
     }
 
-    dragElement(elmnt) {
-        let isDragging = false;
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-        elmnt.onmousedown = dragMouseDown;
-        elmnt.addEventListener('touchstart', (event) => dragMouseDown({
-            clientX: event.touches[0].clientX,
-            clientY: event.touches[0].clientY
-        }), { passive: true });
-
-        document.onmousemove = elementDrag;
-        document.addEventListener('touchmove', (event) => elementDrag({
-            clientX: event.touches[0].clientX,
-            clientY: event.touches[0].clientY
-        }), { passive: true });
-
-        elmnt.onmouseup = closeDragElement;
-        elmnt.ontouchend = closeDragElement;
-
-
-        // 윈도 크기 변화할 경우 처리
-        window.onresize = handleWindowResize;
-
-        function dragMouseDown(e) {
-            isDragging = true;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-        }
-
-        function elementDrag(e) {
-            if (!isDragging) return;
-
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-
-            const rect = elmnt.getBoundingClientRect();
-            const maxX = window.innerWidth - rect.width / 2;
-            const maxY = window.innerHeight - rect.height / 2;
-
-            // set the element's new position:
-            elmnt.style.left = Math.max(rect.width / 2, Math.min(elmnt.offsetLeft - pos1, maxX)) + "px";
-            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop - pos2, maxY)) + "px";
-        }
-
-        function handleWindowResize() {
-            // 위치 변경이 한 번도 없을 경우 이벤트 무시
-            if (elmnt.style.left === '') return;
-
-            const rect = elmnt.getBoundingClientRect();
-            const maxX = window.innerWidth - rect.width / 2;
-            const maxY = window.innerHeight - rect.height / 2;
-
-            // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
-            elmnt.style.left = Math.max(rect.width / 2, Math.min(elmnt.offsetLeft, maxX)) + "px";
-            elmnt.style.top = Math.max(rect.height / 2, Math.min(elmnt.offsetTop, maxY)) + "px";
-        }
-
-        function closeDragElement() {
-            isDragging = false;
-        }
-    }
 }
 
 class Settings {
@@ -380,5 +328,85 @@ class Settings {
             e.classList.remove('on');
         });
         target.classList.add('on');
+    }
+}
+
+class Dragable {
+    constructor(elmnt) {
+        this.element = elmnt;
+        this.init();
+    }
+
+    init() {
+        this.position = {};
+        this.rect = this.element.getBoundingClientRect();
+
+        this.element.onmousedown = (event) => this.startDragging(event);
+        this.element.addEventListener('touchstart', (event) => this.startDragging({
+            clientX: event.touches[0].clientX,
+            clientY: event.touches[0].clientY
+        }), { passive: true });
+
+        document.addEventListener('mousemove', (event) => { this.drag(event) });
+        document.addEventListener('touchmove', (event) => this.drag({
+            clientX: event.touches[0].clientX,
+            clientY: event.touches[0].clientY
+        }), { passive: true });
+
+        this.element.onmouseup = (event) => this.stopDragging(event);
+        this.element.addEventListener('touchend', (event) => { this.stopDragging(event) });
+
+        // 윈도 크기 변화할 경우 처리
+        window.addEventListener('resize', () => { this.handleWindowResize() });
+
+    }
+
+    startDragging(e) {
+        this.isDragging = true;
+        this.rect = this.element.getBoundingClientRect();
+        this.dragOffsetX = e.clientX - this.rect.left - this.rect.width / 2;
+        this.dragOffsetY = e.clientY - this.rect.top - this.rect.height / 2;
+
+        this.element.classList.add('drag');
+    }
+
+    drag(e) {
+        if (!this.isDragging) return;
+
+        // 드래그 중일 때, 새로운 위치로 이동
+        const newX = e.clientX - this.dragOffsetX;
+        const newY = e.clientY - this.dragOffsetY;
+
+        // 화면 경계를 벗어나지 않도록 제한
+        const maxX = window.innerWidth - this.rect.width / 2;
+        const maxY = window.innerHeight - this.rect.height / 2;
+
+        this.position.x = Math.max(this.rect.width / 2, Math.min(newX, maxX));
+        this.position.y = Math.max(this.rect.height / 2, Math.min(newY, maxY));
+
+        this.element.style.left = `${this.position.x}px`;
+        this.element.style.top = `${this.position.y}px`;
+    }
+
+    stopDragging() {
+        this.isDragging = false;
+        this.element.classList.remove('drag');
+    }
+
+    handleWindowResize() {
+        const maxX = window.innerWidth - this.rect.width / 2;
+        const maxY = window.innerHeight - this.rect.height / 2;
+
+        // 위치 변경이 한 번도 없을 경우 이벤트 무시
+        if (this.element.style.left === '') return;
+
+        // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
+        this.position.x = Math.min(this.element.offsetLeft, maxX);
+        this.position.y = Math.min(this.element.offsetTop, maxY);
+
+        this.element.style.left = `${this.position.x}px`;
+        this.element.style.top = `${this.position.y}px`;
+
+        // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
     }
 }

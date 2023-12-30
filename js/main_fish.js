@@ -112,7 +112,7 @@ class Fish {
 
         // 야생의 색이 다른 생선이 나타났다!
         if (Math.random() < 1 / 32) {
-        // if (Math.random() < 1 / 2) {
+            // if (Math.random() < 1 / 2) {
             this.figure.style.filter = `hue-rotate(${Math.ceil(Math.random() * 5) * 60}deg`;
             this.irochi = true;
             this.element.classList.add('irochi');
@@ -155,6 +155,11 @@ class Fish {
             case 'waterbottle':
                 // 체력 추가
                 this.hp = this.hp_max = 30;
+                break;
+
+            case 'dex':
+                this.element.classList.add('special');
+                this.element.addEventListener('click',()=>{events.showDex()});
                 break;
 
             default:

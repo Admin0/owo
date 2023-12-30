@@ -1,0 +1,79 @@
+#dex {
+    position: absolute;
+    z-index: 20;
+    font-size: 14px;
+
+    width: 600px;
+    max-width: 100%;
+    padding: 1em;
+    top: 50%;
+    left: 50%;
+
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 5px 11px rgba(0, 0, 0, .25);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .25s;
+    transition-property: opacity, transform, margin, visibility;
+    transform: translate(-50%, -50%) perspective(1000px) rotateX(5deg);
+}
+
+#dex.on {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translate(-50%, -50%);
+    transform-origin: 50% 100%;
+}
+
+#dex ul {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#dex li figure {
+    width: 64px;
+    height: 64px;
+}
+#dex li.discovered figure {
+    background-color: gold;
+}
+
+#dex li figure {
+    background-color: silver;
+}
+
+#dex li .on {
+    display: none;
+}
+
+#dex li .off {
+    display: block;
+}
+
+#dex li.discovered .on {
+    display: block;
+}
+
+#dex li.discovered .off {
+    display: none;
+}
+
+#dex .dex_close_bt {
+    position: absolute;
+    top: .75em;
+    right: .75em;
+    width: 1em;
+    height: 1em;
+    background-color: #aaa;
+    border-radius: 50%;
+}
+
+#dex.on .dex_close_bt:hover {
+    background-color: #F44336;
+}

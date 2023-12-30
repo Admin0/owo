@@ -5,41 +5,12 @@
   </li>
 </ul>
 <ul>
-  <li class="dev_mode" onclick="context.setDevMode(true)">
-    <span class="icon iconcat"></span class="text"><span>개발자 모드</span>
+  <li class="disabled" onclick="">
+    <span class="icon"></span><span class="text">↓ 소환 마법 선택(유료)</span>
     <!-- <span class="shortcut">D</span> -->
-  </li>
-  <li class="auto_summon" onclick="context.setAutoSummon()">
-    <span class="icon"></span><span class="text">자동 급식기 끄기</span>
-    <!-- <span class="shortcut">D</span> -->
-  </li>
-  <li class="sub">
-    <span class="icon"></span><span class="text">스킬</span>
-    <!-- <span class="shortcut">S</span> -->
-    <span class="arrow">▸</span>
-    <section class="context">
-      <ul>
-        <li class="" onclick="skills.summonMassiveCats(10);"> <span class="icon iconcat"></span><span>길냥이들 납치해오기</span> </li>
-        <li class="" onclick="skills.surpriseCats();"> <span class="icon"></span><span>야옹이 놀래키기</span> </li>
-      </ul>
-      <ul>
-        <li class="" onclick="skills.summonMassiveFishs(100);"> <span class="icon fish"></span><span>생선 대량 소환</span> </li>
-        <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div>
-        <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
-        <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
-        <li class="" onclick="skills.summonMassiveCats(10); skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
-      </ul>
-      <ul>
-        <li class="" onclick="skills.clearAllPisces();"><span class="icon"></span> <span>물건 치우기</span> </li>
-      </ul>
-      <ul>
-        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span class="icon"></span><span>Show me the money</span> </li>
-        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span class="icon"></span><span>Food for thought</span> </li>
-      </ul>
-    </section>
   </li>
   <ul class="skill_wrap">
-    <li class="skill icon iconcat" onclick="context.setSkill('iconcat')" title="<ul class=resources><li class='minerals'>50</li><li class='supplies'>1</li></ul>고양이를 입양합니다.">
+    <li class="skill icon cat" onclick="context.setSkill('cat')" title="<ul class=resources><li class='minerals'>50</li><li class='supplies'>1</li></ul>고양이를 입양합니다.">
       <span>냥이</span>
     </li>
     <li class="skill icon random" onclick="context.setSkill('random')" title="<ul class=resources><li class='minerals'>1</li></ul>아무거나 소환합니다.">
@@ -64,6 +35,49 @@
       <span>생수 볼링</span>
     </li>
   </ul>
+</ul>
+<ul>
+  <li class="auto_summon" onclick="context.setAutoSummon()">
+    <span class="icon"></span><span class="text">자동 급식기 끄기</span>
+    <!-- <span class="shortcut">D</span> -->
+  </li>
+</ul>
+<ul>
+  <li class="dev_mode" onclick="context.setDevMode(true)">
+    <span class="icon cat"></span class="text"><span>개발자 모드</span>
+    <!-- <span class="shortcut">D</span> -->
+  </li>
+  <li class="sub">
+    <span class="icon"></span><span class="text">스킬</span>
+    <!-- <span class="shortcut">S</span> -->
+    <span class="arrow">▸</span>
+    <section class="context">
+      <ul>
+        <li class="" onclick="skills.summonMassiveCats(10);"> <span class="icon cat"></span><span>길냥이들 납치해오기</span> </li>
+        <li class="" onclick="skills.surpriseCats();"> <span class="icon"></span><span>야옹이 놀래키기</span> </li>
+      </ul>
+      <ul>
+        <li class="" onclick="skills.summonMassiveFishs(100);"> <span class="icon fish"></span><span>생선 대량 소환</span> </li>
+        <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div>
+        <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
+        <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
+        <li class="" onclick="skills.summonWaterbottleDelivery();"><span class="icon"></span><span class="text">생수 택배 주문</span> </li>
+        <li class="" onclick="skills.summonMassiveCats(10); skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
+      </ul>
+      <ul>
+        <li class="" onclick="skills.clearAllPisces();"><span class="icon"></span> <span>물건 치우기</span> </li>
+      </ul>
+      <ul>
+        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span class="icon"></span><span>Show me the money</span> </li>
+        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span class="icon"></span><span>Food for thought</span> </li>
+      </ul>
+    </section>
+  </li>
+</ul>
+<ul>
+  <li class="" onclick="events.showDex();">
+    <span class="icon dex"></span><span class="text">냥냥도감 보기 (개발 중)</span>
+  </li>
 </ul>
 <ul>
   <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank');">

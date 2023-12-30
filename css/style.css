@@ -3,6 +3,7 @@
 @import url('pisces.css');
 @import url('context.css');
 @import url('context_mobile.css');
+@import url('dex.css');
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -201,23 +202,53 @@ footer img {
   position: fixed;
   left: 20%;
   bottom: 25%;
-  margin: 1em;
-  color: #212121;
   pointer-events: none;
-  text-shadow: -2px 0px #fff, 0px 2px #fff, 2px 0px #fff, 0px -2px #fff;
+  /* background-color: #21212170; */
+  /* text-shadow: 1px 0 #000, 0 1px #000, -1px 0 #000, 0 -1px #000; */
+  padding: .5em 0;
 }
 
-#messages .message_wrap {
+#messages .message {
+  filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
+  will-change: transform;
   display: flex;
+  margin: 0 .5em;
 }
 
-#messages .time {
+#messages .time,
+#messages .num {
+  color: #76FF03;
   width: fit-content;
   margin-right: .5em;
 }
 
+#messages .text {
+  color: #ffffff;
+}
+
+#messages .cat {
+  color: #00E676;
+}
+
+#messages .pisces {
+  color: #FFEA00;
+}
+
+#messages .villain {
+  color: #FF5252;
+}
+
+#messages .special {
+  color: rgba(148, 187, 233, 1);
+  background: linear-gradient(to right, rgba(238, 174, 202, 1) 50%, rgba(148, 187, 233, 1) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 @media only screen and (max-width: 425px) {
   #messages {
+    background-color: transparent;
     max-width: 100%;
     bottom: 0;
     left: 0;
@@ -251,9 +282,12 @@ footer img {
 }
 
 /* z-index position
+020   #dex
+019
+018
 017   #toast
 016   #context
-015   #messages | #resources(header)
+015   #messages | #resources
 014   #context(mobile)
 013
 012   

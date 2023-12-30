@@ -48,6 +48,8 @@ class Cat {
         this.element.classList.add(this.skin);
         this.element.style.backgroundImage = `url('./img/cat_skin_${skin == null ? skins[skin_index] : skin}.png')`;
 
+        if (skin === '우유') this.element.classList.add('special');
+
         return this;
     }
 
@@ -274,6 +276,19 @@ class Cat {
         this.startMoving();
     }
 
+    handleWindowResize() {
+        const rect = this.element.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+
+        // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
+        this.position.x = Math.min(this.position.x, maxX);
+        this.position.y = Math.min(this.position.y, maxY);
+
+        this.element.style.left = `${this.position.x}px`;
+        this.element.style.top = `${this.position.y}px`;
+    }
+
     // 야옹 소리를 내는 메서드
     setMeow(mmm) {
         const rect = this.element.getBoundingClientRect();
@@ -294,19 +309,6 @@ class Cat {
         setTimeout(() => { this.meow.remove(); }, 2000);
 
         return this;
-    }
-
-    handleWindowResize() {
-        const rect = this.element.getBoundingClientRect();
-        const maxX = window.innerWidth - rect.width;
-        const maxY = window.innerHeight - rect.height;
-
-        // 현재 위치가 화면을 벗어나면 새로운 위치로 설정
-        this.position.x = Math.min(this.position.x, maxX);
-        this.position.y = Math.min(this.position.y, maxY);
-
-        this.element.style.left = `${this.position.x}px`;
-        this.element.style.top = `${this.position.y}px`;
     }
 
     updateInfoWindow() {
@@ -357,21 +359,7 @@ class Cat {
                 this.hp = hp_max;
             } else {
                 // 고양이 쥬금 ㅠㅠ
-                this.hp = 0;
-                this.setMeow('Woem...');
-                context
-                    .setMessage('')
-                    .setMessage(`*** ${this.skin}가 고양이 별로 떠났습니다. 당신은 ${this.skin}와의 추억을 오랬동안 기억할 것입니다. ***`);
-                const i = cats.findIndex(cat => cat == this);
-
-                // 고양이 객체 제거
-                this.setSkin('유령');
-                // cats[i].element.remove();
-                cats.splice(i, 1);
-
-                p.updateParameterValues();
-
-                p.getShouldEvent()
+                events.catDead(this);
             }
         }
         return this;

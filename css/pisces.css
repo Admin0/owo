@@ -1,4 +1,4 @@
-.pisces {
+#basket .pisces {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
     /* for selected class */
 }
 
-.pisces figure {
+#basket .pisces figure {
     margin: 0;
     width: inherit;
     height: inherit;
@@ -31,16 +31,16 @@
     transform-style: preserve-3d;
 }
 
-.pisces.drag {
+#basket .pisces.drag {
     z-index: 11;
     cursor: grabbing;
 }
 
-.pisces.drag figure {
+#basket .pisces.drag figure {
     background-position-x: calc(var(--cat-size) * -1);
 }
 
-.pisces.ghost figure {
+#basket .pisces.ghost figure {
     background-position-x: calc(var(--cat-size) * -2);
     pointer-events: none;
 }
@@ -127,7 +127,7 @@
     background-position-y: calc(var(--cat-size) * -7);
 }
 
-.yarnball.move figure {
+#basket .yarnball.move figure {
     background-position-x: 0;
     animation: yarnball .5s steps(4, jump-none) infinite;
 }
@@ -142,7 +142,7 @@
     }
 }
 
-.waterbottle.down figure {
+#basket .waterbottle.down figure {
     background-position-x: calc(var(--cat-size) * -5);
     animation: waterbottle-down .3125s steps(5, jump-none);
     z-index: 8;
