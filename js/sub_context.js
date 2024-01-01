@@ -42,21 +42,13 @@ class Context {
         });
     }
 
-    loadElement(element, module) {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function () {
-            element.innerHTML = this.responseText;
-        }
-        xhttp.open("GET", module, true);
-        xhttp.send();
-    }
     loadContextElement() {
         this.element = document.createElement('section');
         this.element.id = 'context';
         document.body.appendChild(this.element);
 
         // 컨텍스트 메뉴 로드
-        this.loadElement(this.element, "./module/context.html");
+        loadElement(this.element, "./module/context.html");
         this.sub = { element: null }
     }
 
@@ -68,7 +60,7 @@ class Context {
         // setMessage 에서 이전 메시지와 같은 지 확인 목적
         this.messages.textCheckVal = '이전 메시지와 같은 지 확인할 거에요';
     }
-    
+
     setMessage(somethingToSay) {
         // 이전 메시지와 다른 값인 경우 메시지 출력
         if (this.messages.textCheckVal != somethingToSay) {
@@ -136,13 +128,73 @@ class Context {
             });
         }
     }
+
     loadDexElement() {
         const dex = document.createElement('section');
         dex.id = 'dex';
         document.body.appendChild(dex);
 
-        // 컨텍스트 메뉴 로드
-        this.loadElement(dex, "./module/dex.html");
+        // 도감 로드 후 세부 목록 만들기
+        const setDexList = (array, target) => {
+            array.forEach((element, i) => {
+                if (i === 0) return;
+                const li = document.createElement('li');
+                li.className = element.id;
+                document.querySelector(`#dex .${target}`).appendChild(li);
+
+                const figure = document.createElement('figure');
+                li.appendChild(figure);
+
+                const dl = document.createElement('dl');
+                dl.className = 'toast';
+                li.appendChild(dl);
+                const dt_on = document.createElement('dt');
+                dt_on.className = 'on';
+                dt_on.innerHTML = element.name;
+                dl.appendChild(dt_on);
+                const dd_on = document.createElement('dd');
+                dd_on.className = 'on';
+                dd_on.innerHTML = element.desc;
+                dl.appendChild(dd_on);
+                const dt_off = document.createElement('dt');
+                dt_off.className = 'off';
+                dt_off.innerText = array[0].off_name;
+                dl.appendChild(dt_off);
+                const dd_off = document.createElement('dd');
+                dd_off.className = 'off';
+                dd_off.innerText = array[0].off_desc;
+                dl.appendChild(dd_off);
+            });
+        }
+
+        // 도감 로드 후 통계 목록 만들기
+        const setStatisticsList = () => {
+            // if (document.querySelector('#dex #statistics') === null) { setTimeout(() => { setStatisticsList() }, 100); return; }
+            Object.keys(p.data.achievement).forEach(key => {
+                // 숫자인 경우만 목록 만듦
+                // if (typeof (p.data.achievement[key]) == 'boolean') { return }
+
+                const li = document.createElement('li');
+                li.className = key;
+                document.querySelector('#dex #statistics').appendChild(li);
+
+                ['name', 'val'].forEach(each => {
+                    const element = document.createElement('span');
+                    element.className = each;
+                    document.querySelector(`#dex #statistics .${key}`).appendChild(element);
+                });
+                document.querySelector(`#dex #statistics .${key} .name`).textContent = `${key}: `;
+            });
+        }
+
+        // 도감 로드
+        loadElement(dex, "./module/dex.html", () => {
+            setStatisticsList();
+            setDexList(dex_cats, 'cats');
+            setDexList(dex_pisces, 'pisces');
+            setDexList(dex_achievement, 'achievement');
+        });
+
     }
 
     setDevMode(wannaToggle = false) {
@@ -181,21 +233,21 @@ class Context {
         p.autoSummon = isAutoSummon;
     }
 
-    setSkill(skill = p.val.skill) {
+    setSkill(skill = p.data.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
 
         // 현재 선택된 스킬이 액티베이션 상태이면 액티베이션 취소
         if (targetSkill != null && targetSkill.classList.contains('activated')) {
             targetSkill.classList.remove('activated');
-            p.val.skill = 'dummy'; // 선택 해제 시 스킬 정보 삭제
+            p.data.skill = 'dummy'; // 선택 해제 시 스킬 정보 삭제
         } else {
             // 현재 선택된 스킬이 액티베이션 상태가 아니면 액티베이션 상태로 변경
             this.getSkill(skill);
-            p.val.skill = skill;
+            p.data.skill = skill;
             p.updateParameterValues();
         }
     }
-    getSkill(skill = p.val.skill) {
+    getSkill(skill = p.data.skill) {
         const targetSkill = document.querySelector(`#context .skill.${skill}`);
         document.querySelectorAll('#context .skill').forEach((e) => { e.classList.remove('activated'); });
         if (targetSkill != null) { targetSkill.classList.add('activated'); }
@@ -295,8 +347,8 @@ class Settings {
                 // console.log(event);
                 event.addEventListener("change", (event) => {
                     console.log(event);
-                    p.val.work_start = document.querySelector('#settings input#work_start').value;
-                    p.val.work_final = document.querySelector('#settings input#work_final').value;
+                    p.data.work_start = document.querySelector('#settings input#work_start').value;
+                    p.data.work_final = document.querySelector('#settings input#work_final').value;
                     // p.set('payday', $('#settings input#payday').value.substring(8, 10));
                     p.setParaToURL();
                     p.updateParameterValues();
@@ -368,24 +420,29 @@ class Dragable {
         this.dragOffsetY = e.clientY - this.rect.top - this.rect.height / 2;
 
         this.element.classList.add('drag');
+
     }
 
     drag(e) {
         if (!this.isDragging) return;
 
         // 드래그 중일 때, 새로운 위치로 이동
-        const newX = e.clientX - this.dragOffsetX;
-        const newY = e.clientY - this.dragOffsetY;
+        const newX = e.clientX - this.dragOffsetX - this.rect.width / 2;
+        const newY = e.clientY - this.dragOffsetY - this.rect.height / 2;
 
         // 화면 경계를 벗어나지 않도록 제한
-        const maxX = window.innerWidth - this.rect.width / 2;
-        const maxY = window.innerHeight - this.rect.height / 2;
+        const maxX = window.innerWidth - this.rect.width;
+        const maxY = window.innerHeight - this.rect.height;
 
-        this.position.x = Math.max(this.rect.width / 2, Math.min(newX, maxX));
-        this.position.y = Math.max(this.rect.height / 2, Math.min(newY, maxY));
+        this.position.x = Math.max(0, Math.min(newX, maxX));
+        this.position.y = Math.max(0, Math.min(newY, maxY));
 
         this.element.style.left = `${this.position.x}px`;
         this.element.style.top = `${this.position.y}px`;
+        this.element.style.bottom = 'auto';
+        this.element.style.right = 'auto';
+
+
     }
 
     stopDragging() {
@@ -394,8 +451,13 @@ class Dragable {
     }
 
     handleWindowResize() {
-        const maxX = window.innerWidth - this.rect.width / 2;
-        const maxY = window.innerHeight - this.rect.height / 2;
+        if (window.innerWidth <= this.rect.width) {
+            this.element.style.left = '';
+            return;
+        }
+
+        const maxX = window.innerWidth - this.rect.width;
+        const maxY = window.innerHeight - this.rect.height;
 
         // 위치 변경이 한 번도 없을 경우 이벤트 무시
         if (this.element.style.left === '') return;

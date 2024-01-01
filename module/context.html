@@ -62,21 +62,21 @@
         <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
         <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
         <li class="" onclick="skills.summonWaterbottleDelivery();"><span class="icon"></span><span class="text">생수 택배 주문</span> </li>
-        <li class="" onclick="skills.summonMassiveCats(10); skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
+        <li class="" onclick="skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
       </ul>
       <ul>
         <li class="" onclick="skills.clearAllPisces();"><span class="icon"></span> <span>물건 치우기</span> </li>
       </ul>
       <ul>
-        <li class="" onclick="p.val.resources.minerals += 10000; p.updateParameterValues();"> <span class="icon"></span><span>Show me the money</span> </li>
-        <li class="" onclick="p.val.resources.suppliesMax = 200; p.updateParameterValues();"> <span class="icon"></span><span>Food for thought</span> </li>
+        <li class="" onclick="p.data.resources.minerals += 10000; p.updateParameterValues();"> <span class="icon"></span><span>Show me the money</span> </li>
+        <li class="" onclick="p.data.resources.suppliesMax = 200; p.updateParameterValues();"> <span class="icon"></span><span>Food for thought</span> </li>
       </ul>
     </section>
   </li>
 </ul>
 <ul>
   <li class="" onclick="events.showDex();">
-    <span class="icon dex"></span><span class="text">냥냥도감 보기 (개발 중)</span>
+    <span class="icon dex"></span><span class="text">냥냥도감 열기</span>
   </li>
 </ul>
 <ul>

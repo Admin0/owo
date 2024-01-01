@@ -17,4 +17,4 @@ xhr.onreadystatechange = function () {
     }
 };
 
-xhr.send('');
+// xhr.send('');

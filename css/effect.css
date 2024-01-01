@@ -1,0 +1,39 @@
+/* shiny effect */
+.effect {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+
+    background-image: url('../img/effect.png');
+    background-size: calc(var(--cat-size) * 8) calc(var(--cat-size) * 10);
+    background-position: calc(var(--cat-size) * 1) 0;
+    background-repeat: no-repeat;
+}
+
+.irochi .effect {
+    background-position-y: 0;
+    animation: irochi .5s steps(6, jump-none);
+}
+
+.irochi.drag .effect {
+    animation: irochi2 .5s steps(6, jump-none) 2;
+    animation-play-state: running;
+}
+
+@keyframes irochi {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}
+
+@keyframes irochi2 {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}

@@ -45,9 +45,9 @@
     pointer-events: none;
 }
 
-.goldfish.ghost figure,
-.richmineral.ghost figure,
-.richraremineral.ghost figure {
+#basket .fish_rich.ghost figure,
+#basket .mineral_rich.ghost figure,
+#basket .mineral_richrare.ghost figure {
     background-position-x: calc(var(--cat-size) * -5);
 }
 
@@ -57,16 +57,16 @@
     }
 }
 
-.goldfish.drag figure,
-.richmineral.drag figure,
-.richraremineral.drag figure {
+#basket .fish_rich.drag figure,
+#basket .mineral_rich.drag figure,
+#basket .mineral_richrare.drag figure {
     background-position-x: calc(var(--cat-size) * -4);
 
 }
 
-.goldfish figure,
-.richmineral figure,
-.richraremineral figure {
+#basket .fish_rich figure,
+#basket .mineral_rich figure,
+#basket .mineral_richrare figure {
     animation-name: pisces-col2;
     background-position-x: calc(var(--cat-size) * -3);
 }
@@ -108,13 +108,13 @@
 }
 
 .mineral figure,
-.richmineral figure {
+.mineral_rich figure {
     background-position-y: calc(var(--cat-size) * -2);
 
 }
 
-.raremineral figure,
-.richraremineral figure {
+.mineral_rare figure,
+.mineral_richrare figure {
     background-position-y: calc(var(--cat-size) * -3);
 
 }
@@ -151,46 +151,6 @@
 @keyframes waterbottle-down {
     from {
         background-position-x: calc(var(--cat-size) * -1)
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -5);
-    }
-}
-
-/* shiny effect */
-.irochi .effect {
-    background-position: calc(var(--cat-size) * 1) calc(var(--cat-size) * -9);
-    animation: irochi .5s steps(6, jump-none);
-
-    position: absolute;
-    background-repeat: no-repeat;
-    width: inherit;
-    height: inherit;
-
-    background-image: inherit;
-    background-size: inherit;
-}
-
-.irochi.drag .effect {
-    animation: irochi2 .5s steps(6, jump-none);
-    animation-iteration-count: 2;
-    animation-play-state: running;
-}
-
-@keyframes irochi {
-    from {
-        background-position-x: 0
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -5);
-    }
-}
-
-@keyframes irochi2 {
-    from {
-        background-position-x: 0
     }
 
     to {

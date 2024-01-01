@@ -32,7 +32,7 @@ new Dragable(document.getElementById("book"));
 // 카운트다운 객체 생성
 const cd = new Countdown()
   .setTarget('.countdown')
-  .setTime(p.val.work_final)
+  .setTime(p.data.work_final)
   .setOptions({ timer_head: 'h', timer_tail: 'c' })
   .start();
 
@@ -70,7 +70,7 @@ const leftClick = event => {
   if (p.fishInterceptedByCat) return;
 
   // {고양이 객체 = 클릭의 영향을 받지 않는 요소} 정의
-  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, footer');
+  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, #dex, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만
@@ -79,7 +79,7 @@ const leftClick = event => {
       x: event.pageX - 64 + 64 * Math.random(),
       y: event.pageY - 86 + 64 * Math.random()
     }
-    switch (p.val.skill) {
+    switch (p.data.skill) {
       case 'cat':
         skills.summonCat(pos);
         break;
@@ -131,7 +131,7 @@ setInterval(() => {
 
   const evilList = [
     '잼민이', '헤드헌터', '월급루팡', '생계형 월급 채굴꾼', '버즈도둑놈',
-    '카페인 중독자', '키보드 스매셔', '자료요청 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
+    '카페인 중독자', '키보드 스매셔', '자료제출 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
     '부서폭파범(KDA 2/1/3)', '맑은 눈의 광인', '탕비실 독재자', '질문봇', '넵봇',
     '물음표 살인마', '젊은 꼰대', '책상위 서류탑 맨'
   ];

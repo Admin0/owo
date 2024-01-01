@@ -324,10 +324,10 @@ body.dev_mode #cage .cat.유령 .info-window,
 
 #cage .special.selected:before,
 #basket .special.selected:before {
-    border-color: #FF4081;
+    border-color: #FF80AB;
 }
 
 body.dev_mode #cage .special,
 body.dev_mode #basket .special {
-    outline-color: #FF4081;
+    outline-color: #FF80AB;
 }

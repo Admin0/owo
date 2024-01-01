@@ -213,6 +213,10 @@
   background-position: calc(var(--sprite-block-size) * -4) 0;
 }
 
+#context .icon.dex {
+  background-position: calc(var(--sprite-block-size) * -4) calc(var(--sprite-block-size) * -1);
+}
+
 #context_bt {
   display: none;
 }

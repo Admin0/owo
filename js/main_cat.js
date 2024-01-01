@@ -50,6 +50,12 @@ class Cat {
 
         if (skin === '우유') this.element.classList.add('special');
 
+        // 통계를 위해서 넣었습니다
+        if (p !== null) {
+            p.data.achievement[`cat_summoned_${this.skin}`]++;
+            p.data.achievement.cat_summoned_total++;
+        }
+
         return this;
     }
 
@@ -146,6 +152,9 @@ class Cat {
 
         // 고양이 정보 창 업데이트
         this.updateInfoWindow();
+
+        // 생선이랑 충돌 이벤트
+        pisces.forEach(fish => { fish.activateWithCat([this]) });
 
     }
 
@@ -274,6 +283,9 @@ class Cat {
         this.element.classList.remove('drag');
         this.toggleMovement();
         this.startMoving();
+
+        // 생선이랑 충돌 이벤트
+        pisces.forEach(fish => { fish.activateWithCat([this]); });
     }
 
     handleWindowResize() {

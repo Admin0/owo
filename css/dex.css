@@ -1,13 +1,44 @@
+/* .pisces.dex */
+
+.dex figure {
+    background-position-y: calc(var(--cat-size) * -9);
+}
+
+#basket .dex.down figure {
+    background-position-x: calc(var(--cat-size) * -5);
+    animation: dex-down .3125s steps(5, jump-none);
+    /* z-index: 8; */
+}
+
+@keyframes dex-down {
+    from {
+        background-position-x: calc(var(--cat-size) * -1)
+    }
+
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}
+
+
+/* #dex */
 #dex {
     position: absolute;
-    z-index: 20;
+    z-index: 13;
     font-size: 14px;
+    cursor: default;
 
-    width: 600px;
-    max-width: 100%;
+    width: calc(calc(64px + 1em) * 8 - 1em);
+    max-width: calc(100% - 2em);
+    height: fit-content;
+    max-height: 100vh;
+    margin: auto;
     padding: 1em;
-    top: 50%;
-    left: 50%;
+    padding-bottom: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 
     background-color: #fff;
     border-radius: 8px;
@@ -18,34 +49,104 @@
 
     transition: .25s;
     transition-property: opacity, transform, margin, visibility;
-    transform: translate(-50%, -50%) perspective(1000px) rotateX(5deg);
+    transform: perspective(1000px) rotateX(5deg);
+
+    scrollbar-width: none;
+}
+
+#dex::-webkit-scrollbar {
+    display: none;
 }
 
 #dex.on {
     opacity: 1;
     visibility: visible;
 
-    transform: translate(-50%, -50%);
+    transform: none;
     transform-origin: 50% 100%;
 }
 
-#dex ul {
+#dex h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+#dex ol {
     padding: 0;
     list-style: none;
+    counter-reset: item;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+#dex li {
+    position: relative;
+}
+
+#dex ol li::before {
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    display: inline-block;
+    content: "00" counter(item);
+    counter-increment: item;
+    width: 2em;
+}
+
+#dex ol li:nth-child(n+10)::before {
+    content: "0" counter(item);
+}
+
+#dex ol li:nth-child(n+100)::before {
+    content: counter(item);
+}
+
+#dex ol li:not(:nth-child(8n)) {
+    margin: 0 1em 1em 0;
 }
 
 #dex li figure {
-    width: 64px;
-    height: 64px;
+    width: var(--cat-size);
+    height: var(--cat-size);
+    /* background: url('../img/cat_skin_흰냥이.png'); */
+    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
+    image-rendering: pixelated;
 }
-#dex li.discovered figure {
+
+#dex ol li {
+    width: var(--cat-size);
+    height: var(--cat-size);
+    outline: 1px solid #aaa;
+    border-radius: 4px;
+    background-color: #efefef;
+    margin: 0;
+}
+
+#dex ol li.discovered {
     background-color: gold;
 }
 
-#dex li figure {
-    background-color: silver;
+#dex li dl {
+    width: fit-content;
+    white-space: nowrap;
+}
+
+#dex li dl dt {
+    font-weight: bold;
+}
+
+#dex li dl.toast {
+    margin-top: -5em;
+    margin-left: 1em;
+}
+
+#dex li dl dd {
+    margin: 0;
+}
+
+#dex li:hover dl.toast {
+    display: initial;
 }
 
 #dex li .on {
@@ -66,14 +167,170 @@
 
 #dex .dex_close_bt {
     position: absolute;
-    top: .75em;
-    right: .75em;
-    width: 1em;
-    height: 1em;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
     background-color: #aaa;
+    border: 1em solid #fff;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 #dex.on .dex_close_bt:hover {
     background-color: #F44336;
+}
+
+/* 고양이 */
+#dex figure {
+    margin: 0;
+    animation: cat 1s steps(8, jump-none) infinite;
+}
+
+#dex .cats li:not(.유령) figure:before {
+    display: block;
+    width: inherit;
+    height: inherit;
+    background-size: inherit;
+    content: '';
+    background-image: url('../img/cat_skin_그림자.png');
+}
+
+#dex .우유 figure {
+    background-image: url('../img/cat_skin_우유.png');
+}
+
+#dex .흰냥이 figure {
+    background-image: url('../img/cat_skin_흰냥이.png');
+}
+
+#dex .깜냥이 figure {
+    background-image: url('../img/cat_skin_깜냥이.png');
+}
+
+#dex .턱시도 figure {
+    background-image: url('../img/cat_skin_턱시도.png');
+}
+
+#dex .젖소 figure {
+    background-image: url('../img/cat_skin_젖소.png');
+}
+
+#dex .치즈 figure {
+    background-image: url('../img/cat_skin_치즈.png');
+}
+
+#dex .고등어 figure {
+    background-image: url('../img/cat_skin_고등어.png');
+}
+
+#dex .유령 figure {
+    background-image: url('../img/cat_skin_유령.png');
+}
+
+#dex .유령 figure {
+    background-image: url('../img/cat_skin_유령.png');
+}
+
+/* 고양이 말고 다른 거 */
+#dex .pisces figure {
+    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-image: url('../img/fish.png');
+    animation: none;
+}
+
+#dex ol li:not(.discovered) figure {
+    filter: grayscale(1) blur(2px);
+    animation: none;
+}
+
+#dex .cats .discovered:hover figure {
+    background-position-y: calc(-4 * var(--cat-size));
+}
+
+#dex .pisces .discovered:hover figure {
+    background-position-x: calc(-1 * var(--cat-size));
+}
+
+
+#dex .fish figure {}
+
+#dex .fish_rich figure {}
+
+#dex .cucumber figure {
+    background-position-y: calc(-1 * var(--cat-size));
+}
+
+#dex .fish_rich figure,
+#dex .mineral_rich figure,
+#dex .mineral_richrare figure,
+#dex .potion_hp_rich figure,
+#dex .potion_mp_rich figure {
+    background-position-x: calc(-3 * var(--cat-size));
+}
+
+#dex .discovered.fish_rich:hover figure,
+#dex .discovered.mineral_rich:hover figure,
+#dex .discovered.mineral_richrare:hover figure,
+#dex .discovered.potion_hp_rich:hover figure,
+#dex .discovered.potion_mp_rich:hover figure {
+    background-position-x: calc(-4 * var(--cat-size));
+}
+
+#dex .mineral figure,
+#dex .mineral_rich figure {
+    background-position-y: calc(-2 * var(--cat-size));
+}
+
+
+#dex .mineral_rare figure,
+#dex .mineral_richrare figure {
+    background-position-y: calc(-3 * var(--cat-size));
+}
+
+#dex .yarnball figure {
+    background-position-y: calc(-4 * var(--cat-size));
+}
+
+#dex .potion_hp figure,
+#dex .potion_hp_rich figure {
+    background-position-y: calc(-5 * var(--cat-size));
+}
+
+#dex .potion_mp figure,
+#dex .potion_mp_rich figure {
+    background-position-y: calc(-6 * var(--cat-size));
+}
+
+#dex .waterbottle figure {
+    background-position-y: calc(-7 * var(--cat-size));
+}
+
+#dex .shavedice figure {
+    background-position-y: calc(-8 * var(--cat-size));
+}
+
+
+/* 통계 */
+#dex #statistics {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#dex #statistics li {
+    border-right: 1px dashed #ccc;
+    padding-right: 1em;
+    margin-right: 1em;
+    line-height: 1.5;
+}
+
+#dex #statistics .desc {
+    /* color: #fff; */
+}
+
+#dex #statistics .val {
+    color: #4caf50;
+    filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
 }

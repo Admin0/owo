@@ -32,7 +32,7 @@ class Fish {
         this.element.classList.add(Math.random() > .5 ? 'left' : 'right');
 
         // 고양이 객체와 충돌 이벤트 감지
-        this.activateInterval = setInterval(() => this.activateWithCat(cats), 100);
+        // this.activateInterval = setInterval(() => this.activateWithCat(cats), 100);
 
         // 드래그 앤 드롭 관련 속성 추가
         this.isDragging = false;
@@ -64,9 +64,9 @@ class Fish {
     setType(type) {
 
         const types = [
-            'fish', 'goldfish',
+            'fish', 'fish_rich',
             'cucumber',
-            'mineral', 'richmineral', 'raremineral', 'richraremineral',
+            'mineral', 'mineral_rich', 'mineral_rare', 'mineral_richrare',
             'yarnball', 'waterbottle',
 
             'irochi',
@@ -100,22 +100,24 @@ class Fish {
         // 파라미터 전달 안 받았으면 랜덤값 지정
         this.type = type == null ? types_applied_prequency[type_index] : type;
 
-        // 생선은 1/10 확률로 금붕어가 된다
-        if (this.type == 'fish') { this.type = Math.floor(Math.random() * 10) != 0 ? 'fish' : 'goldfish' }
-        // 광물은 1/10 확률로 풍부한광물 된다
-        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 10) != 0 ? 'mineral' : 'richmineral' }
-        // 광물은 1/20 확률로 희귀광물이 된다
-        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 20) != 0 ? 'mineral' : 'raremineral' }
-        // 희귀광물이 1/10 확률로 풍부한희귀광물이 된다
-        if (this.type == 'raremineral') { this.type = Math.floor(Math.random() * 10) != 0 ? 'raremineral' : 'richraremineral' }
+        // 생선은 낮은 확률로 금붕어가 된다
+        if (this.type == 'fish') { this.type = Math.floor(Math.random() * 32) != 0 ? 'fish' : 'fish_rich' }
+        // 광물은 낮은 확률로 풍부한광물 된다
+        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 32) != 0 ? 'mineral' : 'mineral_rich' }
+        // 광물은 낮은 확률로 희귀광물이 된다
+        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 32) != 0 ? 'mineral' : 'mineral_rare' }
+        // 희귀광물이 낮은 확률로 풍부한희귀광물이 된다
+        if (this.type == 'mineral_rare') { this.type = Math.floor(Math.random() * 32) != 0 ? 'mineral_rare' : 'mineral_richrare' }
 
 
         // 야생의 색이 다른 생선이 나타났다!
-        if (Math.random() < 1 / 32) {
+        if (Math.random() < 1 / 64) {
             // if (Math.random() < 1 / 2) {
             this.figure.style.filter = `hue-rotate(${Math.ceil(Math.random() * 5) * 60}deg`;
             this.irochi = true;
             this.element.classList.add('irochi');
+
+            p.data.achievement.pisces_summoned_irochi++;
         }
 
         // 특별한 타입이면 요소 추가
@@ -159,7 +161,16 @@ class Fish {
 
             case 'dex':
                 this.element.classList.add('special');
-                this.element.addEventListener('click',()=>{events.showDex()});
+                this.element.addEventListener('click', (event) => {
+                    const click_distance = this.calculateDistance(
+                        { x: this.startDragX, y: this.startDragY },
+                        { x: this.lastDragX, y: this.lastDragY }
+                    );
+                    if (click_distance < 16) {
+                        this.element.classList.add('down');
+                        events.showDex(500);
+                    }
+                });
                 break;
 
             default:
@@ -170,6 +181,17 @@ class Fish {
 
         this.element.classList.add(this.type);
         this.updateInfoWindow();
+
+        // 통계를 위해서 넣었습니다
+        // console.log(this.type);
+        if (p !== null) {
+            const target = p.data.achievement[`pisces_summoned_${this.type}`];
+            if (target === undefined) { return this };
+
+            p.data.achievement[`pisces_summoned_${this.type}`]++;
+            p.data.achievement.pisces_summoned_total++;
+        }
+
         return this;
     }
 
@@ -199,6 +221,7 @@ class Fish {
         // 물건을 들면 이벤트 발생
         switch (this.type) {
             case 'waterbottle':
+            case 'dex':
                 // 물병은 세워놓는다
                 this.element.classList.remove('down');
                 break;
@@ -238,13 +261,13 @@ class Fish {
             this.element.style.top = `${this.position.y}px`;
 
             // 털실 공을 굴려보자
-            // if (this.type == 'yarnball') {
             this.lastDragX = event.clientX;
             this.lastDragY = event.clientY;
 
+            this.activateWithCat(cats);
+
             // 드래그 이력 추가
             this.dragHistory.push({ x: event.clientX, y: event.clientY, time: performance.now() });
-            // }
 
             this.updateInfoWindow();
         }
@@ -265,6 +288,12 @@ class Fish {
 
             // 드래그 종료되기 100ms 전의 위치 / 없으면 현재 위치
             const startPos = startIndex != -1 ? this.dragHistory[startIndex] : { x: this.x, y: this.y };
+
+            // 털실 공을 굴려보자 (mouseup 이벤트로 호출할 경우)
+            if (event !== undefined) {
+                this.lastDragX = event.clientX;
+                this.lastDragY = event.clientY;
+            }
 
             // 드래그 종료되기 100ms 전의 위치에서 현재 위치까지의 거리 계산
             const deltaX = this.lastDragX - startPos.x;
@@ -308,6 +337,9 @@ class Fish {
     // Cat 객체를 전달받아 activate 메서드 호출
     activateWithCat(cats) {
         cats.forEach(cat => {
+            // 유령 냥이는 생선과의 활성화가 없다
+            if (cat.element.classList.contains('유령')) return;
+
             const catRect = cat.element.getBoundingClientRect();
             const catPosition = { x: catRect.left, y: catRect.top }
             const distance = this.calculateDistance(this.getPosition(), catPosition);
@@ -340,7 +372,7 @@ class Fish {
                 case 'fish':
                     // 고양이 체력 증가
                     cat.updateHp(10);
-                case 'goldfish':
+                case 'fish_rich':
 
                     // 고양이 움직임 정의
                     cat
@@ -362,9 +394,9 @@ class Fish {
                     this.kill();
 
                     break;
-                case 'richraremineral': p.resources.setMinerals(8);
-                case 'raremineral': p.resources.setMinerals(8);
-                case 'richmineral': p.resources.setMinerals(8);
+                case 'mineral_richrare': p.resources.setMinerals(8);
+                case 'mineral_rare': p.resources.setMinerals(8);
+                case 'mineral_rich': p.resources.setMinerals(8);
                 case 'mineral':
                     p.resources.setMinerals(8);
                     p.updateParameterValues();
@@ -452,15 +484,18 @@ class Fish {
 
             switch (fish.type) {
                 case 'fish':
-                case 'goldfish':
+                case 'fish_rich':
                     break;
+
                 case 'cucumber':
                     break;
-                case 'richraremineral': p.resources.setMinerals(8);
-                case 'raremineral': p.resources.setMinerals(8);
-                case 'richmineral': p.resources.setMinerals(8);
+
+                case 'mineral_richrare': p.resources.setMinerals(8);
+                case 'mineral_rare': p.resources.setMinerals(8);
+                case 'mineral_rich': p.resources.setMinerals(8);
                 case 'mineral':
                     break;
+
                 case 'yarnball':
                     if (this.prevCollidedfish == fish || prevCollidedDistance() < 32) { return; }
 
@@ -494,7 +529,6 @@ class Fish {
                     // 움직임 시작
                     fish.startSliding({ v: v_new, a: a_this });
                     this.startSliding({ v: v_new, a: a_target });
-
                     break;
                 default:
                     break;
@@ -569,6 +603,8 @@ class Fish {
             switch (this.type) {
                 case 'yarnball':
                     return 0.1;
+                case 'dex':
+                    return 2.0;
                 default:
                     return 0.5;
             }
@@ -578,7 +614,14 @@ class Fish {
         switch (this.type) {
             case 'waterbottle':
                 // 속도가 빠르면 물병이 쓰러진다
-                if (v > 5) this.element.classList.add('down');
+                if (v > 5) { this.element.classList.add('down'); }
+                break;
+            case 'dex':
+                // 속도가 빠르면 도감이 펼쳐진다
+                if (v > 5) {
+                    this.element.classList.add('down');
+                    events.showDex(500);
+                }
                 break;
 
             default:

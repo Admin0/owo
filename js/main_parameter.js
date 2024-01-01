@@ -1,13 +1,13 @@
 class Parameter {
     constructor() {
         // 로컬 스토리지에서 파라미터 값을 가져오거나 기본값으로 설정
-        this.val = localStorage.val != null ? JSON.parse(localStorage.val) : {};
+        this.data = localStorage.data != null ? JSON.parse(localStorage.data) : {};
         this.cats = localStorage.cats != null ? JSON.parse(localStorage.cats) : null;
 
         // 날짜와 점심 시간 기본값 설정
-        this.val.date = { yyyy: new Date().getFullYear(), mm: new Date().getMonth(), dd: new Date().getDate() };
-        this.val.lunch_start = '12:00';
-        this.val.lunch_final = '13:00';
+        this.data.date = { yyyy: new Date().getFullYear(), mm: new Date().getMonth(), dd: new Date().getDate() };
+        this.data.lunch_start = '12:00';
+        this.data.lunch_final = '13:00';
 
         // 리소스 초기화 메서드 호출
         this.initResources();
@@ -17,18 +17,20 @@ class Parameter {
 
     // 리소스 초기화 메서드
     initResources() {
-        if (this.val.resources == null) {
-            this.val.resources = { minerals: 50, supplies: 0, suppliesMax: 12 };
-        }
+        // 자원 
+        if (this.data.resources == null) { this.data.resources = { minerals: 50, supplies: 0, suppliesMax: 12 }; }
+
+        // 통계 & 도전 과제
+        if (this.data.achievement == null) { this.data.achievement = statistic; }
     }
 
     // 자원 추가, 삭제, 조작을 담당하는 객체
     resources = {
         setMinerals(val) {
-            p.val.resources.minerals += val;
+            p.data.resources.minerals += val;
         },
         setSupplies(val) {
-            p.val.resources.supplies += val;
+            p.data.resources.supplies += val;
         },
         setSuppliesMax(val) {
             // 최대 자원 수를 증가시키지만 200을 초과하지 않도록 설정
@@ -37,15 +39,13 @@ class Parameter {
         }
     }
 
-    // 도전 과제를 위한 객체
-    achievement = {}
 
     // URL에 파라미터 값을 설정하는 메서드
     setParaToURL(params) {
-        this.val.work_start = params.work_start;
-        this.val.work_final = params.work_final;
-        this.val.payday = params.payday || '25';
-        history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.val.work_start}&work_final=${this.val.work_final}&payday=${this.val.payday}`);
+        this.data.work_start = params.work_start;
+        this.data.work_final = params.work_final;
+        this.data.payday = params.payday || '25';
+        history.pushState('', '퇴근 시간을 알려주는 고양이', `?work_start=${this.data.work_start}&work_final=${this.data.work_final}&payday=${this.data.payday}`);
         this.setCountdownNewValue(cd);
         this.updateParameterValues();
     }
@@ -53,25 +53,71 @@ class Parameter {
     // URL에서 파라미터 값을 가져오는 메서드
     getParaFromURL() {
         // URL에서 작업 시작, 종료 및 월급일 정보를 가져와 설정
-        this.val.work_start = new URLSearchParams(window.location.search).get('work_start') || this.val.work_start || '08:30';
-        this.val.work_final = new URLSearchParams(window.location.search).get('work_final') || this.val.work_final || '17:30';
-        this.val.payday = new URLSearchParams(window.location.search).get('payday') || this.val.payday || '25';
+        this.data.work_start = new URLSearchParams(window.location.search).get('work_start') || this.data.work_start || '08:30';
+        this.data.work_final = new URLSearchParams(window.location.search).get('work_final') || this.data.work_final || '17:30';
+        this.data.payday = new URLSearchParams(window.location.search).get('payday') || this.data.payday || '25';
     }
 
     setCountdownNewValue(countdownObject) {
-        countdownObject.setTime(this.val.work_final);
+        countdownObject.setTime(this.data.work_final);
+    }
+
+    // 도전과제 달성을 확인하는 메서드
+    checkAchievement() {
+        const a = (key) => { return p.data.achievement[key] };
+        // console.log(a('cat_summoned_유령'));
+        // 고양이
+        if (document.querySelector('#dex .cats') === null) { return }
+
+        let discover_all_cat = 1;
+        dex_cats.forEach(cat => {
+            if (a(`cat_summoned_${cat.id}`) > 0) {
+                document.querySelector(`#dex .cats .${cat.id}`).classList.add('discovered');
+            }
+            discover_all_cat *= a(`cat_summoned_${cat.id}`);
+        });
+
+        // 고양이 말고 다른 거
+        let discover_all_pisces = 1;
+        dex_pisces.forEach(pisces => {
+            if (a(`pisces_summoned_${pisces.id}`) > 0) {
+                document.querySelector(`#dex .pisces .${pisces.id}`).classList.add('discovered');
+            }
+            discover_all_pisces *= a(`cat_summoned_${pisces.id}`);
+        });
+
+        // 시스템 개선이 필요하네요
+        // 도전 과제
+
+        // 모든 고양이 조우
+        p.data.achievement.discover_all_cat = discover_all_cat !== 0 ? true : false;
+        p.data.achievement.discover_all_pisces = discover_all_cat !== 0 ? true : false;
+        p.data.achievement.discover_irochi = a('pisces_summoned_irochi') !== 0 ? true : false;
+        p.data.achievement.discover_irochi_10 = a('pisces_summoned_irochi') > 10 ? true : false;
+        p.data.achievement.discover_irochi_100 = a('pisces_summoned_irochi') > 100 ? true : false;
+
+        dex_achievement.forEach(achievement => {
+            if (a(achievement.id) === true) {
+                document.querySelector(`#dex .achievement .${achievement.id}`).classList.add('discovered');
+                // context.setMessage('');
+                // context.setMessage('도전 과제 달성] 냥냥몬 마스터가 될거야');
+                // context.setMessage('귀하는 냥냥 도감 고양이 부문을 훌륭하게 완성했습니다!');
+            }
+        });
     }
 
     // 파라미터 값을 업데이트하는 메서드
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고
-        document.querySelector('#minerals').textContent = this.val.resources.minerals;
-        this.val.resources.supplies = cats.length;
-        document.querySelector('#supplies').textContent = `${this.val.resources.supplies}/${this.val.resources.suppliesMax}`;
+        document.querySelector('#minerals').textContent = this.data.resources.minerals;
+        this.data.resources.supplies = cats.length;
+        document.querySelector('#supplies').textContent = `${this.data.resources.supplies}/${this.data.resources.suppliesMax}`;
 
         // 로컬 스토리지에 저장
-        localStorage.setItem('val', JSON.stringify(this.val));
+        localStorage.setItem('data', JSON.stringify(this.data));
         localStorage.setItem('cats', JSON.stringify(cats));
+
+        this.checkAchievement();
     }
 
     // 이벤트를 정의해보자
@@ -89,16 +135,13 @@ class Parameter {
  * time, num: light green
  * special: pink - sky blue
  */
-const strong = (content, cls) => {
-    return `<span class="${cls}">${content}</span>`
-}
 
 const events = {
     titleEvent: () => {
         const messages = [
             ``,
-            `*** ${strong('퇴근 시간을 알려주는 고양이', 'special')} ***`,
-            `- Project ${strong('OwO', 'special')} as Off Work On-time v.2.2`,
+            `*** ${setClass('퇴근 시간을 알려주는 고양이', 'special')} ***`,
+            `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.version.val}`,
         ];
 
         let i = 0;
@@ -123,8 +166,8 @@ const events = {
         cat.setMeow('Woem...');
         context
             .setMessage('')
-            .setMessage(`*** ${strong(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}가 ${strong('고양이 별', 'special')}로 떠났습니다. 
-            당신은 ${strong(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. ***`);
+            .setMessage(`*** ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}가 ${setClass('고양이 별', 'special')}로 떠났습니다. 
+            당신은 ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. ***`);
         const i = cats.findIndex(target => target == cat);
 
         // 고양이 객체 제거
@@ -132,31 +175,43 @@ const events = {
         // cats[i].element.remove();
         cats.splice(i, 1);
 
-        p.val.achievement.cat_dead++;
+        p.data.achievement.cat_dead.val++;
         p.updateParameterValues();
 
         p.getShouldEvent();
     },
     allCatsDead: () => {
-        console.info(`[owo][event] allCatsDead (${p.val.resources.supplies}/${p.val.resources.suppliesMax})`);
+        console.info(`[owo][event] allCatsDead (${p.data.resources.supplies}/${p.data.resources.suppliesMax})`);
         // 고양이들이 다 냥이별로 갔는지 체크 후 실행
-        if (p.val.resources.supplies == 0) {
+        if (p.data.resources.supplies == 0) {
             console.info(`[owo][event] *** allCatsDead ***`);
             context
                 .setMessage(``)
-                .setMessage(`*** 모든 ${strong(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
-                .setMessage(`*** ${strong(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
+                .setMessage(`*** 모든 ${setClass(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
+                .setMessage(`*** ${setClass(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
 
-
-            p.val.achievement.cat_dead_all++;
+            p.data.achievement.cat_dead_all.val++;
             p.updateParameterValues();
         }
     },
     setDex: () => {
 
     },
-    showDex: () => {
-        document.getElementById('dex').classList.add('on');
+    showDex: (delay) => {
+        setTimeout(() => {
+            document.getElementById('dex').classList.add('on');
+            document.querySelector('.pisces.dex').classList.add('down');
+        }, delay);
+
+        // 도감 통계 업데이트 <-- 랙 문제로 가끔씩만 호출되는 자리로 이동
+        Object.keys(p.data.achievement).forEach(key => {
+            if (document.querySelector(`.${key}`) === null) { return }
+            document.querySelector(`.${key} .val`).textContent = p.data.achievement[key];
+        });
+    },
+    hideDex: () => {
+        document.getElementById('dex').classList.remove('on');
+        document.querySelector('.pisces.dex').classList.remove('down');
     }
 
 }
@@ -167,9 +222,9 @@ const skills = {
         return Math.min(Math.floor(window.innerWidth * window.innerHeight / 33333 * times), 100 * times);
     },
 
-    getMineralOk(cost) { return p.val.resources.minerals - cost >= 0 },
-    setMineral(cost) { p.val.resources.minerals -= cost; },
-    getSupplyOk() { return p.val.resources.supplies < p.val.resources.suppliesMax },
+    getMineralOk(cost) { return p.data.resources.minerals - cost >= 0 },
+    setMineral(cost) { p.data.resources.minerals -= cost; },
+    getSupplyOk() { return p.data.resources.supplies < p.data.resources.suppliesMax },
 
     summonCat(pos) {
         const cost = 50;
@@ -177,12 +232,12 @@ const skills = {
             this.setMineral(cost);
             const cat = new Cat(pos).setMeow('Eow');
             cats.push(cat);
-            context.setMessage(`${strong(cat.skin, 'cat')}에게 간택 당했습니다.`);
+            context.setMessage(`${setClass(cat.skin, 'cat')}에게 간택 당했습니다.`);
             p.updateParameterValues();
         } else if (!this.getMineralOk(cost)) {
-            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         } else {
-            context.setMessage(`${strong('보급고', 'pisces')}가 부족합니다.`);
+            context.setMessage(`${setClass('보급고', 'pisces')}가 부족합니다.`);
         }
     },
     summonMassiveCats(n) {
@@ -193,17 +248,17 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonFish(pos, options) {
         const cost = 4;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('fish'));
-            if (options == null || options.mute != true) context.setMessage(`${strong('생선', 'pisces')}을 소환했습니다.`);
+            if (options == null || options.mute != true) context.setMessage(`${setClass('생선', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -214,7 +269,7 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonCucumber(pos, options) {
         pisces.push(new Fish(pos).setType('cucumber'));
@@ -224,23 +279,23 @@ const skills = {
     },
     summonMassiveCucumbers(n) {
         let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
-        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonMineral(pos) {
         const cost = 0;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('mineral'));
-            context.setMessage(`${strong('광물', 'pisces')}을 소환했습니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
     summonMassiveMinerals(n) {
         let i = 0; for (i; i < n; i++) { this.summonMineral(); }
-        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonYarnball(pos, options) {
         const cost = 100;
@@ -250,7 +305,7 @@ const skills = {
             if (options == null || options.mute != true) context.setMessage('<span class="pisces">털실 공</span>을 소환했습니다.');
             p.updateParameterValues();
         } else {
-            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -262,17 +317,17 @@ const skills = {
                 break;
             }
         }
-        if (i != 0) context.setMessage(`(${strong('x' + i, 'num')}회 소환 성공)`);
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonWaterbottle(pos, options) {
         const cost = 2;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos).setType('waterbottle'));
-            context.setMessage(`${strong('물병', 'pisces')}을 소환했습니다.`);
+            context.setMessage(`${setClass('물병', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage(`${strong('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
     },
@@ -341,7 +396,7 @@ const skills = {
             .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y + h })
             .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y + h });
 
-        context.setMessage(`[냥냥택배] 주문하신 ${strong('생수', 'pisces')}${strong('2 L x 20 개', 'num')}, 문앞에 배송 완료 되었습니다.`)
+        context.setMessage(`[냥냥택배] 주문하신 ${setClass('생수', 'pisces')}${setClass('2 L x 20 개', 'num')}, 문앞에 배송 완료 되었습니다.`)
     },
     summonMassiveYWaterbottle(n) {
         let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { context.setMessage('소환을 중지합니다.'); break; } }
@@ -383,7 +438,23 @@ const skills = {
         });
         context
             .setMessage(``)
-            .setMessage(`${strong('고양이', 'cat')}들이 깜짝 놀랐습니다!`);
+            .setMessage(`${setClass('고양이', 'cat')}들이 깜짝 놀랐습니다!`);
 
     },
+}
+
+// SUB FUNCTIONS
+
+const loadElement = (element, module, callback = () => { }) => {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", module, true);
+    xhttp.send();
+    xhttp.onload = (event) => {
+        element.innerHTML = event.target.responseText;
+        callback();
+    }
+}
+
+const setClass = (content, cls) => {
+    return `<span class="${cls}">${content}</span>`
 }
