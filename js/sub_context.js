@@ -135,11 +135,10 @@ class Context {
         document.body.appendChild(dex);
 
         // 도감 로드 후 세부 목록 만들기
-        const setDexList = (array, target) => {
-            array.forEach((element, i) => {
-                if (i === 0) return;
+        const setDexList = (array, target, off_titile, off_dexc) => {
+            array.forEach((e, i) => {
                 const li = document.createElement('li');
-                li.className = element.id;
+                li.className = e.id;
                 document.querySelector(`#dex .${target}`).appendChild(li);
 
                 const figure = document.createElement('figure');
@@ -150,30 +149,28 @@ class Context {
                 li.appendChild(dl);
                 const dt_on = document.createElement('dt');
                 dt_on.className = 'on';
-                dt_on.innerHTML = element.name;
+                dt_on.innerHTML = e.name;
                 dl.appendChild(dt_on);
                 const dd_on = document.createElement('dd');
                 dd_on.className = 'on';
-                dd_on.innerHTML = element.desc;
+                dd_on.innerHTML = e.desc;
                 dl.appendChild(dd_on);
                 const dt_off = document.createElement('dt');
                 dt_off.className = 'off';
-                dt_off.innerText = array[0].off_name;
+                dt_off.innerText = off_titile;
                 dl.appendChild(dt_off);
                 const dd_off = document.createElement('dd');
                 dd_off.className = 'off';
-                dd_off.innerText = array[0].off_desc;
+                dd_off.innerText = off_dexc;
                 dl.appendChild(dd_off);
+
+                e.element = li;
             });
         }
 
         // 도감 로드 후 통계 목록 만들기
         const setStatisticsList = () => {
-            // if (document.querySelector('#dex #statistics') === null) { setTimeout(() => { setStatisticsList() }, 100); return; }
             Object.keys(p.data.achievement).forEach(key => {
-                // 숫자인 경우만 목록 만듦
-                // if (typeof (p.data.achievement[key]) == 'boolean') { return }
-
                 const li = document.createElement('li');
                 li.className = key;
                 document.querySelector('#dex #statistics').appendChild(li);
@@ -190,9 +187,11 @@ class Context {
         // 도감 로드
         loadElement(dex, "./module/dex.html", () => {
             setStatisticsList();
-            setDexList(dex_cats, 'cats');
-            setDexList(dex_pisces, 'pisces');
-            setDexList(dex_achievement, 'achievement');
+            setDexList(dex_cats, 'cats', '미발견', '만나지 못했습니다');
+            setDexList(dex_pisces, 'pisces', '미발견', '발견하지 못했습니다');
+            setDexList(dex_achievement, 'achievement', '미달성', '달성하지 못했습니다');
+
+            p.updateParameterValues();
         });
 
     }

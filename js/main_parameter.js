@@ -21,7 +21,10 @@ class Parameter {
         if (this.data.resources == null) { this.data.resources = { minerals: 50, supplies: 0, suppliesMax: 12 }; }
 
         // 통계 & 도전 과제
-        if (this.data.achievement == null) { this.data.achievement = statistic; }
+        if (this.data.achievement == null) { this.data.achievement = achievement.data; }
+        if (this.data.dex_cats == null) { this.data.dex_cats = dex_cats; }
+        if (this.data.dex_pisces == null) { this.data.dex_pisces = dex_pisces; }
+        if (this.data.dex_achievement == null) { this.data.dex_achievement = dex_achievement; }
     }
 
     // 자원 추가, 삭제, 조작을 담당하는 객체
@@ -38,7 +41,6 @@ class Parameter {
             origin = origin + val < 200 ? origin + val : 200;
         }
     }
-
 
     // URL에 파라미터 값을 설정하는 메서드
     setParaToURL(params) {
@@ -62,50 +64,6 @@ class Parameter {
         countdownObject.setTime(this.data.work_final);
     }
 
-    // 도전과제 달성을 확인하는 메서드
-    checkAchievement() {
-        const a = (key) => { return p.data.achievement[key] };
-        // console.log(a('cat_summoned_유령'));
-        // 고양이
-        if (document.querySelector('#dex .cats') === null) { return }
-
-        let discover_all_cat = 1;
-        dex_cats.forEach(cat => {
-            if (a(`cat_summoned_${cat.id}`) > 0) {
-                document.querySelector(`#dex .cats .${cat.id}`).classList.add('discovered');
-            }
-            discover_all_cat *= a(`cat_summoned_${cat.id}`);
-        });
-
-        // 고양이 말고 다른 거
-        let discover_all_pisces = 1;
-        dex_pisces.forEach(pisces => {
-            if (a(`pisces_summoned_${pisces.id}`) > 0) {
-                document.querySelector(`#dex .pisces .${pisces.id}`).classList.add('discovered');
-            }
-            discover_all_pisces *= a(`cat_summoned_${pisces.id}`);
-        });
-
-        // 시스템 개선이 필요하네요
-        // 도전 과제
-
-        // 모든 고양이 조우
-        p.data.achievement.discover_all_cat = discover_all_cat !== 0 ? true : false;
-        p.data.achievement.discover_all_pisces = discover_all_cat !== 0 ? true : false;
-        p.data.achievement.discover_irochi = a('pisces_summoned_irochi') !== 0 ? true : false;
-        p.data.achievement.discover_irochi_10 = a('pisces_summoned_irochi') > 10 ? true : false;
-        p.data.achievement.discover_irochi_100 = a('pisces_summoned_irochi') > 100 ? true : false;
-
-        dex_achievement.forEach(achievement => {
-            if (a(achievement.id) === true) {
-                document.querySelector(`#dex .achievement .${achievement.id}`).classList.add('discovered');
-                // context.setMessage('');
-                // context.setMessage('도전 과제 달성] 냥냥몬 마스터가 될거야');
-                // context.setMessage('귀하는 냥냥 도감 고양이 부문을 훌륭하게 완성했습니다!');
-            }
-        });
-    }
-
     // 파라미터 값을 업데이트하는 메서드
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고
@@ -117,7 +75,7 @@ class Parameter {
         localStorage.setItem('data', JSON.stringify(this.data));
         localStorage.setItem('cats', JSON.stringify(cats));
 
-        this.checkAchievement();
+        achievement.checkAchievement();
     }
 
     // 이벤트를 정의해보자
@@ -141,7 +99,7 @@ const events = {
         const messages = [
             ``,
             `*** ${setClass('퇴근 시간을 알려주는 고양이', 'special')} ***`,
-            `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.version.val}`,
+            `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.version}`,
         ];
 
         let i = 0;
@@ -208,6 +166,8 @@ const events = {
             if (document.querySelector(`.${key}`) === null) { return }
             document.querySelector(`.${key} .val`).textContent = p.data.achievement[key];
         });
+
+        p.updateParameterValues();
     },
     hideDex: () => {
         document.getElementById('dex').classList.remove('on');

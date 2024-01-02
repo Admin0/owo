@@ -52,7 +52,7 @@ class Fish {
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
         }));
-        this.element.addEventListener('touchend', (event) => this.stopDragging(event));
+        this.element.addEventListener('touchend', () => this.stopDragging());
 
         // 화면 크기 변경 시 이벤트
         window.addEventListener("resize", () => this.handleWindowResize());
@@ -289,7 +289,7 @@ class Fish {
             // 드래그 종료되기 100ms 전의 위치 / 없으면 현재 위치
             const startPos = startIndex != -1 ? this.dragHistory[startIndex] : { x: this.x, y: this.y };
 
-            // 털실 공을 굴려보자 (mouseup 이벤트로 호출할 경우)
+            // 털실 공을 굴려보자 (이동이 전혀 없어도 위치 반환이 필요해서)
             if (event !== undefined) {
                 this.lastDragX = event.clientX;
                 this.lastDragY = event.clientY;

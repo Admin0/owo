@@ -43,11 +43,9 @@ settings = new Settings();
 // 기본 이벤트 막기 (select 이벤트)
 document.addEventListener('mousedown', (e) => {
   e.preventDefault();
-  p.updateParameterValues();
 });
 document.addEventListener('touchend', (e) => {
   // e.preventDefault();
-  p.updateParameterValues();
 });
 
 

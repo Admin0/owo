@@ -228,10 +228,6 @@
     background-image: url('../img/cat_skin_유령.png');
 }
 
-#dex .유령 figure {
-    background-image: url('../img/cat_skin_유령.png');
-}
-
 /* 고양이 말고 다른 거 */
 #dex .pisces figure {
     background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
@@ -244,7 +240,8 @@
     animation: none;
 }
 
-#dex .cats .discovered:hover figure {
+#dex .cats .discovered:hover figure,
+#dex .cats .discovered:hover figure:before {
     background-position-y: calc(-4 * var(--cat-size));
 }
 
