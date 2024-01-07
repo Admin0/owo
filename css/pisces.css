@@ -12,7 +12,7 @@
     background-repeat: no-repeat;
     image-rendering: pixelated;
     background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
-    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
     /* for selected class */
 }
 
@@ -48,7 +48,7 @@
 #basket .fish_rich.ghost figure,
 #basket .mineral_rich.ghost figure,
 #basket .mineral_richrare.ghost figure {
-    background-position-x: calc(var(--cat-size) * -5);
+    background-position-x: calc(var(--cat-size) * -6);
 }
 
 @keyframes pisces {
@@ -60,7 +60,7 @@
 #basket .fish_rich.drag figure,
 #basket .mineral_rich.drag figure,
 #basket .mineral_richrare.drag figure {
-    background-position-x: calc(var(--cat-size) * -4);
+    background-position-x: calc(var(--cat-size) * -5);
 
 }
 
@@ -68,38 +68,16 @@
 #basket .mineral_rich figure,
 #basket .mineral_richrare figure {
     animation-name: pisces-col2;
-    background-position-x: calc(var(--cat-size) * -3);
+    background-position-x: calc(var(--cat-size) * -4);
 }
 
 @keyframes pisces-col2 {
     from {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+
+    to {
         background-position-x: calc(var(--cat-size) * -4);
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -3);
-    }
-}
-
-
-@keyframes pisces-col3 {
-    from {
-        background-position-x: calc(var(--cat-size) * -5);
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -3);
-    }
-}
-
-
-@keyframes pisces-col4 {
-    from {
-        background-position-x: calc(var(--cat-size) * -7);
-    }
-
-    to {
-        background-position-x: calc(var(--cat-size) * -5);
     }
 }
 
@@ -143,17 +121,17 @@
 }
 
 #basket .waterbottle.down figure {
-    background-position-x: calc(var(--cat-size) * -5);
-    animation: waterbottle-down .3125s steps(5, jump-none);
+    background-position-x: calc(var(--cat-size) * -7);
+    animation: waterbottle-down .375s steps(6, jump-none);
     z-index: 8;
 }
 
 @keyframes waterbottle-down {
     from {
-        background-position-x: calc(var(--cat-size) * -1)
+        background-position-x: calc(var(--cat-size) * -2)
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -5);
+        background-position-x: calc(var(--cat-size) * -7);
     }
 }

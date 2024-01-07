@@ -687,8 +687,9 @@ class Fish {
     kill() {    // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
         if (this.element.classList.contains('ghost')) { return }
         this.element.classList.add('ghost');
-        this.figure.animate({ filter: ['brightness(.75)', 'brightness(2)'] }, {
-            duration: 250,
+        this.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
+            duration: 200,
+            animationDirection: 'alternate',
             iterations: Infinity,
             composite: 'add',
         });

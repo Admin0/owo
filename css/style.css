@@ -31,11 +31,11 @@ body {
 
 /* dev_mode */
 
-body .dev_mode{
+body .dev_mode {
   display: none;
 }
 
-body.dev_mode .dev_mode{
+body.dev_mode .dev_mode {
   display: initial;
 }
 
@@ -92,7 +92,7 @@ body.dev_mode .dev_mode{
 }
 
 #messages .time,
-#messages .num {
+.text.num {
   color: #76FF03;
   width: fit-content;
   margin-right: .5em;
@@ -103,26 +103,27 @@ body.dev_mode .dev_mode{
 }
 
 #messages .cat,
-#dex .toast .cat {
+.text.cat {
   color: #00E676;
 }
 
-#messages .pisces {
+#messages .pisces,
+.text.pisces {
   color: #FFEA00;
 }
 
 #messages .villain,
-#dex .toast .villain {
+.text.villain {
   color: #FF5252;
 }
 
 #messages .var,
-#dex .toast .var {
+.text.var {
   color: #2196F3;
 }
 
-#messages .special,
-#dex .toast .special {
+.text.special,
+#messages .special {
   color: rgba(148, 187, 233, 1);
   background: linear-gradient(to right, rgba(238, 174, 202, 1) 50%, rgba(148, 187, 233, 1) 100%);
   background-clip: text;

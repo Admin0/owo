@@ -5,18 +5,18 @@
 }
 
 #basket .dex.down figure {
-    background-position-x: calc(var(--cat-size) * -5);
-    animation: dex-down .3125s steps(5, jump-none);
+    background-position-x: calc(var(--cat-size) * -7);
+    animation: dex-down .375s steps(6, jump-none);
     /* z-index: 8; */
 }
 
 @keyframes dex-down {
     from {
-        background-position-x: calc(var(--cat-size) * -1)
+        background-position-x: calc(var(--cat-size) * -2)
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -5);
+        background-position-x: calc(var(--cat-size) * -7);
     }
 }
 
@@ -52,6 +52,7 @@
     transform: perspective(1000px) rotateX(5deg);
 
     scrollbar-width: none;
+    overflow-y: auto;
 }
 
 #dex::-webkit-scrollbar {
@@ -67,7 +68,6 @@
 }
 
 #dex h2 {
-    margin-top: 0;
     text-align: center;
 }
 
@@ -124,7 +124,7 @@
 }
 
 #dex ol li.discovered {
-    background-color: gold;
+    background: rgba(148, 187, 233, .25);
 }
 
 #dex li dl {
@@ -149,6 +149,15 @@
     display: initial;
 }
 
+#dex .text {
+    /* filter: brightness(.85); */
+    /* filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000); */
+}
+
+#dex .text.special {
+    filter: drop-shadow(1px 0 #303F9F) drop-shadow(-1px 0 #C2185B) drop-shadow(0 1px #303F9F) drop-shadow(0 -1px #C2185B);
+}
+
 #dex li .on {
     display: none;
 }
@@ -157,7 +166,8 @@
     display: block;
 }
 
-#dex li.discovered .on {
+#dex li.discovered .on,
+.dev_mode #dex li .on {
     display: block;
 }
 
@@ -185,6 +195,10 @@
 #dex figure {
     margin: 0;
     animation: cat 1s steps(8, jump-none) infinite;
+}
+
+#dex figure::before {
+    animation: inherit;
 }
 
 #dex .cats li:not(.유령) figure:before {
@@ -230,14 +244,28 @@
 
 /* 고양이 말고 다른 거 */
 #dex .pisces figure {
-    background-size: calc(6 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
     background-image: url('../img/fish.png');
     animation: none;
 }
 
+#dex ol li:not(.discovered) {}
+
+/* 잠긴 항목 자물쇠 */
 #dex ol li:not(.discovered) figure {
-    filter: grayscale(1) blur(2px);
+    background-image: url('../img/fish.png');
     animation: none;
+    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-position: calc(-4 * var(--cat-size)) calc(-1 * var(--cat-size));
+    /* filter: grayscale(1) blur(2px); */
+}
+
+#dex ol li:not(.discovered) figure:hover {
+    background-position-x: calc(-5 * var(--cat-size));
+}
+
+#dex ol li:not(.discovered) figure:before {
+    background: none !important;
 }
 
 #dex .cats .discovered:hover figure,
@@ -263,7 +291,7 @@
 #dex .mineral_richrare figure,
 #dex .potion_hp_rich figure,
 #dex .potion_mp_rich figure {
-    background-position-x: calc(-3 * var(--cat-size));
+    background-position-x: calc(-4 * var(--cat-size));
 }
 
 #dex .discovered.fish_rich:hover figure,
@@ -271,7 +299,7 @@
 #dex .discovered.mineral_richrare:hover figure,
 #dex .discovered.potion_hp_rich:hover figure,
 #dex .discovered.potion_mp_rich:hover figure {
-    background-position-x: calc(-4 * var(--cat-size));
+    background-position-x: calc(-5 * var(--cat-size));
 }
 
 #dex .mineral figure,
@@ -307,6 +335,24 @@
     background-position-y: calc(-8 * var(--cat-size));
 }
 
+/* 도전 과제 */
+#dex .achievement figure {
+    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-image: url('../img/achievement.png');
+    animation: none;
+}
+
+#dex .discover_irochi figure {
+    background-position: calc(-1 * var(--cat-size)) calc(-1 * var(--cat-size));
+}
+
+#dex .discover_irochi_10 figure {
+    background-position: calc(-2 * var(--cat-size)) calc(-1 * var(--cat-size));
+}
+
+#dex .discover_irochi_100 figure {
+    background-position: calc(-3 * var(--cat-size)) calc(-1 * var(--cat-size));
+}
 
 /* 통계 */
 #dex #statistics {

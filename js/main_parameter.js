@@ -133,7 +133,7 @@ const events = {
         // cats[i].element.remove();
         cats.splice(i, 1);
 
-        p.data.achievement.cat_dead.val++;
+        p.data.achievement.cat_dead++;
         p.updateParameterValues();
 
         p.getShouldEvent();
@@ -148,7 +148,7 @@ const events = {
                 .setMessage(`*** 모든 ${setClass(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
                 .setMessage(`*** ${setClass(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
 
-            p.data.achievement.cat_dead_all.val++;
+            p.data.achievement.cat_dead_all++;
             p.updateParameterValues();
         }
     },

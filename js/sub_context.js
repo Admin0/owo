@@ -135,7 +135,7 @@ class Context {
         document.body.appendChild(dex);
 
         // 도감 로드 후 세부 목록 만들기
-        const setDexList = (array, target, off_titile, off_dexc) => {
+        const setDexList = (array, target, off_dexc) => {
             array.forEach((e, i) => {
                 const li = document.createElement('li');
                 li.className = e.id;
@@ -148,17 +148,12 @@ class Context {
                 dl.className = 'toast';
                 li.appendChild(dl);
                 const dt_on = document.createElement('dt');
-                dt_on.className = 'on';
                 dt_on.innerHTML = e.name;
                 dl.appendChild(dt_on);
                 const dd_on = document.createElement('dd');
-                dd_on.className = 'on';
+                dd_on.className = 'on dev_mode';
                 dd_on.innerHTML = e.desc;
                 dl.appendChild(dd_on);
-                const dt_off = document.createElement('dt');
-                dt_off.className = 'off';
-                dt_off.innerText = off_titile;
-                dl.appendChild(dt_off);
                 const dd_off = document.createElement('dd');
                 dd_off.className = 'off';
                 dd_off.innerText = off_dexc;
@@ -187,9 +182,9 @@ class Context {
         // 도감 로드
         loadElement(dex, "./module/dex.html", () => {
             setStatisticsList();
-            setDexList(dex_cats, 'cats', '미발견', '만나지 못했습니다');
-            setDexList(dex_pisces, 'pisces', '미발견', '발견하지 못했습니다');
-            setDexList(dex_achievement, 'achievement', '미달성', '달성하지 못했습니다');
+            setDexList(dex_cats, 'cats', '만나지 못했습니다.');
+            setDexList(dex_pisces, 'pisces', '발견하지 못했습니다.');
+            setDexList(dex_achievement, 'achievement', '달성하지 못했습니다.');
 
             p.updateParameterValues();
         });
