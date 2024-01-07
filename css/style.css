@@ -39,6 +39,11 @@ body.dev_mode .dev_mode {
   display: initial;
 }
 
+.hide {
+  visibility: hidden;
+  opacity: 0;
+}
+
 /** 
  * SPLASH
  */
@@ -65,85 +70,13 @@ body.dev_mode .dev_mode {
   text-align: center;
 }
 
-.sp_item {
-  overflow: hidden;
-  display: inline-block;
-  transition: 1s;
-  white-space: nowrap;
-}
-
-#messages {
-  max-width: 1280px;
-  z-index: 15;
-  position: fixed;
-  left: 20%;
-  bottom: 25%;
-  pointer-events: none;
-  /* background-color: #21212170; */
-  /* text-shadow: 1px 0 #000, 0 1px #000, -1px 0 #000, 0 -1px #000; */
-  padding: .5em 0;
-}
-
-#messages .message {
-  filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
-  will-change: transform;
-  display: flex;
-  margin: 0 .5em;
-}
-
-#messages .time,
-.text.num {
-  color: #76FF03;
-  width: fit-content;
-  margin-right: .5em;
-}
-
-#messages .text {
-  color: #ffffff;
-}
-
-#messages .cat,
-.text.cat {
-  color: #00E676;
-}
-
-#messages .pisces,
-.text.pisces {
-  color: #FFEA00;
-}
-
-#messages .villain,
-.text.villain {
-  color: #FF5252;
-}
-
-#messages .var,
-.text.var {
-  color: #2196F3;
-}
-
-.text.special,
-#messages .special {
-  color: rgba(148, 187, 233, 1);
-  background: linear-gradient(to right, rgba(238, 174, 202, 1) 50%, rgba(148, 187, 233, 1) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-@media only screen and (max-width: 425px) {
-  #messages {
-    background-color: transparent;
-    max-width: 100%;
-    bottom: 0;
-    left: 0;
-    font-size: 12px;
-  }
-}
+/* toast */
 
 #toast,
 .toast {
-  width: fit-content;
+  font-family: "Galmuri11", sans-serif;
+  font-size: 12px;
+
   position: absolute;
   padding: .5em .7em;
   border: 2px solid #212121;
@@ -151,12 +84,12 @@ body.dev_mode .dev_mode {
   z-index: 17;
   transform: translate(-1em, calc(-1em - 100%));
   box-shadow: 0px 2px 5px rgba(0, 0, 0, .25);
-  font-size: 12px;
   /* pointer-events: none; */
   display: none;
 }
 
 #toast .resources {
+  font-family: 'NeoDunggeunmo', sans-serif;
   position: relative;
   font-size: 16px;
   margin-top: 2px;

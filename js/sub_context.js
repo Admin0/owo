@@ -59,11 +59,13 @@ class Context {
 
         // setMessage 에서 이전 메시지와 같은 지 확인 목적
         this.messages.textCheckVal = '이전 메시지와 같은 지 확인할 거에요';
+        // 초기화
+        this.messages.count = 0;
     }
 
     setMessage(somethingToSay) {
         // 이전 메시지와 다른 값인 경우 메시지 출력
-        if (this.messages.textCheckVal != somethingToSay) {
+        if (this.messages.textCheckVal !== somethingToSay) {
 
             // 바깥 구조 생성 (messages > message > 1 time & 2 text)
             const message = document.createElement('div');
@@ -72,11 +74,17 @@ class Context {
 
             // 내부 중 시간 부분 생성
             const time = document.createElement('div');
-            time.className = 'time';
+            time.className = 'time hide';
             const d = new Date();
             const z = number => (number < 10 ? '0' : '') + number;
-            time.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}] `;
+            time.innerText = `[${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}]`;
             message.appendChild(time);
+
+            // 내부 중 행 부분 생성
+            const row = document.createElement('div');
+            row.className = 'row text var hide';
+            row.innerText = `[${this.messages.count.toString().padStart(3, '0')}]`;
+            message.appendChild(row);
 
             // 내부 중 메시지 부분 생성
             const text = document.createElement('div');
@@ -85,10 +93,19 @@ class Context {
             message.appendChild(text);
 
             this.messages.textCheckVal = somethingToSay;
+            this.messages.count++ || 1;
+
+            // 스크롤 가장 아래로 설정
+            if (!messages.matches(':hover') || messages.scrollHeight - messages.scrollTop - messages.offsetHeight < 32)
+                messages.scrollTop = messages.scrollHeight;
+
+            // 도전 과제
+            if (this.messages.count > 999) achievement.getAchievement('오버플로우');
 
             // 10 초 뒤 메시지 삭제
             setTimeout(() => {
-                message.remove();
+                // message.remove();
+                message.classList.add('hide');
                 this.messages.textCheckVal = '10 초 뒤 메시지 삭제';
             }, 10000);
         }
@@ -166,6 +183,9 @@ class Context {
         // 도감 로드 후 통계 목록 만들기
         const setStatisticsList = () => {
             Object.keys(p.data.achievement).forEach(key => {
+                // 숫자인 경우만 목록 만듦
+                if (typeof (p.data.achievement[key]) == 'boolean') { return }
+
                 const li = document.createElement('li');
                 li.className = key;
                 document.querySelector('#dex #statistics').appendChild(li);
@@ -300,11 +320,12 @@ class Context {
 
     setSelectCatOrSometing() {
         document.addEventListener('click', event => {
-            document.querySelectorAll('.cat, .pisces, .pisces figure').forEach(event => {
+            document.querySelectorAll('.cat, .cat figure, .pisces, .pisces figure').forEach(event => {
                 if (event.matches('.cat, .pisces')) event.classList.remove('selected');
                 if (event.parentElement.matches('.pisces')) event.classList.remove('selected');
             });
             if (event.target.matches('.cat, .pisces')) { event.target.classList.add('selected'); }
+            if (event.target.parentElement.matches('.cat')) { event.target.parentElement.classList.add('selected'); }
             if (event.target.parentElement.matches('.pisces')) { event.target.parentElement.classList.add('selected'); }
         });
 
@@ -436,7 +457,8 @@ class Dragable {
         this.element.style.bottom = 'auto';
         this.element.style.right = 'auto';
 
-
+        // 도전 과제 
+        if (this.element === messages) { achievement.getAchievement('머리_치워_머리') };
     }
 
     stopDragging() {

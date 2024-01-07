@@ -15,7 +15,7 @@ const dex_cats = [
     new Dex('고등어', '고등어', '누구나 좋아하는 냥이계의 스테디셀러.'),
     new Dex('젖소', '젖소', '애교가 많은 귀염둥이.'),
     new Dex('턱시도', '턱시도', '알맞은 복장을 입은 고양이는 어디에서나 환영받는다.'),
-    new Dex('유령', '유령냥이', '집사와의 추억이 미련으로 남아 성불하지 못했다. <br> 근처에 다가가면 서늘한 기운이 든다.'),
+    new Dex('유령', '유령 냥이', '집사와의 추억이 미련으로 남아 성불하지 못했다. <br> 근처에 다가가면 서늘한 기운이 든다.'),
     new Dex('샴', '샴', '위엄있는 얼굴이지만 사실은 여린 고양이. (미구현)'),
     new Dex('스핑크스', '스핑크스', '으악 옷을 업어 야옹아!(미구현)'),
     new Dex('페르시안', '페르시안', '(미구현)'),
@@ -30,6 +30,9 @@ const dex_cats = [
     new Dex('노르웨이숲', '노르웨이 숲', '(미구현)'),
     new Dex('터키시앙고라', '터키시 앙고라', '(미구현)'),
     new Dex('사바나', '사바나', '(미구현)'),
+    new Dex('우주비행사', '우주비행사', '사실 최초의 우주 고양이는 젖소무늬였다.<br>1963년, 고양이 최초로 우주에 다녀온 펠리세트를 기리며.'),
+    new Dex('달빛냥이', '달빛 냥이', '살며시 다가가 고백하고 싶어지는 야옹이.<br> 새끼 때는 종종 깜냥이로 오해한다.'),
+    new Dex('파일럿', '파일럿 냥이', '(미구현)'),
 ];
 
 const dex_pisces = [
@@ -40,10 +43,11 @@ const dex_pisces = [
 
     new Dex('cucumber', '오이', '고양이의 유전자에 도망가라는 명령이 각인되어있는 사악한 채소.<br>제압 후 냉국으로 요리하면 맛있다.'),
 
-    new Dex('mineral', '광물', '채굴하면 한덩이에 8 광물이 통장에 입금된다. <br> 소환마법에도 필요한 주요 자원.'),
-    new Dex('mineral_rich', '희귀한 광물', '광물 덩어리가 더 큰 희귀한 광물.'),
-    new Dex('mineral_rare', '풍부한 광물', '낮은 확률로 발견되는 황금색 광물. <br> 색이 다른 광물과는 또다른 클래식한 느낌의 골-든 광물.'),
+    new Dex('mineral', '광물', '우주에서 지구로 떨어진 운석에 섞여있던 광물. <br> 채굴하면 한덩이에 8 광물이 통장에 입금된다.'),
+    new Dex('mineral_rich', '풍부한 광물', ' 더 큰 광물 덩어리. 부수면 작은 광물로 쪼개진다.'),
+    new Dex('mineral_rare', '희귀한 광물', '낮은 확률로 발견되는 황금색 광물. <br> 색이 다른 광물과는 또다른 클래식한 느낌의 골-든 광물.'),
     new Dex('mineral_richrare', '풍부한 희귀 광물', '수식어가 두 개나 붙은 초레어 광물. <br>여기에 색까지 다르다면? 당신의 로또 당첨 운, 색이 다른 풍부한 희귀 광물로 대체되었다.'),
+    new Dex('stone_moon', '달맞이 돌', '어느 특정 냥냥이를 진화시키는 이상한 돌. 하늘처럼 파랗다.'),
 
     new Dex('yarnball', '털실 공', '둥글게 말려있는 게 마치 잠자는 고양이를 닮은 귀여운 장난감.'),
     new Dex('potion_hp', '체력 회복 물약', '(미구현)'),
@@ -57,22 +61,30 @@ const dex_pisces = [
 ]
 
 const dex_achievement = [
-    new Dex('discover_8_cat', '냥냥몬 마스터가 될거야', `${setClass('냥냥 도감', 'text special')} 중 태초마을의 고양이 8 마리를 모두 발견했습니다.`),
+    new Dex('discover_8_cat', '냥냥몬 마스터가 될거야', `${setClass('냥냥 도감', 'text special')} 중 태초마을의 고양이 8 마리를 모두 발견했다.`),
     new Dex('discover_all_cat', '냥냥몬 마스터', `귀하는 ${setClass('냥냥 도감', 'text special')} 고양이 부문을 훌륭하게 완성했습니다!`),
-    new Dex('고양이 별', '고양이 별', `모든 고양이가 고양이 별로 떠났습니다. <br> 성좌 냥냥이가 당신을 원망합니다...`),
+    new Dex('고양이_별', '고양이 별', `모든 고양이가 고양이 별로 떠났다. <br> ${setClass('성좌 냥냥이', 'text special')}가 당신을 원망했다...`),
+    new Dex('살려야한다', '살려야한다', `30분 동안 모든 고양이가 생존했다. (미구현)`),
+
     new Dex('discover_all_pisces', '고양이 말고 다른 거', `귀하는 ${setClass('냥냥 도감', 'text special')} 고양이 말고 다른 거 부문을 훌륭하게 완성했습니다!`),
+    new Dex('마인크래프트', '마인크래프트', `큰 광물을 부숴서 작은 광물을 발견했다.`),
 
-    new Dex('discover_irochi', '색이 다른 냥냥이', '색이 다른 물건을 발견했습니다. 반짝이는 효과가 생깁니다.'),
-    new Dex('discover_irochi_10', '샤이니 애옹이', '색이 다른 물건을 10 번 발견했습니다.'),
-    new Dex('discover_irochi_100', '이로치 호앵이', '색이 다른 물건을 100 번 발견했습니다.'),
+    new Dex('샤이니', '샤이니', '색이 다른 물건을 10 번 발견했다. 반짝이는 효과가 예쁘다.'),
+    new Dex('이로치', '이로치', '색이 다른 물건을 1000 번 발견했다.'),
+    new Dex('샤이니_이로치', '샤이니 이로치', '털실 공은 색이 모두 다르지만, 한번 더 색이 달라진 털실 공을 발견했다. <br> 원래는 무슨 색이였을까?'),
 
-    new Dex('똑같은_영웅도_환영', '똑같은 영웅도 환영', '똑같은 고양이만 6마리를 입양했습니다. (미구현)'),
-    new Dex('좌우대칭', '좌우대칭', '화면 틈새에 낀 고양이를 구출했습니다. <br> 참고: 칡은 철망 사이에 끼어서 노는 습성이 있으므로 안심하셔도 됩니다.(미구현)'),
-    new Dex('레벨5', '레벨5', '고양이를 최고 레벨까지 길렀습니다.'),
-    new Dex('다마고치', '다마고치', '고양이 알에서 아기 고양이가 태어났습니다.'),
-    new Dex('유리가가린', '유리 가가린', '고양이를 지구 궤도로 진입시켰습니다.'),
-    new Dex('스트라이크', '스트라이크', '물병 10 개를 한 번에 쓰러뜨렸습니다.'),
-    new Dex('고질라', '고질라', '고양이를 이용해 물병 10 개를 한 번에 쓰러뜨렸습니다.'),
+    new Dex('똑같은_영웅도_환영', '똑같은 영웅도 환영', '똑같은 고양이만 6 마리를 입양했다. (유령 냥이 제외)'),
+    new Dex('좌우대칭', '좌우대칭', '화면 틈새에 낀 고양이를 구출했다. <br> 참고: 칡은 철망 사이에 끼어서 노는 습성이 있으므로 안심하셔도 됩니다.(미구현)'),
+    new Dex('레벨5', '레벨 5', '고양이를 최고 레벨까지 길렀다. (미구현)'),
+    new Dex('다마고치', '다마고치', '고양이 알에서 아기 고양이가 태어났다. (미구현)'),
+
+    new Dex('스트라이크', '스트라이크', '물병 10 개를 한 번에 쓰러뜨렸다. (미구현)'),
+    new Dex('거대_괴수_냥냥이', '거대 괴수 냥냥이', '고양이를 이용해 물병 10 개를 한 번에 쓰러뜨렸다. (미구현)'),
+    new Dex('머리_치워_머리', '머리 치워 머리', '메시지 창을 다른 곳으로 치웠다.'),
+
+    new Dex('펠리세트', '펠리세트', '한 마리의 고양이가 지구 궤도로 진출했다. (미구현)'),
+    new Dex('오버플로우', '오버플로우', '한 게임 안에서 999 회가 넘는 안내 메시지를 보았다.'),
+
 ];
 
 // 도전과제를 위한 통계량 초기화
@@ -102,6 +114,7 @@ const achievement = {
         pisces_summoned_mineral_rich: 0,
         pisces_summoned_mineral_rare: 0,
         pisces_summoned_mineral_richrare: 0,
+        pisces_summoned_stone_moon: 0,
         pisces_summoned_yarnball: 0,
         pisces_summoned_waterbottle: 0,
         pisces_summoned_total: 0,
@@ -109,14 +122,50 @@ const achievement = {
         pisces_summoned_irochi: 0,
 
         // 고양이 별로 떠난 냥이
+        // 망가뜨린 물건
         cat_dead: 0,
         cat_dead_all: 0,
+        pisces_break_mineral: 0,
 
     },
 
-    // 도전과제 달성을 확인하는 메서드
+    // 도전 과제 달성 유무 도감에 업데이트, 그리고 업적 달성 시 화면에 표시하는 기능
+    updateAchievementsAll() {
+        dex_achievement.forEach(achievement => {
+            // console.log(p.data.achievement[`${achievement.id}__completedEventTriggered`]);
+            if (p.data.achievement[`${achievement.id}__completed`] === true || p.data.achievement[`${achievement.id}__completed`] === 1) {
+
+                // 업적 달성 표시
+                achievement.element.classList.add('discovered');
+
+                if (!p.data.achievement[`${achievement.id}__completedEventTriggered`]) { // 새로운 조건 추가
+                    // 최초 이벤트 발생 로직을 여기에 추가
+                    context
+                        .setMessage('')
+                        .setMessage(`*** 도전 과제 달성: ${setClass(achievement.name, 'text var')} ***`)
+                        .setMessage('');
+
+                    // 최초 이벤트가 발생했음을 표시
+                    p.data.achievement[`${achievement.id}__completedEventTriggered`] = true;
+                }
+            }
+        });
+    },
+
+    // 도전 과제를 달성하게 하는 코드
+    getStatistic(id) {
+        return p.data.achievement[id];
+    },
+
+    // 도전 과제를 달성하게 하는 코드
+    getAchievement(id) {
+        if (p.data.achievement[`${id}__completed`] === true) return;
+        p.data.achievement[`${id}__completed`] = true;
+        this.updateAchievementsAll();
+    },
+
+    // 도전 과제 달성을 확인하는 메서드
     checkAchievement() {
-        const a = (key) => { return p.data.achievement[key] };
 
         if (document.querySelector('#dex .cats') === null) { return }
 
@@ -124,7 +173,7 @@ const achievement = {
         p.data.achievement.discover_8_cat__completed = true;
         p.data.achievement.discover_all_cat__completed = true;
         dex_cats.forEach((cat, i) => {
-            if (cat.completed || a(`cat_summoned_${cat.id}`) > 0) {
+            if (cat.completed || this.getStatistic(`cat_summoned_${cat.id}`) > 0) {
                 cat.element.classList.add('discovered');
                 cat.completed = true;
 
@@ -139,36 +188,25 @@ const achievement = {
         // 고양이 말고 다른 거
         p.data.achievement.discover_all_pisces__completed = true;
         dex_pisces.forEach(pisces => {
-            if (pisces.completed || a(`pisces_summoned_${pisces.id}`) > 0) {
+            if (pisces.completed || this.getStatistic(`pisces_summoned_${pisces.id}`) > 0) {
                 pisces.element.classList.add('discovered');
                 pisces.completed = true;
             }
             p.data.achievement.discover_all_pisces__completed *= pisces.completed;
         });
 
-        // 시스템 개선이 필요하네요
         // 도전 과제
-        p.data.achievement.discover_irochi__completed = a('pisces_summoned_irochi') !== 0 ? true : false;
-        p.data.achievement.discover_irochi_10__completed = a('pisces_summoned_irochi') > 10 ? true : false;
-        p.data.achievement.discover_irochi_100__completed = a('pisces_summoned_irochi') > 100 ? true : false;
+        // console.log(this.getStatistic('pisces_summoned_irochi'));
+        if (this.getStatistic('pisces_summoned_irochi') >= 10) this.getAchievement('샤이니');
+        if (this.getStatistic('pisces_summoned_irochi') >= 1000) this.getAchievement('이로치');
 
-        dex_achievement.forEach(achievement => {
-            // console.log(p.data.achievement[`${achievement.id}__completedEventTriggered`]);
-            if (p.data.achievement[`${achievement.id}__completed`] === true || p.data.achievement[`${achievement.id}__completed`] === 1) {
-
-                // 업적 달성 표시
-                achievement.element.classList.add('discovered');
-
-                if (!p.data.achievement[`${achievement.id}__completedEventTriggered`]) { // 새로운 조건 추가
-                    // 최초 이벤트 발생 로직을 여기에 추가
-                    context
-                        .setMessage('')
-                        .setMessage(`도전과제 ${achievement.name}을(를) 달성했습니다.`);
-
-                    // 최초 이벤트가 발생했음을 표시
-                    p.data.achievement[`${achievement.id}__completedEventTriggered`] = true;
-                }
-            }
-        });
-    }
+        this.updateAchievementsAll();
+    },
 }
+
+document.addEventListener("click", (event) => {
+    const keepElements = document.querySelectorAll('#dex, #context, #messages');
+    const isClickedOnKeeps = Array.from(keepElements).some(keepElement => keepElement.contains(event.target));
+    if (document.querySelector('#dex.on') != null)
+        if (!isClickedOnKeeps) events.hideDex();
+});

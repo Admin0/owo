@@ -46,15 +46,18 @@ class Cat {
         const skin_index = Math.floor(Math.random() * skins.length);
         this.skin = skin == null ? skins[skin_index] : skin
         this.element.classList.add(this.skin);
-        this.element.style.backgroundImage = `url('./img/cat_skin_${skin == null ? skins[skin_index] : skin}.png')`;
+        // this.element.style.backgroundImage = `url('./img/cat_skin_${skin == null ? skins[skin_index] : skin}.png')`;
 
         if (skin === '우유') this.element.classList.add('special');
 
         // 통계를 위해서 넣었습니다
         if (p !== null) {
-            p.data.achievement[`cat_summoned_${this.skin}`]++;
-            p.data.achievement.cat_summoned_total++;
+            p.data.achievement[`cat_summoned_${this.skin}`]++ || 1;
+            p.data.achievement.cat_summoned_total++ || 1;
         }
+
+        // 도전 과제 달성 확인
+        events.똑같은_영웅도_환영(skins);
 
         return this;
     }
@@ -65,6 +68,10 @@ class Cat {
         this.element.className = 'cat';
         document.getElementById('cage').appendChild(this.element);
         // document.body.appendChild(this.element);
+
+        // 본체 이미지를 표시할 공간
+        this.figure = document.createElement('figure');
+        this.element.appendChild(this.figure);
 
         // 고양이 정보를 표시할 창
         this.infoWindow = document.createElement('div');

@@ -28,6 +28,7 @@ context.setDevMode();
 // 이동할 요소들 지정 (카운트다운 | 도감)
 new Dragable(document.getElementById("dex"));
 new Dragable(document.getElementById("book"));
+new Dragable(document.getElementById("messages"));
 
 // 카운트다운 객체 생성
 const cd = new Countdown()
@@ -61,14 +62,15 @@ cats.forEach(cat => {
 const pisces = [];
 
 // 도감 생성
-pisces.push(new Fish().setType('dex'));
+pisces.push(new Fish(undefined, 'dex'));
+
 
 const leftClick = event => {
   // 생선을 고양이에게 뺏긴 경우 이벤트 중단
   if (p.fishInterceptedByCat) return;
 
   // {고양이 객체 = 클릭의 영향을 받지 않는 요소} 정의
-  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #context_bt, #dex, footer');
+  const catElements = document.querySelectorAll('.cat, .pisces, #book, #context, #messages, #context_bt, #dex, footer');
   // 클릭된 요소가 고양이 객체인지 확인
   const isClickedOnCat = Array.from(catElements).some(catElement => catElement.contains(event.target));
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만

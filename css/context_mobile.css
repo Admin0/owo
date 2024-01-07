@@ -101,3 +101,24 @@
   }
 
 }
+
+
+/* messages */
+
+@media only screen and (max-width: 425px) {
+  #messages {
+    pointer-events: none;
+    background-color: transparent;
+    max-width: 100%;
+    top: inherit !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: inherit !important;
+    font-size: 12px;
+  }
+
+  #messages .time,
+  #messages .row {
+    display: none;
+  }
+}

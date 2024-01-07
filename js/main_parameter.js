@@ -75,6 +75,7 @@ class Parameter {
         localStorage.setItem('data', JSON.stringify(this.data));
         localStorage.setItem('cats', JSON.stringify(cats));
 
+        // 도전 과제
         achievement.checkAchievement();
     }
 
@@ -84,16 +85,12 @@ class Parameter {
     }
 }
 
+// 임무는 이야기를 진행시키는 큰 이벤트의 줄기입니다.
+const quests = {
 
-// 이벤트 메시지의 색을 쉽게 설정해주는 서브 이벤트 
-/**
- * cat: green
- * pisces: yellow
- * vaillan: red
- * time, num: light green
- * special: pink - sky blue
- */
+}
 
+// 사건은 클래스에서 각각의 경우에 대응하기 위해 만들어진 패시브 이벤트입니다.
 const events = {
     titleEvent: () => {
         const messages = [
@@ -102,16 +99,32 @@ const events = {
             `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.version}`,
         ];
 
+        if (cd.isIgnited()) {
+            messages.push('')
+            messages.push('　')
+            messages.push('타이머가 00:00을 가르키고 있습니다. 정시퇴근 했을 리가 없는데...');
+            messages.push('야근 모드가 활성화됩니다. 타이머가 30 분 뒤로 설정됩니다.');
+            messages.push('')
+            messages.push('3');
+            messages.push('2');
+            messages.push('1');
+            messages.push('')
+        }
+
         let i = 0;
         showMessage = () => {
             context.setMessage(messages[i]);
             i++;
             if (i < messages.length) {
                 setTimeout(showMessage, 1000);
+            } else {
+                cd.setTime(`${('0' + (new Date().getHours()) % 24).slice(-2)}:${('0' + (new Date().getMinutes() + 30)).slice(-2)}`);
             }
+
         }
         showMessage();
     },
+
     todaysHashtags: (moment = '55', tagCount = 3) => {
         if (cd.getSecs() != moment) { return }
         context
@@ -119,13 +132,242 @@ const events = {
             .setMessage(`*** 오늘의 해시태그 ***`)
         for (let i = 0; i < tagCount; i++) { context.setMessage(`#${tag[dice(1, tag.length, -1)]}`); }
     },
+
+    fishBuildUp: (fish) => {
+        switch (fish.type) {
+            case 'mineral_rich':
+            case 'mineral_richrare':
+                fish.hp = fish.hp_max = 40;
+                break;
+
+            case 'yarnball':
+                // 체력 추가
+                fish.hp = fish.hp_max = 30;
+
+                // 색깔 바꾸기
+                fish.figure.style.filter = `brightness(150%) hue-rotate(${Math.floor(Math.random() * 60) * 6}deg`;
+                break;
+
+            case 'waterbottle':
+                // 체력 추가
+                fish.hp = fish.hp_max = 30;
+                break;
+
+            case 'dex':
+                fish.element.classList.add('special');
+                fish.element.addEventListener('click', (event) => {
+                    const click_distance = fish.calculateDistance(
+                        { x: fish.startDragX, y: fish.startDragY },
+                        { x: fish.lastDragX, y: fish.lastDragY }
+                    );
+                    if (click_distance < 16) {
+                        fish.element.classList.add('down');
+                        events.showDex(500);
+                    }
+                });
+                break;
+
+            default:
+                break;
+        }
+
+        // 체력바를 표시할 창
+        switch (fish.type) {
+            case 'mineral_rich':
+            case 'mineral_richrare':
+                if (fish.hp != null) {
+                    fish.hpBar = document.createElement('div');
+                    fish.hpBar.className = 'hp-bar';
+                    fish.element.appendChild(fish.hpBar);
+
+                    // 체력 바 업데이트
+                    fish.updateHpBar();
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        // 이로치 발생 시 이펙트 요소 추가
+        if (fish.irochi === true) {
+            fish.effect = document.createElement('div');
+            fish.effect.className = 'effect';
+            fish.element.appendChild(fish.effect);
+        }
+    },
+    /**
+     * 
+     * @param {*} fish      충돌한 생선 객체
+     * @param {*} cat       생선 객체와 충돌한 고양이 객체
+     * @param {*} catRect   고양이 객체 요소의 getBoundingClientRect
+     * @returns 
+     */
+    fishActivateWithCat: (fish, cat, catRect) => {
+
+        // 완전 멈추지는 않고 속도가 줄어든다
+        this.speed = this.speed / 2;
+
+        // 생선 새로운 각도 구함: 고양이 반대편에서 90도 랜덤 값
+        const a_new = Math.atan2(catRect.y - fish.position.y, catRect.x - fish.position.x) + Math.PI - (Math.PI / 4) + (Math.random() * Math.PI / 2);
+        const v_new = 2 + (cat.speed * 1 / 2) + (fish.speed) + (3 * Math.random());
+
+        const damage_for_cat = -(1 + (fish.speed || 0))
+
+        switch (fish.type) {
+            case 'fish':
+                // 고양이 체력 증가
+                cat.updateHp(10);
+            case 'fish_rich':
+
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement('lick')     // 셍선를 먹는 움직임
+                    .setMeow('Meow♥️')         // 야옹거리는 동작
+                    .updateHp(10);              // 체력 업데이트
+
+                // 생선 객체 삭제
+                fish.kill();
+                break;
+            case 'cucumber':
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement('surprised')     // 오이를 먹는 움직임
+                    .setMeow('Grrrr!')               // 야옹거리는 동작
+                    .updateHp(damage_for_cat - 10);                   // 체력 업데이트
+
+                // 오이 객체 삭제
+                fish.kill();
+
+                break;
+            case 'mineral_rare': p.resources.setMinerals(8);
+            case 'mineral':
+                p.resources.setMinerals(8);
+                p.updateParameterValues();
+
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement('lick')   // 오이를 먹는 움직임
+                    .setMeow('Nyan♥️');            // 야옹거리는 동작
+
+                // 객체 삭제
+                fish.kill();
+                break;
+
+            case 'mineral_richrare': p.resources.setMinerals(8);
+            case 'mineral_rich': p.resources.setMinerals(8);
+
+                // 이전에 충돌한 cat, position 정보 업데이트
+                fish.prevCollidedCat = cat;
+                fish.prevCollidedPosition = fish.getPosition();
+
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 부딪히면 고양이는 멈춤
+                    .setMeow('Nyan!')    // 야옹거리는 동작
+                    .updateHp(damage_for_cat);        // 체력 업데이트
+
+                // 생선 움직임 정의
+                fish
+                    .startSliding({
+                        v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
+                        a: a_new
+                    })              // 광물 움직임 시작
+                    .updateHp(-5);  // 광물 내구도 업데이트
+
+                break;
+
+
+            case 'yarnball':
+                // 이전에 충돌한 cat, position 정보 업데이트
+                fish.prevCollidedCat = cat;
+                fish.prevCollidedPosition = fish.getPosition();
+
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement()    // 공이랑 부딪히면 고양이는 멈춤
+                    .setMeow('Nyaa!')    // 야옹거리는 동작
+                    .updateHp(damage_for_cat);       // 체력 업데이트
+
+                // 생선 움직임 정의
+                fish
+                    .startSliding({
+                        v: v_new,
+                        a: a_new
+                    })              // 공 움직임 시작
+                    .updateHp(-5);  // 공 내구도 업데이트
+
+                break;
+
+            case 'waterbottle':
+                // 누운채로 멈춰있으면 작동 안 함
+                if (fish.element.classList.contains('down') && fish.speed === 0) { return; }
+
+                // 이전에 충돌한 cat, position 정보 업데이트
+                fish.prevCollidedCat = cat;
+                fish.prevCollidedPosition = fish.getPosition();
+
+                // 고양이 움직임 정의
+                cat
+                    .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 물병이랑 부딪히면 고양이는 멈춤
+                    .setMeow('Grrrr!')    // 야옹거리는 동작
+                    .updateHp(damage_for_cat);        // 체력 업데이트
+
+                // 생선 움직임 정의
+                fish
+                    .startSliding({
+                        v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
+                        a: a_new
+                    })              // 물병 움직임 시작
+                    .updateHp(-5);  // 물병 내구도 업데이트
+
+                break;
+
+            case 'stone_moon':
+                switch (cat.skin) {
+                    case '깜냥이':
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('달빛 냥이', 'cat')}로 변했습니다.`)
+                        cat.setSkin('달빛냥이');
+                        break;
+
+                    case '흰냥이':
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('우주비행사 냥이', 'cat')}로 변했습니다.`)
+                        cat.setSkin('우주비행사');
+                        break;
+
+                    default:
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 체력이 늘어난 기분이 느껴집니다.`)
+
+                        break;
+                }
+
+                cat.hp_max += 30;
+                cat.hp = cat.hp_max;
+
+                fish.kill();
+
+                break;
+            default:
+                break;
+        }
+
+        cat.updateHpBar();
+    },
+
+
     catDead: (cat) => {
         cat.hp = 0;
         cat.setMeow('Woem...');
         context
             .setMessage('')
             .setMessage(`*** ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}가 ${setClass('고양이 별', 'special')}로 떠났습니다. 
-            당신은 ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. ***`);
+            당신은 ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. *** (${p.data.resources.supplies - 1}/${p.data.resources.suppliesMax})`);
         const i = cats.findIndex(target => target == cat);
 
         // 고양이 객체 제거
@@ -139,19 +381,38 @@ const events = {
         p.getShouldEvent();
     },
     allCatsDead: () => {
-        console.info(`[owo][event] allCatsDead (${p.data.resources.supplies}/${p.data.resources.suppliesMax})`);
+        // console.info(`[owo] allCatsDead (${p.data.resources.supplies}/${p.data.resources.suppliesMax})`);
         // 고양이들이 다 냥이별로 갔는지 체크 후 실행
         if (p.data.resources.supplies == 0) {
-            console.info(`[owo][event] *** allCatsDead ***`);
+            // console.info(`[owo] *** allCatsDead ***`);
             context
                 .setMessage(``)
                 .setMessage(`*** 모든 ${setClass(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
                 .setMessage(`*** ${setClass(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
 
-            p.data.achievement.cat_dead_all++;
+            p.data.achievement.cat_dead_all++||1;
             p.updateParameterValues();
+
+            achievement.getAchievement('고양이_별')
         }
     },
+
+    똑같은_영웅도_환영: (skins) => {
+        const cats_achiev = document.querySelectorAll('#cage .cat');       // 똑같은 영웅도 환영
+        if (document.querySelectorAll('#cage .cat').length === 7) {
+            skins.forEach(skin => {
+                let check_똑같은_영웅도_환영 = true;
+                document.querySelectorAll('#cage .cat').forEach((cat, i) => {
+                    if (i == 0) return;   // 우유는 제외
+                    check_똑같은_영웅도_환영 *= cat.classList.contains(skin);
+                    // console.log(i, check_똑같은_영웅도_환영, skin, cat.classList.contains(skin));
+                });
+                if (check_똑같은_영웅도_환영 === 1) { achievement.getAchievement('똑같은_영웅도_환영') }
+                // console.info(`[owo] 똑같은_영웅도_환영: ${check_똑같은_영웅도_환영}`)
+            });
+        }
+    },
+
     setDex: () => {
 
     },
@@ -214,7 +475,7 @@ const skills = {
         const cost = 4;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
-            pisces.push(new Fish(pos).setType('fish'));
+            pisces.push(new Fish(pos, 'fish'));
             if (options == null || options.mute != true) context.setMessage(`${setClass('생선', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
@@ -241,11 +502,23 @@ const skills = {
         let i = 0; for (i; i < n; i++) { this.summonCucumber(); }
         if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
-    summonMineral(pos) {
+    summonMineral(pos, options = { mute: false, vector: undefined }) {
         const cost = 0;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
-            pisces.push(new Fish(pos).setType('mineral'));
+            pisces.push(new Fish(pos, 'mineral').startSliding(options.vector));
+            if (options == null || options.mute != true) context.setMessage(`${setClass('광물', 'pisces')}을 소환했습니다.`);
+            p.updateParameterValues();
+        } else {
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+        }
+        return this;
+    },
+    summonMineralRich(pos, options = { mute: false, vector: undefined }) {
+        const cost = 0;
+        if (this.getMineralOk(cost)) {
+            this.setMineral(cost);
+            pisces.push(new Fish(pos, 'mineral_rich').startSliding(options.vector));
             context.setMessage(`${setClass('광물', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
@@ -254,14 +527,14 @@ const skills = {
         return this;
     },
     summonMassiveMinerals(n) {
-        let i = 0; for (i; i < n; i++) { this.summonMineral(); }
+        let i = 0; for (i; i < n; i++) { this.summonMineral(undefined, { vector: { a: 0 } }); }
         if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
-    summonYarnball(pos, options) {
+    summonYarnball(pos, options = { mute: false, vector: undefined }) {
         const cost = 100;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
-            pisces.push(new Fish(pos).setType('yarnball').startSliding(options));
+            pisces.push(new Fish(pos, 'yarnball').startSliding(options.vector));
             if (options == null || options.mute != true) context.setMessage('<span class="pisces">털실 공</span>을 소환했습니다.');
             p.updateParameterValues();
         } else {
@@ -283,8 +556,8 @@ const skills = {
         const cost = 2;
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
-            pisces.push(new Fish(pos).setType('waterbottle'));
-            context.setMessage(`${setClass('물병', 'pisces')}을 소환했습니다.`);
+            pisces.push(new Fish(pos, 'waterbottle'));
+            if (options == null || options.mute != true) context.setMessage(`${setClass('물병', 'pisces')}을 소환했습니다.`);
             p.updateParameterValues();
         } else {
             context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
@@ -298,65 +571,68 @@ const skills = {
 
         this
             // line 4th
-            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - h })
-            .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y - h })
-            .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y - h })
-            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - h })
+            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - h }, { mute: true })
+            .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y - h }, { mute: true })
+            .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y - h }, { mute: true })
+            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - h }, { mute: true })
 
             // line 3rd
-            .summonWaterbottle({ x: pos.x - 4 / 3 * w, y: pos.y })
-            .summonWaterbottle({ x: pos.x, y: pos.y })
-            .summonWaterbottle({ x: pos.x + 4 / 3 * w, y: pos.y })
+            .summonWaterbottle({ x: pos.x - 4 / 3 * w, y: pos.y }, { mute: true })
+            .summonWaterbottle({ x: pos.x, y: pos.y }, { mute: true })
+            .summonWaterbottle({ x: pos.x + 4 / 3 * w, y: pos.y }, { mute: true })
 
             // line 2nd
-            .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y + h })
-            .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y + h })
+            .summonWaterbottle({ x: pos.x - 2 / 3 * w, y: pos.y + h }, { mute: true })
+            .summonWaterbottle({ x: pos.x + 2 / 3 * w, y: pos.y + h }, { mute: true })
 
             // line 1st
-            .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h })
+            .summonWaterbottle({ x: pos.x, y: pos.y + 2 * h }, { mute: true })
 
             // ball
             .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
+
+        context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`);
     },
     summonWaterbottleDelivery(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         const quarterViewFactor = .75;
         const w = 12;
         const h = w * quarterViewFactor;
 
-        const maxX = window.innerWidth - 2 * w;
-        const maxY = window.innerHeight - 2 * w;
+        const maxX = window.innerWidth - 64 - 2 * w;
+        const maxY = window.innerHeight - 64 - 1 * h;
         this.pos = {
             x: Math.max(2 * w, Math.min(pos.x, maxX)),
-            y: Math.max(2 * w, Math.min(pos.y, maxY))
+            y: Math.max(2 * h, Math.min(pos.y, maxY))
         };
 
+        console.log(this.pos.x + 64, window.innerWidth);
         this
             // line 4th
-            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - 2 * h })
-            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y - 2 * h })
-            .summonWaterbottle({ x: pos.x, y: pos.y - 2 * h })
-            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y - 2 * h })
-            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - 2 * h })
+            .summonWaterbottle({ x: this.pos.x - 2 * w, y: this.pos.y - 2 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x - 1 * w, y: this.pos.y - 2 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x, y: this.pos.y - 2 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y - 2 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y - 2 * h }, { mute: true })
             // line 3th
-            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y - 1 * h })
-            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y - 1 * h })
-            .summonWaterbottle({ x: pos.x, y: pos.y - 1 * h })
-            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y - 1 * h })
-            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y - 1 * h })
+            .summonWaterbottle({ x: this.pos.x - 2 * w, y: this.pos.y - 1 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x - 1 * w, y: this.pos.y - 1 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x, y: this.pos.y - 1 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y - 1 * h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y - 1 * h }, { mute: true })
             // line 2th
-            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y })
-            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y })
-            .summonWaterbottle({ x: pos.x, y: pos.y })
-            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y })
-            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y })
+            .summonWaterbottle({ x: this.pos.x - 2 * w, y: this.pos.y }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x - 1 * w, y: this.pos.y }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x, y: this.pos.y }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y }, { mute: true })
             // line 1th
-            .summonWaterbottle({ x: pos.x - 2 * w, y: pos.y + h })
-            .summonWaterbottle({ x: pos.x - 1 * w, y: pos.y + h })
-            .summonWaterbottle({ x: pos.x, y: pos.y + h })
-            .summonWaterbottle({ x: pos.x + 1 * w, y: pos.y + h })
-            .summonWaterbottle({ x: pos.x + 2 * w, y: pos.y + h });
+            .summonWaterbottle({ x: this.pos.x - 2 * w, y: this.pos.y + h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x - 1 * w, y: this.pos.y + h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x, y: this.pos.y + h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y + h }, { mute: true })
+            .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y + h }, { mute: true });
 
-        context.setMessage(`[냥냥택배] 주문하신 ${setClass('생수', 'pisces')}${setClass('2 L x 20 개', 'num')}, 문앞에 배송 완료 되었습니다.`)
+        context.setMessage(`[냥냥 택배] 고객님께서 주문하신 ${setClass('생수', 'pisces')} ${setClass('x20 개', 'num')} 상품을 배송완료 하였습니다.`)
     },
     summonMassiveYWaterbottle(n) {
         let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { context.setMessage('소환을 중지합니다.'); break; } }
@@ -415,6 +691,15 @@ const loadElement = (element, module, callback = () => { }) => {
     }
 }
 
+
+// 이벤트 메시지의 색을 쉽게 설정해주는 서브 이벤트 
+/**
+ * cat: green
+ * pisces: yellow
+ * vaillan: red
+ * time, num: light green
+ * special: pink - sky blue
+ */
 const setClass = (content, cls) => {
     return `<span class="${cls}">${content}</span>`
 }

@@ -52,7 +52,7 @@
     transform: perspective(1000px) rotateX(5deg);
 
     scrollbar-width: none;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 #dex::-webkit-scrollbar {
@@ -69,6 +69,12 @@
 
 #dex h2 {
     text-align: center;
+    font-weight: normal;
+}
+
+
+#dex h3 {
+    font-weight: normal;
 }
 
 #dex ol {
@@ -92,6 +98,7 @@
     content: "00" counter(item);
     counter-increment: item;
     width: 2em;
+    filter: drop-shadow(1px 0 #fff) drop-shadow(-1px 0 #fff) drop-shadow(0 1px #fff) drop-shadow(0 -1px #fff);
 }
 
 #dex ol li:nth-child(n+10)::before {
@@ -119,7 +126,7 @@
     height: var(--cat-size);
     outline: 1px solid #aaa;
     border-radius: 4px;
-    background-color: #efefef;
+    background-color: #eee;
     margin: 0;
 }
 
@@ -201,50 +208,18 @@
     animation: inherit;
 }
 
-#dex .cats li:not(.유령) figure:before {
+/* #dex .cats li:not(.유령, .달빛냥이) figure:before {
     display: block;
     width: inherit;
     height: inherit;
     background-size: inherit;
     content: '';
     background-image: url('../img/cat_skin_그림자.png');
-}
-
-#dex .우유 figure {
-    background-image: url('../img/cat_skin_우유.png');
-}
-
-#dex .흰냥이 figure {
-    background-image: url('../img/cat_skin_흰냥이.png');
-}
-
-#dex .깜냥이 figure {
-    background-image: url('../img/cat_skin_깜냥이.png');
-}
-
-#dex .턱시도 figure {
-    background-image: url('../img/cat_skin_턱시도.png');
-}
-
-#dex .젖소 figure {
-    background-image: url('../img/cat_skin_젖소.png');
-}
-
-#dex .치즈 figure {
-    background-image: url('../img/cat_skin_치즈.png');
-}
-
-#dex .고등어 figure {
-    background-image: url('../img/cat_skin_고등어.png');
-}
-
-#dex .유령 figure {
-    background-image: url('../img/cat_skin_유령.png');
-}
+} */
 
 /* 고양이 말고 다른 거 */
 #dex .pisces figure {
-    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: var(--pisces-background-size);
     background-image: url('../img/fish.png');
     animation: none;
 }
@@ -255,7 +230,7 @@
 #dex ol li:not(.discovered) figure {
     background-image: url('../img/fish.png');
     animation: none;
-    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: var(--pisces-background-size);
     background-position: calc(-4 * var(--cat-size)) calc(-1 * var(--cat-size));
     /* filter: grayscale(1) blur(2px); */
 }
@@ -342,16 +317,28 @@
     animation: none;
 }
 
-#dex .discover_irochi figure {
+#dex .discover_8_cat figure {
+    background-position: calc(-1 * var(--cat-size)) calc(0 * var(--cat-size));
+}
+
+#dex .똑같은_영웅도_환영 figure {
+    background-position: calc(-2 * var(--cat-size)) calc(0 * var(--cat-size));
+}
+
+#dex .고양이_별 figure {
+    background-position: calc(-3 * var(--cat-size)) calc(0 * var(--cat-size));
+}
+
+#dex .샤이니 figure {
+    background-position: calc(0 * var(--cat-size)) calc(-1 * var(--cat-size));
+}
+
+#dex .이로치 figure {
     background-position: calc(-1 * var(--cat-size)) calc(-1 * var(--cat-size));
 }
 
-#dex .discover_irochi_10 figure {
+#dex .샤이니_이로치 figure {
     background-position: calc(-2 * var(--cat-size)) calc(-1 * var(--cat-size));
-}
-
-#dex .discover_irochi_100 figure {
-    background-position: calc(-3 * var(--cat-size)) calc(-1 * var(--cat-size));
 }
 
 /* 통계 */

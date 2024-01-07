@@ -2,13 +2,14 @@
 
 body {
     --cat-size: 64px;
+    --cat-background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
 }
 
 .info-window {
-    /* font-family: 'Pixelify Sans', 'StarDust Bold', sans-serif; */
+    font-family: "GalmuriMono9", monospace;
+    font-size: 10px;
     position: absolute;
     /* background-color: #fff; */
-    font-size: 12px;
     left: calc(var(--cat-size) + 8px);
     top: -2px;
     display: none;
@@ -19,11 +20,6 @@ body.dev_mode #cage .cat.selected .info-window,
 body.dev_mode .hp-bar,
 .selected .hp-bar {
     display: initial;
-}
-
-#cage .cat.left .info-window {
-    left: initial;
-    right: calc(var(--cat-size) + 8px);
 }
 
 .info-window table {
@@ -49,10 +45,10 @@ body.dev_mode .hp-bar,
     /* color: #FFC107; */
 }
 
-#basket .yarnball .info-window table th,
-#basket .yarnball .info-window table td,
-#basket .waterbottle .info-window table th,
-#basket .waterbottle .info-window table td {
+#basket .cucumber .info-window table th,
+#basket .cucumber .info-window table td,
+#basket .cucumber .info-window table th,
+#basket .cucumber .info-window table td {
     border-color: #FF5722;
     /* color: #FF5722; */
 }
@@ -65,14 +61,15 @@ body.dev_mode .hp-bar,
     width: var(--cat-size);
     height: var(--cat-size);
     background: url('../img/cat_skin_우유.png');
-    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
+    background-size: var(--cat-background-size);
+    background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
     image-rendering: pixelated;
     position: absolute;
     display: flex;
     justify-content: center;
+    background-repeat: no-repeat;
 
     z-index: 10;
-    animation: cat 1s steps(8, jump-none) infinite;
 
     cursor: grab;
 
@@ -80,10 +77,27 @@ body.dev_mode .hp-bar,
     transform-style: preserve-3d;
 }
 
+#cage .cat figure {
+    margin: 0;
+    width: inherit;
+    height: inherit;
+
+    background-image: inherit;
+    background-size: inherit;
+
+    animation: cat 1s steps(8, jump-none) infinite;
+    background-position-x: 0;
+
+    /* for selected class */
+    transform-style: preserve-3d;
+}
+
 /* shadow */
-#cage .cat:not(.유령):after {
+#cage .cat:not(.유령, .달빛냥이) figure:after,
+#dex .cats li:not(.유령, .달빛냥이) figure:before {
+    display: block;
     content: '';
-    background: url('../img/cat_skin_그림자.png');
+    background-image: url('../img/cat_skin_그림자.png');
     width: inherit;
     height: inherit;
     background-size: inherit;
@@ -104,6 +118,57 @@ body.dev_mode .hp-bar,
     }
 }
 
+#cage .우유 figure,
+#dex .우유 figure {
+    background-image: url('../img/cat_skin_우유.png');
+}
+
+#cage .흰냥이 figure,
+#dex .흰냥이 figure {
+    background-image: url('../img/cat_skin_흰냥이.png');
+}
+
+#cage .깜냥이 figure,
+#dex .깜냥이 figure {
+    background-image: url('../img/cat_skin_깜냥이.png');
+}
+
+#cage .턱시도 figure,
+#dex .턱시도 figure {
+    background-image: url('../img/cat_skin_턱시도.png');
+}
+
+#cage .젖소 figure,
+#dex .젖소 figure {
+    background-image: url('../img/cat_skin_젖소.png');
+}
+
+#cage .치즈 figure,
+#dex .치즈 figure {
+    background-image: url('../img/cat_skin_치즈.png');
+}
+
+#cage .고등어 figure,
+#dex .고등어 figure {
+    background-image: url('../img/cat_skin_고등어.png');
+}
+
+#cage .유령 figure,
+#dex .유령 figure {
+    background-image: url('../img/cat_skin_유령.png');
+}
+
+#cage .달빛냥이 figure,
+#dex .달빛냥이 figure {
+    background-image: url('../img/cat_skin_달빛냥이.png');
+}
+
+#cage .우주비행사 figure,
+#dex .우주비행사 figure {
+    background-image: url('../img/cat_skin_우주비행사.png');
+}
+
+
 body.dev_mode #cage .cat,
 body.dev_mode #cage .cat.유령,
 body.dev_mode #basket .pisces {
@@ -112,8 +177,8 @@ body.dev_mode #basket .pisces {
     border-radius: 4px;
 }
 
-body.dev_mode #basket .yarnball,
-body.dev_mode #basket .waterbottle {
+body.dev_mode #basket .cucumber,
+body.dev_mode #basket .cucumber {
     outline-color: #FF5722;
 }
 
@@ -122,54 +187,53 @@ body.dev_mode #cage .cat {
     background-color: #ffffff60;
 }
 
-#cage .cat.left,
-#basket .pisces.left figure,
-#cage .cat.left .info-window {
+#cage .cat.left figure,
+#basket .pisces.left figure {
     transform: scaleX(-1);
 }
 
 
 
-#cage .cat.watch,
-#cage .cat.watch:after {
+#cage .cat.watch figure,
+#cage .cat.watch figure:after {
     background-position-y: calc(var(--cat-size) * -1);
 }
 
-#cage .cat.walk,
-#cage .cat.walk:after {
+#cage .cat.walk figure,
+#cage .cat.walk figure:after {
     background-position-y: calc(var(--cat-size) * -2);
 }
 
-#cage .cat.run,
-#cage .cat.run:after {
+#cage .cat.run figure,
+#cage .cat.run figure:after {
     background-position-y: calc(var(--cat-size) * -3);
 }
 
-#cage .cat.drag,
-#cage .cat.drag:after {
+#cage .cat.drag figure,
+#cage .cat.drag figure:after {
     background-position-y: calc(var(--cat-size) * -4);
     z-index: 11;
     cursor: grabbing;
 }
 
-#cage .cat.lick,
-#cage .cat.lick:after {
+#cage .cat.lick figure,
+#cage .cat.lick figure:after {
     background-position-y: calc(var(--cat-size) * -5);
 }
 
-#cage .cat.wash,
-#cage .cat.wash:after {
+#cage .cat.wash figure,
+#cage .cat.wash figure:after {
     background-position-y: calc(var(--cat-size) * -6);
 }
 
-#cage .cat.stretch,
-#cage .cat.stretch:after {
+#cage .cat.stretch figure,
+#cage .cat.stretch figure:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -7);
 }
 
-#cage .cat.surprised,
-#cage .cat.surprised:after {
+#cage .cat.surprised figure,
+#cage .cat.surprised figure:after {
     animation-name: start-from-first-step;
     background-position-y: calc(var(--cat-size) * -8);
 }
@@ -203,8 +267,8 @@ body.dev_mode #basket .pisces.selected {
     border-color: #FFC107;
 }
 
-#basket .yarnball.selected:before,
-#basket .waterbottle.selected:before {
+#basket .cucumber.selected:before,
+#basket .cucumber.selected:before {
     border-color: #FF5722;
 }
 

@@ -1,3 +1,7 @@
+body {
+    --pisces-background-size: calc(8 * var(--cat-size)) calc(12 * var(--cat-size));
+}
+
 #basket .pisces {
     position: absolute;
     display: flex;
@@ -12,7 +16,7 @@
     background-repeat: no-repeat;
     image-rendering: pixelated;
     background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
-    background-size: calc(8 * var(--cat-size)) calc(10 * var(--cat-size));
+    background-size: var(--pisces-background-size);
     /* for selected class */
 }
 
@@ -103,6 +107,10 @@
 
 .waterbottle figure {
     background-position-y: calc(var(--cat-size) * -7);
+}
+
+.stone_moon figure {
+    background-position-y: calc(var(--cat-size) * -10);
 }
 
 #basket .yarnball.move figure {
