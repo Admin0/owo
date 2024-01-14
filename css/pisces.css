@@ -1,35 +1,51 @@
-body {
-    --pisces-background-size: calc(8 * var(--cat-size)) calc(12 * var(--cat-size));
+:root {
+    --sprite-block-size: 64px;
+    --pisces-background-size: calc(12 * var(--sprite-block-size)) calc(14 * var(--sprite-block-size));
+
+    --sprite-position-x: 0px;
+    --sprite-position-col-2: var(--sprite-block-size) * -4;
+    --sprite-position-col-3: var(--sprite-block-size) * -8;
+    --sprite-position-col-4: var(--sprite-block-size) * -12;
 }
 
 #basket .pisces {
     position: absolute;
     display: flex;
     justify-content: center;
-    width: var(--cat-size);
-    height: var(--cat-size);
+    width: var(--sprite-block-size);
+    height: var(--sprite-block-size);
     z-index: 9;
     cursor: grab;
-    --cat-size: 64px;
 
     background-image: url('../img/fish.png');
     background-repeat: no-repeat;
     image-rendering: pixelated;
-    background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
     background-size: var(--pisces-background-size);
-    /* for selected class */
+    background-position: calc(var(--sprite-block-size) * 1) calc(var(--sprite-block-size) * 1);
 }
 
-#basket .pisces figure {
+#basket .fish::after {
+    visibility: hidden;
+    position: absolute;
+}
+
+#basket .fish.selected::after {
+    visibility: visible;
+}
+
+#basket .fish::after {
+    content: var(--fish-type);
+}
+
+.pisces figure {
     margin: 0;
     width: inherit;
     height: inherit;
 
-    background-image: inherit;
-    background-size: inherit;
+    background: inherit;
 
     animation: pisces .125s steps(2, jump-none);
-    background-position-x: 0;
+    background-position: calc(var(--sprite-position-x)) 0;
 
     /* for selected class */
     transform-style: preserve-3d;
@@ -37,83 +53,63 @@ body {
 
 #basket .pisces.drag {
     z-index: 11;
-    cursor: grabbing;
-}
-
-#basket .pisces.drag figure {
-    background-position-x: calc(var(--cat-size) * -1);
-}
-
-#basket .pisces.ghost figure {
-    background-position-x: calc(var(--cat-size) * -2);
-    pointer-events: none;
-}
-
-#basket .fish_rich.ghost figure,
-#basket .mineral_rich.ghost figure,
-#basket .mineral_richrare.ghost figure {
-    background-position-x: calc(var(--cat-size) * -6);
 }
 
 @keyframes pisces {
     from {
-        background-position-x: calc(var(--cat-size) * -1);
+        background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
     }
 }
 
-#basket .fish_rich.drag figure,
-#basket .mineral_rich.drag figure,
-#basket .mineral_richrare.drag figure {
-    background-position-x: calc(var(--cat-size) * -5);
-
+.pisces.drag figure {
+    background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
+    cursor: grabbing;
 }
 
-#basket .fish_rich figure,
-#basket .mineral_rich figure,
-#basket .mineral_richrare figure {
-    animation-name: pisces-col2;
-    background-position-x: calc(var(--cat-size) * -4);
+.pisces.ghost figure {
+    background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -2);
+    pointer-events: none;
 }
 
-@keyframes pisces-col2 {
-    from {
-        background-position-x: calc(var(--cat-size) * -5);
-    }
+.pisces.massive figure {
+    background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -3);
+    pointer-events: none;
+}
 
-    to {
-        background-position-x: calc(var(--cat-size) * -4);
-    }
+.fish_rich figure {
+    --sprite-position-x: var(--sprite-position-col-2);
 }
 
 .cucumber figure {
-    background-position-y: calc(var(--cat-size) * -1);
+    background-position-y: calc(var(--sprite-block-size) * -1);
 }
 
 .mineral figure,
 .mineral_rich figure {
-    background-position-y: calc(var(--cat-size) * -2);
+    background-position-y: calc(var(--sprite-block-size) * -2);
 
 }
 
 .mineral_rare figure,
 .mineral_richrare figure {
-    background-position-y: calc(var(--cat-size) * -3);
+    background-position-y: calc(var(--sprite-block-size) * -3);
 
+}
+
+.mineral_rich figure,
+.mineral_richrare figure {
+    --sprite-position-x: var(--sprite-position-col-2);
 }
 
 .yarnball figure {
-    background-position-y: calc(var(--cat-size) * -4);
+    background-position-y: calc(var(--sprite-block-size) * -4);
 }
 
 .waterbottle figure {
-    background-position-y: calc(var(--cat-size) * -7);
+    background-position-y: calc(var(--sprite-block-size) * -7);
 }
 
-.stone_moon figure {
-    background-position-y: calc(var(--cat-size) * -10);
-}
-
-#basket .yarnball.move figure {
+.yarnball.move figure {
     background-position-x: 0;
     animation: yarnball .5s steps(4, jump-none) infinite;
 }
@@ -124,22 +120,113 @@ body {
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -3);
+        background-position-x: calc(var(--sprite-block-size) * -3);
     }
 }
 
-#basket .waterbottle.down figure {
-    background-position-x: calc(var(--cat-size) * -7);
+.waterbottle.down figure,
+.potion_health_bottle.down figure,
+.potion_vigor_bottle.down figure,
+.potion_poison_bottle.down figure {
+    background-position-x: calc(var(--sprite-block-size) * -7);
     animation: waterbottle-down .375s steps(6, jump-none);
     z-index: 8;
 }
 
 @keyframes waterbottle-down {
     from {
-        background-position-x: calc(var(--cat-size) * -2)
+        background-position-x: calc(var(--sprite-block-size) * -2)
     }
 
     to {
-        background-position-x: calc(var(--cat-size) * -7);
+        background-position-x: calc(var(--sprite-block-size) * -7);
+    }
+}
+
+.stone_moon figure {
+    background-position-y: calc(var(--sprite-block-size) * -10);
+}
+
+.화석 figure {
+    --sprite-position-x: var(--sprite-position-col-2);
+    background-position-y: calc(var(--sprite-block-size) * -10);
+}
+
+.yu-gi-puzzle figure {
+    background-position-y: calc(var(--sprite-block-size) * -11);
+}
+
+.potion_health figure,
+.potion_health_bottle figure {
+    background-position-y: calc(var(--sprite-block-size) * -5);
+}
+
+.potion_vigor figure,
+.potion_vigor_bottle figure {
+    background-position-y: calc(var(--sprite-block-size) * -6);
+}
+
+.potion_poison figure,
+.potion_poison_bottle figure {
+    background-position-y: calc(var(--sprite-block-size) * -12);
+}
+
+.potion_health_bottle figure,
+.potion_vigor_bottle figure,
+.potion_poison_bottle figure {
+    --sprite-position-x: var(--sprite-block-size) * -2;
+}
+
+.pisces.yu-gi-puzzle.Lv1 figure {
+    background-position-x: calc(var(--sprite-block-size) * -2);
+}
+
+.pisces.yu-gi-puzzle.Lv2 figure {
+    background-position-x: calc(var(--sprite-block-size) * -3);
+}
+
+.pisces.yu-gi-puzzle.Lv3 figure {
+    background-position-x: calc(var(--sprite-block-size) * -3);
+    animation: yu-gi-puzzle .375s steps(4, jump-none) infinite;
+}
+
+@keyframes yu-gi-puzzle {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * -4);
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * -7);
+    }
+}
+
+
+.동전 figure {
+    --sprite-position-x: var(--sprite-position-col-3);
+    background-position-y: 0;
+}
+
+.동전.ghost figure {
+    animation: 동전 .375s steps(4, jump-none) infinite;
+    background-position-y: calc(var(--sprite-block-size) * -1);
+}
+
+.택배 figure {
+    --sprite-position-x: var(--sprite-position-col-3);
+    background-position-y: calc(var(--sprite-block-size) * -2);
+}
+
+.택배_상자 figure {
+    --sprite-position-x: calc(var(--sprite-position-col-3) - 128px);
+    background-position-y: calc(var(--sprite-block-size) * -2);
+}
+
+@keyframes 동전 {
+    from {
+        background-position-x: calc(var(--sprite-block-size) * -8);
+    }
+
+    to {
+        background-position-x: calc(var(--sprite-block-size) * -11);
     }
 }

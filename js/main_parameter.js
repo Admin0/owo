@@ -148,8 +148,14 @@ const events = {
                 fish.figure.style.filter = `brightness(150%) hue-rotate(${Math.floor(Math.random() * 60) * 6}deg`;
                 break;
 
-            case 'waterbottle':
+            case 'potion_health_bottle':
+            case 'potion_vigor_bottle':
+            case 'potion_poison_bottle':
                 // 체력 추가
+                fish.hp = fish.hp_max = 10;
+                break;
+
+            case 'waterbottle':
                 fish.hp = fish.hp_max = 30;
                 break;
 
@@ -163,6 +169,20 @@ const events = {
                     if (click_distance < 16) {
                         fish.element.classList.add('down');
                         events.showDex(500);
+                    }
+                });
+                break;
+
+            case '택배':
+                fish.element.addEventListener('click', (event) => {
+                    const click_distance = fish.calculateDistance(
+                        { x: fish.startDragX, y: fish.startDragY },
+                        { x: fish.lastDragX, y: fish.lastDragY }
+                    );
+                    if (click_distance < 16) {
+                        skills.splitMassiveFish(undefined, fish, { n: 10, breakup: false, type: [] });
+                        // fish.setType('택배_상자');
+                        fish.kill();
                     }
                 });
                 break;
@@ -194,6 +214,8 @@ const events = {
             fish.effect = document.createElement('div');
             fish.effect.className = 'effect';
             fish.element.appendChild(fish.effect);
+
+            if (fish.hp !== undefined) { fish.hp_max *= 2; fish.hp = fish.hp_max }
         }
     },
     /**
@@ -212,13 +234,56 @@ const events = {
         const a_new = Math.atan2(catRect.y - fish.position.y, catRect.x - fish.position.x) + Math.PI - (Math.PI / 4) + (Math.random() * Math.PI / 2);
         const v_new = 2 + (cat.speed * 1 / 2) + (fish.speed) + (3 * Math.random());
 
-        const damage_for_cat = -(1 + (fish.speed || 0))
+        const damage_for_cat = -(1 + (fish.speed || 0));
+
+        const mineral_rich = () => {
+            // 이전에 충돌한 cat, position 정보 업데이트
+            fish.prevCollidedCat = cat;
+            fish.prevCollidedPosition = fish.getPosition();
+
+            // 고양이 움직임 정의
+            cat
+                .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 부딪히면 고양이는 멈춤
+                .setMeow('Nyan!')    // 야옹거리는 동작
+                .updateHp(damage_for_cat);        // 체력 업데이트
+
+            // 생선 움직임 정의
+            fish
+                .startSliding({
+                    v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
+                    a: a_new
+                })              // 광물 움직임 시작
+                .updateHp(-5);  // 광물 내구도 업데이트
+
+            skills.splitMassiveFish(cat, fish, { n: 1, length: 32, breakup: false, type: ['mineral'] });
+        }
+
+        const 동전 = () => {
+            if (fish.element.classList.contains('massive')) {
+                skills.splitMassiveFish(cat, fish, { n: 9, length: 0, breakup: true });
+            } else {
+                fish.kill();
+            }
+
+            if (fish.element.classList.contains('irochi')) {
+                context
+                    .setMessage('')
+                    .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('색이 다른 동전', 'pisces')}의 힘으로 ${setClass('냐옹', 'cat')}이 되었다.`, cat);
+                cat.setSkin('냐옹');
+                skills.highlight(cat);
+            }
+        }
+
+        const 택배 = () => {
+            // skills.splitMassiveFish(cat, fish, 10, true, []);
+            // fish.kill();
+        }
 
         switch (fish.type) {
-            case 'fish':
+            case 'fish_rich':
                 // 고양이 체력 증가
                 cat.updateHp(10);
-            case 'fish_rich':
+            case 'fish':
 
                 // 고양이 움직임 정의
                 cat
@@ -245,38 +310,12 @@ const events = {
                 p.resources.setMinerals(8);
                 p.updateParameterValues();
 
-                // 고양이 움직임 정의
-                cat
-                    .toggleMovement('lick')   // 오이를 먹는 움직임
-                    .setMeow('Nyan♥️');            // 야옹거리는 동작
-
                 // 객체 삭제
                 fish.kill();
                 break;
 
             case 'mineral_richrare': p.resources.setMinerals(8);
-            case 'mineral_rich': p.resources.setMinerals(8);
-
-                // 이전에 충돌한 cat, position 정보 업데이트
-                fish.prevCollidedCat = cat;
-                fish.prevCollidedPosition = fish.getPosition();
-
-                // 고양이 움직임 정의
-                cat
-                    .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 부딪히면 고양이는 멈춤
-                    .setMeow('Nyan!')    // 야옹거리는 동작
-                    .updateHp(damage_for_cat);        // 체력 업데이트
-
-                // 생선 움직임 정의
-                fish
-                    .startSliding({
-                        v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
-                        a: a_new
-                    })              // 광물 움직임 시작
-                    .updateHp(-5);  // 광물 내구도 업데이트
-
-                break;
-
+            case 'mineral_rich': p.resources.setMinerals(8); mineral_rich(); break;
 
             case 'yarnball':
                 // 이전에 충돌한 cat, position 정보 업데이트
@@ -300,8 +339,11 @@ const events = {
                 break;
 
             case 'waterbottle':
-                // 누운채로 멈춰있으면 작동 안 함
-                if (fish.element.classList.contains('down') && fish.speed === 0) { return; }
+            case 'potion_health_bottle':
+            case 'potion_vigor_bottle':
+            case 'potion_poison_bottle':
+                // 누운채로 멈춰있으면 작동 안 함 --> 제거
+                if (fish.element.classList.contains('down') && fish.speed === 0) { fish.kill(); return; }
 
                 // 이전에 충돌한 cat, position 정보 업데이트
                 fish.prevCollidedCat = cat;
@@ -328,21 +370,23 @@ const events = {
                     case '깜냥이':
                         context
                             .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('달빛 냥이', 'cat')}로 변했습니다.`)
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('달빛 냥이', 'cat')}가 되었다.`, cat);
                         cat.setSkin('달빛냥이');
+                        skills.highlight(cat);
                         break;
 
                     case '흰냥이':
                         context
                             .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('우주비행사 냥이', 'cat')}로 변했습니다.`)
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('우주비행사 냥이', 'cat')}가 되었다.`, cat);
                         cat.setSkin('우주비행사');
+                        skills.highlight(cat);
                         break;
 
                     default:
                         context
                             .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 체력이 늘어난 기분이 느껴집니다.`)
+                            .setMessage(`${setClass(cat.skin, 'cat')}는 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('건강', 'var')}해진 기분을 느꼈다.`, cat);
 
                         break;
                 }
@@ -353,13 +397,127 @@ const events = {
                 fish.kill();
 
                 break;
-            default:
+
+            case '화석':
+
                 break;
+
+            case 'yu-gi-puzzle':
+
+                if (fish.element.classList.contains('Lv3')) {
+
+                    switch (cat.skin) {
+                        case '스핑크스':
+                            context
+                                .setMessage('')
+                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('파라오', 'cat')}가 되었다.`, cat);
+                            cat.setSkin('파라오');
+                            skills.highlight(cat);
+                            break;
+
+                        default:
+
+                            break;
+                    }
+
+                    cat.hp_max += 30;
+                    cat.hp = cat.hp_max;
+
+                    fish.kill();
+
+                    return;
+                } else {
+                    switch (cat.skin) {
+                        case '스핑크스':
+                            context
+                                .setMessage('')
+                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('체력', 'var')}이 늘어난 기분을 느꼈다.`, cat);
+                            break;
+
+                        default:
+                            context
+                                .setMessage('')
+                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('스핑크스', 'cat')}가 되었다.`, cat);
+                            cat.setSkin('스핑크스');
+                            skills.highlight(cat);
+                    }
+
+                    cat.hp_max += 30;
+                    cat.hp = cat.hp_max;
+
+                    fish.kill();
+                }
+
+                context
+                    .setMessage('')
+                    .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('체력', 'var')}이 늘어난 기분을 느꼈다.`, cat);
+
+                cat.hp_max += 30;
+                cat.hp = cat.hp_max;
+
+                fish.kill();
+
+                break;
+
+
+            case 'potion_health':
+                cat.updateHp(50);
+                fish.setType('potion_health_bottle');
+                break;
+            case 'potion_vigor':
+                cat.updateHp(50);
+                fish.setType('potion_vigor_bottle');
+                break;
+            case 'potion_poison':
+                cat.updateHp(- 50);
+                fish.setType('potion_poison_bottle');
+                break;
+
+            case '동전': 동전(); break;
+            case '택배': 택배(); break;
+
+            default: break;
         }
 
         cat.updateHpBar();
+        p.updateParameterValues();
+
     },
 
+    fishActivateWithGhost: (fish, cat, catRect) => {
+        switch (fish.type) {
+            case 'yu-gi-puzzle':
+
+                fish.prevCollidedCat = cat;
+                fish.prevCollidedPosition = fish.getPosition();
+
+                // 유령 흡수
+                cat.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
+                    duration: 200,
+                    animationDirection: 'alternate',
+                    iterations: Infinity,
+                    composite: 'add',
+                });
+
+                if (fish.element.classList.contains('Lv3')) {
+                    // nothing
+                } else if (fish.element.classList.contains('Lv2')) {
+                    fish.element.classList.remove('Lv2');
+                    fish.element.classList.add('Lv3');
+                } else if (fish.element.classList.contains('Lv1')) {
+                    fish.element.classList.remove('Lv1');
+                    fish.element.classList.add('Lv2');
+                } else { fish.element.classList.add('Lv1'); }
+
+
+                setTimeout(() => {
+                    // 해당 객체 삭제
+                    cat.element.remove();
+                    clearInterval(cat.activateInterval);
+
+                }, 500);
+        }
+    },
 
     catDead: (cat) => {
         cat.hp = 0;
@@ -367,13 +525,14 @@ const events = {
         context
             .setMessage('')
             .setMessage(`*** ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}가 ${setClass('고양이 별', 'special')}로 떠났습니다. 
-            당신은 ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. *** (${p.data.resources.supplies - 1}/${p.data.resources.suppliesMax})`);
+            당신은 ${setClass(cat.skin, cat.skin === '우유' ? 'special' : 'cat')}와의 추억을 오랬동안 기억할 것입니다. *** (${p.data.resources.supplies - 1}/${p.data.resources.suppliesMax})`, cat);
         const i = cats.findIndex(target => target == cat);
 
         // 고양이 객체 제거
         cat.setSkin('유령');
         // cats[i].element.remove();
         cats.splice(i, 1);
+        skills.highlight(cat);
 
         p.data.achievement.cat_dead++;
         p.updateParameterValues();
@@ -387,10 +546,10 @@ const events = {
             // console.info(`[owo] *** allCatsDead ***`);
             context
                 .setMessage(``)
-                .setMessage(`*** 모든 ${setClass(`고양이`, `cat`)}가 고양이 별로 떠났습니다 ***`)
-                .setMessage(`*** ${setClass(`성좌 냥냥이`, `special`)}가 당신을 원망합니다... ***`);
+                .setMessage(`*** 모든 ${setClass(`고양이`, `cat`)}가 고양이 별로 떠났다 ***`)
+                .setMessage(`*** ${setClass(`성좌 냥냥이`, `special`)}가 당신을 원망한다... ***`);
 
-            p.data.achievement.cat_dead_all++||1;
+            p.data.achievement.cat_dead_all++ || 1;
             p.updateParameterValues();
 
             achievement.getAchievement('고양이_별')
@@ -425,7 +584,8 @@ const events = {
         // 도감 통계 업데이트 <-- 랙 문제로 가끔씩만 호출되는 자리로 이동
         Object.keys(p.data.achievement).forEach(key => {
             if (document.querySelector(`.${key}`) === null) { return }
-            document.querySelector(`.${key} .val`).textContent = p.data.achievement[key];
+            p.data.achievement[key] = p.data.achievement[key] || 0;
+            document.querySelector(`.${key} .val`).textContent = p.data.achievement[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         });
 
         p.updateParameterValues();
@@ -447,24 +607,25 @@ const skills = {
     setMineral(cost) { p.data.resources.minerals -= cost; },
     getSupplyOk() { return p.data.resources.supplies < p.data.resources.suppliesMax },
 
-    summonCat(pos) {
+    summonCat(pos, options = { skin: undefined }) {
         const cost = 50;
         if (this.getSupplyOk() && this.getMineralOk(cost)) {
             this.setMineral(cost);
-            const cat = new Cat(pos).setMeow('Eow');
+            const skin = options.skin !== undefined ? options.skin[Math.floor(Math.random() * options.skin.length)] : undefined;
+            const cat = new Cat(pos, skin).setMeow('Eow');
             cats.push(cat);
-            context.setMessage(`${setClass(cat.skin, 'cat')}에게 간택 당했습니다.`);
+            context.setMessage(`${setClass(cat.skin, 'cat')}에게 간택 당했다.`);
             p.updateParameterValues();
         } else if (!this.getMineralOk(cost)) {
-            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족하다.`);
         } else {
-            context.setMessage(`${setClass('보급고', 'pisces')}가 부족합니다.`);
+            context.setMessage(`${setClass('보급고', 'pisces')}가 부족하다.`);
         }
     },
-    summonMassiveCats(n) {
+    summonMassiveCats(n, options = { skin: undefined }) {
         let i = 0
         for (i; i < n; i++) {
-            if (this.summonCat() == false) {
+            if (this.summonCat(undefined, options) == false) {
                 context.setMessage('소환을 중지합니다.');
                 break;
             }
@@ -476,10 +637,10 @@ const skills = {
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos, 'fish'));
-            if (options == null || options.mute != true) context.setMessage(`${setClass('생선', 'pisces')}을 소환했습니다.`);
+            if (options == null || options.mute != true) context.setMessage(`${setClass('생선', 'pisces')}을 소환했다.`);
             p.updateParameterValues();
         } else {
-            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족하다.`);
         }
         return this;
     },
@@ -494,7 +655,7 @@ const skills = {
     },
     summonCucumber(pos, options) {
         pisces.push(new Fish(pos).setType('cucumber'));
-        if (options == null || options.mute != true) context.setMessage('<span class="pisces">오이</span>를 소환했습니다.');
+        if (options == null || options.mute != true) context.setMessage('<span class="pisces">오이</span>를 소환했다.');
         p.updateParameterValues();
         return this;
     },
@@ -507,7 +668,7 @@ const skills = {
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos, 'mineral').startSliding(options.vector));
-            if (options == null || options.mute != true) context.setMessage(`${setClass('광물', 'pisces')}을 소환했습니다.`);
+            if (options == null || options.mute != true) context.setMessage(`${setClass('광물', 'pisces')}을 소환했다.`);
             p.updateParameterValues();
         } else {
             context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
@@ -526,8 +687,21 @@ const skills = {
         }
         return this;
     },
-    summonMassiveMinerals(n) {
-        let i = 0; for (i; i < n; i++) { this.summonMineral(undefined, { vector: { a: 0 } }); }
+    summonMassiveMinerals(n, pos) {
+        let i = 0; for (i; i < n; i++) { this.summonMineral(pos, pos !== undefined ? undefined : { vector: { v: 0 } }); }
+        if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
+    },
+    summonMassiveMineralsRich(n, pos) {
+        let i = 0; for (i; i < n; i++) {
+
+            const angle = Math.PI * 2 * Math.random();
+            const length = 64 * Math.random();
+            pos.x = Math.round(pos.x + Math.cos(angle) * length);
+            pos.y = Math.round(pos.y + Math.sin(angle) * length);
+
+            // console.log(pos, angle, length);
+            this.summonMineralRich(pos, pos !== undefined ? undefined : { vector: { v: 0 } });
+        }
         if (i != 0) context.setMessage(`(${setClass('x' + i, 'num')}회 소환 성공)`);
     },
     summonYarnball(pos, options = { mute: false, vector: undefined }) {
@@ -591,7 +765,7 @@ const skills = {
             // ball
             .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
 
-        context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`);
+        context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`, pos);
     },
     summonWaterbottleDelivery(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         const quarterViewFactor = .75;
@@ -605,7 +779,6 @@ const skills = {
             y: Math.max(2 * h, Math.min(pos.y, maxY))
         };
 
-        console.log(this.pos.x + 64, window.innerWidth);
         this
             // line 4th
             .summonWaterbottle({ x: this.pos.x - 2 * w, y: this.pos.y - 2 * h }, { mute: true })
@@ -632,11 +805,36 @@ const skills = {
             .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y + h }, { mute: true })
             .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y + h }, { mute: true });
 
-        context.setMessage(`[냥냥 택배] 고객님께서 주문하신 ${setClass('생수', 'pisces')} ${setClass('x20 개', 'num')} 상품을 배송완료 하였습니다.`)
+        context.setMessage(`[냥냥 택배] 고객님께서 주문하신 ${setClass('생수', 'pisces')} ${setClass('x20 개', 'num')} 상품을 배송완료 하였습니다.`, pos)
     },
     summonMassiveYWaterbottle(n) {
         let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { context.setMessage('소환을 중지합니다.'); break; } }
         if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+    },
+    summonPotionPoison(pos, options) {
+        const cost = 50;
+        if (this.getMineralOk(cost)) {
+            this.setMineral(cost);
+            pisces.push(new Fish(pos, 'potion_poison'));
+            if (options == null || options.mute != true) context.setMessage(`${setClass('독약', 'pisces')}을 소환했습니다.`);
+            p.updateParameterValues();
+        } else {
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+        }
+        return this;
+    },
+    summon동전(pos, options) {
+        const cost = 0;
+        if (this.getMineralOk(cost)) {
+            this.setMineral(cost);
+            pisces.push(new Fish(pos, '동전'));
+            pisces[pisces.length - 1].element.classList.add('massive');
+            if (options == null || options.mute != true) context.setMessage(`${setClass('동전 무더기', 'pisces')}를 소환했습니다.`);
+            p.updateParameterValues();
+        } else {
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+        }
+        return this;
     },
     summonRandom(pos, options = { mute: false, free: false }) {
         const cost = options.free ? 0 : 1;
@@ -664,7 +862,7 @@ const skills = {
     },
     clearAllPisces() {
         const i = pisces.length;
-        while (pisces.length > 0) { pisces[pisces.length - 1].remove(); }
+        while (pisces.length > 1) { pisces[pisces.length - 1].remove(); }
         if (i != 0) context.setMessage(`${i} 개의 물건들을 치웠습니다.`);
         else context.setMessage(`방안에 물건이 없습니다.`);
     },
@@ -676,6 +874,66 @@ const skills = {
             .setMessage(``)
             .setMessage(`${setClass('고양이', 'cat')}들이 깜짝 놀랐습니다!`);
 
+    },
+    highlight(target) {
+        // 이벤트 위치
+        const x = target.position.x + 32;
+        const y = target.position.y + 32;
+
+        // 강조 요소 생성
+        const highlightElement = document.createElement("div");
+        highlightElement.classList.add("highlight");
+        highlightElement.style.left = x + "px";
+        highlightElement.style.top = y + "px";
+
+        document.body.appendChild(highlightElement);
+
+        // 오버레이 요소 표시
+        const overlayElement = document.createElement("div");
+        overlayElement.classList.add("overlay");
+
+        document.body.appendChild(overlayElement);
+
+        // 강조 효과와 오버레이가 사라지도록 설정
+        setTimeout(function () {
+            document.body.removeChild(highlightElement);
+            document.body.removeChild(overlayElement);
+        }, 1000);
+    },
+
+    // 쌓여있는 생선을 흩뿌림
+    splitMassiveFish(cat, fish, options = { n: 9, length: 64, breakup: true, type: [fish.type], chance: 1 }) {
+
+        if (typeof (options.n) === 'undefined') { options.n = 9 }
+        if (typeof (options.length) === 'undefined') { options.length = 64 }
+        if (typeof (options.breakup) === 'undefined') { options.breakup = true }
+        if (typeof (options.type) === 'undefined') { options.type = [fish.type] }
+        if (typeof (options.chance) === 'undefined') { options.chance = 1 }
+
+        for (let i = 0; i < options.n; i++) {
+
+            const angle = Math.PI * 2 * Math.random();
+            const length = options.length * Math.random();
+            const pos = {
+                x: Math.round(fish.position.x + Math.cos(angle) * length),
+                y: Math.round(fish.position.y + Math.sin(angle) * length)
+            }
+
+            const piece = new Fish(
+                pos,
+                options.type.length === 1 ? options.type[0] : Math.random() > options.chance ? options.type[0] : options.type[Math.floor(Math.random() * options.type.length) + 1]
+            );
+
+            piece.startSliding();
+            piece.prevCollidedCat = cat;
+            piece.prevCollidedPosition = pos;
+
+            pisces.push(piece);
+        }
+
+        if (options.breakup) { fish.element.classList.remove('massive'); }
+
+        return;
     },
 }
 

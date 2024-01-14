@@ -42,7 +42,7 @@ class Fish {
         // 드래그 앤 드롭 이벤트 리스너 등록
         this.element.addEventListener('mousedown', (event) => this.startDragging(event));
         document.addEventListener('mousemove', (event) => this.drag(event));
-        this.element.addEventListener('mouseup', (event) => this.stopDragging(event));
+        document.addEventListener('mouseup', (event) => this.stopDragging(event));
         // 모바일 이벤트 리스너 등록
         this.element.addEventListener('touchstart', (event) => this.startDragging({
             clientX: event.touches[0].clientX,
@@ -52,7 +52,7 @@ class Fish {
             clientX: event.touches[0].clientX,
             clientY: event.touches[0].clientY
         }));
-        this.element.addEventListener('touchend', () => this.stopDragging());
+        document.addEventListener('touchend', () => this.stopDragging());
 
         // 화면 크기 변경 시 이벤트
         window.addEventListener("resize", () => this.handleWindowResize());
@@ -68,20 +68,19 @@ class Fish {
             'cucumber',
             'mineral', 'mineral_rich', 'mineral_rare', 'mineral_richrare',
             'yarnball', 'waterbottle',
-
+            'stone_moon', '화석', 'yo-gi-puzzle',
+            'potion_health', 'potion_vigor', 'potion_poison',
             'irochi',
         ]
 
         const types_applied_prequency = [
             'fish', 'fish', 'fish', 'fish', 'fish',
-
-            'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber',
-
-            'mineral', 'mineral', 'mineral', 'mineral', 'mineral',
-
+            'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber',
+            'mineral', 'mineral', 'mineral', 'mineral', 'mineral', 'mineral_rich', 'mineral_rich', 'mineral_rich',
             'yarnball',
-
             'waterbottle', 'waterbottle', 'waterbottle', 'waterbottle', 'waterbottle',
+            '동전',
+            'potion_health', 'potion_vigor',
         ];
         const type_index = Math.floor(Math.random() * types_applied_prequency.length);
 
@@ -139,9 +138,6 @@ class Fish {
 
         // 통계를 위해서 넣었습니다
         if (p !== null) {
-            const target = p.data.achievement[`pisces_summoned_${this.type}`];
-            if (target === undefined) { return this };
-
             p.data.achievement[`pisces_summoned_${this.type}`]++ || 1;
             p.data.achievement.pisces_summoned_total++ || 1;
         }
@@ -150,6 +146,13 @@ class Fish {
     }
 
     startDragging(event) {
+
+        // .massive 일때 이벤트 무시
+        if (this.element.classList.contains('massive')) {
+            skills.splitMassiveFish(undefined, this, { n: 9, length: 0, breakup: true });
+            return;
+        }
+
         // 움직이고 있으면 움직임 종료
         this.stopMoving();
 
@@ -175,6 +178,9 @@ class Fish {
         // 물건을 들면 이벤트 발생
         switch (this.type) {
             case 'waterbottle':
+            case 'potion_health_bottle':
+            case 'potion_vigor_bottle':
+            case 'potion_poison_bottle':
             case 'dex':
                 // 물병은 세워놓는다
                 this.element.classList.remove('down');
@@ -292,7 +298,7 @@ class Fish {
     activateWithCat(cats) {
         cats.forEach(cat => {
             // 유령 냥이는 생선과의 활성화가 없다
-            if (cat.element.classList.contains('유령')) return;
+            // if (cat.element.classList.contains('유령')) return;
 
             const catRect = cat.element.getBoundingClientRect();
             const catPosition = { x: catRect.left, y: catRect.top }
@@ -318,7 +324,11 @@ class Fish {
             }
 
             // 세부 동작은 별도 함수 호출
-            events.fishActivateWithCat(this, cat, catRect);
+            if (cat.skin !== '유령') {
+                events.fishActivateWithCat(this, cat, catRect);
+            } else {
+                events.fishActivateWithGhost(this, cat, catRect);
+            }
 
         });
     }
@@ -341,8 +351,8 @@ class Fish {
             if (this.prevCollidedfish === fish && prevCollidedDistance() < 64) { return; }
 
             const v_new = this.speed * 4 / 5;
-            const a_this = this.angle - Math.PI / 4 + Math.PI / 2 * Math.random(); // 움직이는 거
-            const a_target = this.angle + Math.PI - Math.PI / 4 + Math.PI / 2 * Math.random(); // 가만히있는 거
+            const a_this = this.angle - Math.PI / 4 + Math.PI / 2 * Math.random(); // 가만히있는 거
+            const a_target = this.angle + Math.PI - Math.PI / 4 + Math.PI / 2 * Math.random(); // 움직이는 거
 
             switch (fish.type) {
                 case 'fish':
@@ -372,6 +382,17 @@ class Fish {
                 case 'mineral':
                     break;
 
+                case '동전':
+                    if (!fish.element.classList.contains('massive')) { return }
+
+                    skills.splitMassiveFish(this, fish, { length: 0 });
+                    // this.startSliding({ v: v_new, a: a_target });
+                    break;
+
+                case '택배':
+                    this.startSliding({ v: v_new, a: a_target });
+                    break;
+
                 case 'yarnball':
                     // 이전에 충돌한 fish, position 정보 업데이트
                     this.prevCollidedfish = fish;
@@ -387,6 +408,12 @@ class Fish {
 
                     break;
                 case 'waterbottle':
+                case 'potion_health':
+                case 'potion_vigor':
+                case 'potion_poison':
+                case 'potion_health_bottle':
+                case 'potion_vigor_bottle':
+                case 'potion_poison_bottle':
                     // 충돌 하고나서 일정 거리 안 떨어지면 다시 충돌 불가
                     // 물병이 쓰러져 있는 상태에서는 충돌 불가
                     if (fish.element.classList.contains('down')) { return; }
@@ -487,21 +514,41 @@ class Fish {
         }
 
         // 속도에 따라 이벤트 발생
-        switch (this.type) {
-            case 'waterbottle':
-                // 속도가 빠르면 물병이 쓰러진다
-                if (v > 5) { this.element.classList.add('down'); }
-                break;
-            case 'dex':
-                // 속도가 빠르면 도감이 펼쳐진다
-                if (v > 5) {
+        if (v > 5) {
+            switch (this.type) {
+                case 'potion_health':
+                case 'potion_vigor':
+                case 'potion_poison':
+                    this.element.classList.add('down');
+                    switch (this.type) {
+                        case 'potion_health':
+                            this.setType('potion_health_bottle');
+                            break;
+                        case 'potion_vigor':
+                            this.setType('potion_vigor_bottle');
+                            break;
+                        case 'potion_poison':
+                            this.setType('potion_poison_bottle');
+                            break;
+                    }
+                    break;
+
+                case 'waterbottle':
+                case 'potion_poison_bottle':
+                case 'potion_health_bottle':
+                case 'potion_vigor_bottle':
+                    // 속도가 빠르면 물병이 쓰러진다
+                    this.element.classList.add('down');
+                    break;
+                case 'dex':
+                    // 속도가 빠르면 도감이 펼쳐진다
                     this.element.classList.add('down');
                     events.showDex(500);
-                }
-                break;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
         // 값 업데이트 
@@ -565,14 +612,22 @@ class Fish {
         this.element.classList.add('ghost');
 
         // kill 이미지 없는 거는 반짝거리는 효과
-        if (this.type === 'yarnball' || this.type === 'waterbottle' || this.type === 'stone_moon') {
-            this.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
-                duration: 200,
-                animationDirection: 'alternate',
-                iterations: Infinity,
-                composite: 'add',
-            });
-        }
+        [
+            'yarnball',
+            'mineral', 'mineral_rare',
+            'waterbottle', 'potion_health_bottle', 'potion_vigor_bottle', 'potion_poison_bottle',
+            'stone_moon', '화석', 'yu-gi-puzzle',
+        ].forEach(e => {
+            if (this.type === e) {
+                this.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
+                    duration: 200,
+                    animationDirection: 'alternate',
+                    iterations: Infinity,
+                    composite: 'add',
+                });
+                return;
+            }
+        });
 
         // 털실 공 빼고는 움직임 정지
         // if (this.type !== 'yarnball') { this.stopMoving(); }
@@ -581,24 +636,16 @@ class Fish {
             // 해당 객체 삭제
             this.remove();
 
-            // 상황에 맞는 이벤트 발생
-            const break_mineral = (n, type, chance) => {
-                for (let i = 0; i < n; i++) {
-                    if (Math.random() < chance) {
-                        pisces.push(new Fish(this.position, type).startSliding());
-                    } else {
-                        skills.summonMineral(this.position, { mute: true });
-                    }
-                }
-            }
             switch (this.type) {
                 case 'mineral_richrare':
-                    break_mineral(2, 'stone_moon', 1 / 64);
+                    skills.splitMassiveFish(undefined, this, { n: 2, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', 'yu-gi-puzzle'] });
 
                 case 'mineral_rich':
                     p.data.achievement.pisces_break_mineral || 1;
                     achievement.getAchievement('마인크래프트');
-                    break_mineral(3, 'stone_moon', 1 / 64);
+                    skills.splitMassiveFish(undefined, this, {
+                        n: 3, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', 'yu-gi-puzzle'], chance: 1 / 8
+                    });
 
                     break;
 

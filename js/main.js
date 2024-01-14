@@ -76,8 +76,10 @@ const leftClick = event => {
   // 클릭된 요소가 고양이 객체가 아닌 경우에 대한 동작 && 마우스 왼쪽클릭일 경우에만
   if (!isClickedOnCat && event.button == 0) {
     const pos = {
-      x: event.pageX - 64 + 64 * Math.random(),
-      y: event.pageY - 86 + 64 * Math.random()
+      // x: event.pageX - 64 + 64 * Math.random(),
+      // y: event.pageY - 86 + 64 * Math.random()
+      x: event.pageX - 32,
+      y: event.pageY - 54
     }
     switch (p.data.skill) {
       case 'cat':
@@ -92,6 +94,9 @@ const leftClick = event => {
       case 'mineral':
         skills.summonMineral(pos);
         break;
+      case 'mineral2':
+        skills.summonMassiveMineralsRich(8, pos);
+        break;
       case 'random':
         skills.summonRandom(pos);
         break;
@@ -101,8 +106,17 @@ const leftClick = event => {
       case 'waterbottle':
         skills.summonWaterbottle(pos);
         break;
-      case 'waterbottlebowling':
+      case 'waterbottle2':
         skills.summonWaterbottleBowlingpins(pos);
+        break;
+      case 'waterbottle3':
+        skills.summonWaterbottleDelivery(pos);
+        break;
+      case 'potion_poison':
+        skills.summonPotionPoison(pos);
+        break;
+      case '동전':
+        skills.summon동전(pos);
         break;
       default:
         break;
@@ -131,9 +145,9 @@ setInterval(() => {
 
   const evilList = [
     '잼민이', '헤드헌터', '월급루팡', '생계형 월급 채굴꾼', '버즈도둑놈',
-    '카페인 중독자', '키보드 스매셔', '자료제출 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
+    '카페인 중독자', '키보드 스매셔', '자료 제출 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
     '부서폭파범(KDA 2/1/3)', '맑은 눈의 광인', '탕비실 독재자', '질문봇', '넵봇',
-    '물음표 살인마', '젊은 꼰대', '책상위 서류탑 맨'
+    '물음표 살인마', '젊은 꼰대', '책상 위 서류탑 빌런'
   ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
 

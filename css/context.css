@@ -49,7 +49,8 @@
   border-bottom: none;
 }
 
-#context ul li {
+#context ul li,
+#settings ul li {
   height: 16px;
   display: flex;
   align-items: center;
@@ -63,11 +64,12 @@
   background-color: #FFF9C4;
 }
 
-#context ul li.disabled {
+body:not(.dev_mode) #context ul li.disabled {
   color: #aaa;
+  pointer-events: none;
 }
 
-#context ul li:not(.disabled):hover {
+#context ul li:not(body:not(.dev_mode) .disabled):hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -107,24 +109,51 @@
 }
 
 #context .icon,
-.resources li:before,
+#resources li,
+.resources li,
 #settings .icon {
-  position: inherit;
-  --sprite-block-size: 32px;
+  --sprite-block-size: 64px;
+  --sprite-position-x: 0px;
+  --sprite-position-col-2: calc(var(--sprite-block-size) * -2);
+  --sprite-position-col-3: calc(var(--sprite-block-size) * -4);
+
   width: var(--sprite-block-size);
   height: var(--sprite-block-size);
+
+  padding: 0;
+  margin-left: -12px;
+}
+
+#context .icon:not(.skill),
+#resources li,
+.resources li {
+  pointer-events: none;
+}
+
+#context .icon:before,
+#resources li:before,
+.resources li:before,
+#settings .icon:before {
+  content: '';
+
+  position: absolute;
+  width: inherit;
+  height: inherit;
   background: url('../img/context.png');
   background-size: calc(6 * var(--sprite-block-size)) calc(7 * var(--sprite-block-size));
+  background-position-x: calc(var(--sprite-position-x));
   background-position-y: calc(var(--sprite-block-size) * 1);
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  padding: 0px;
-  outline: none;
-  animation: none;
 }
 
-#context .icon {
-  margin: 0 12px 0 0;
+#context .icon:before,
+#settings .icon:before {
+  filter: grayscale(1);
+}
+
+#context li:hover>.icon:before {
+  filter: none;
 }
 
 #context .text {
@@ -139,55 +168,108 @@
   right: 1em;
 }
 
-#context .skill {
+#context .skill,
+#settings .icon {
   outline: none;
-  position: static;
-  color: transparent;
-  border: 8px solid #fff;
   margin: 0;
+  width: 48px;
+  height: 48px;
 }
 
-#context .skill:hover {
-  border-color: #ccc;
+#context .skill:before,
+#settings .icon:before {
+  margin-top: -16px;
+  margin-left: -8px;
+  /* clip: rect(0 40px 40px 0); */
+}
+
+#context .skill:hover:before,
+#settings .icon.on:before,
+#settings .icon:hover:before {
+  filter: none;
 }
 
 #context .skill.activated,
 #context .skill.activated:hover {
   background-color: #FFF9C4;
-  border-color: #FFF9C4;
+  filter: none;
 }
 
-.resources .supplies:before,
-#context .icon.cat {
+#context .icon.cat:before {
   background-position-y: calc(var(--sprite-block-size) * 0);
 }
 
-#context .icon.fish {
+#context .icon.fish:before {
   background-position-y: calc(var(--sprite-block-size) * -1);
 }
 
-#context .icon.cucumber {
+#context .icon.cucumber:before {
   background-position-y: calc(var(--sprite-block-size) * -2);
 }
 
-#context .icon.mineral {
+#context .icon.mineral:before {
   background-position-y: calc(var(--sprite-block-size) * -3);
 }
 
-#context .icon.random {
+#context .icon.mineral2:before {
+  --sprite-position-x: var(--sprite-position-col-2);
+  background-position-y: calc(var(--sprite-block-size) * -3);
+}
+
+#context .icon.random:before {
   animation: random 1s steps(5, jump-none) infinite;
 }
 
-#context .icon.yarnball {
+#context .icon.yarnball:before {
   background-position-y: calc(var(--sprite-block-size) * -4);
 }
 
-#context .icon.waterbottle {
+#context .icon.waterbottle:before {
   background-position-y: calc(var(--sprite-block-size) * -5);
 }
 
-#context .icon.waterbottlebowling {
+#context .icon.waterbottle2:before {
+  --sprite-position-x: var(--sprite-position-col-2);
+  background-position-y: calc(var(--sprite-block-size) * -5);
+}
+
+#context .icon.waterbottle3:before {
+  --sprite-position-x: var(--sprite-position-col-3);
+  background-position-y: calc(var(--sprite-block-size) * -5);
+}
+
+#context .icon.potion_poison:before {
   background-position-y: calc(var(--sprite-block-size) * -6);
+}
+
+#context .icon.동전:before {
+  --sprite-position-x: var(--sprite-position-col-2);
+  background-position-y: calc(var(--sprite-block-size) * -4);
+}
+
+
+#settings .icon.enf:before {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -2);
+}
+
+#settings .icon.enf.on:before {
+  background-position-x: calc(var(--sprite-block-size) * -3);
+}
+
+#settings .icon.tk:before {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -1);
+}
+
+#settings .icon.tk.on:before {
+  background-position-x: calc(var(--sprite-block-size) * -3);
+}
+
+#settings .icon.jw:before {
+  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * 0);
+}
+
+#settings .icon.jw.on:before {
+  background-position-x: calc(var(--sprite-block-size) * -3);
 }
 
 @keyframes random {
@@ -200,76 +282,26 @@
   }
 }
 
-#context .icon.activated,
-#context .activated .icon {
-  background-position-x: calc(var(--sprite-block-size) * -1);
+#context .icon.activated:before,
+#context .activated .icon:before {
+  background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
+  filter: none;
 }
 
-#context .icon.timer {
+#context .icon.timer:before {
   background-position: calc(var(--sprite-block-size) * -5) 0;
 }
 
-#context .icon.bucket {
+#context .icon.bucket:before {
   background-position: calc(var(--sprite-block-size) * -4) 0;
 }
 
-#context .icon.dex {
+#context .icon.dex:before {
   background-position: calc(var(--sprite-block-size) * -4) calc(var(--sprite-block-size) * -1);
 }
 
 #context_bt {
   display: none;
-}
-
-/**
- * RESOURCES
- */
-
-
-header,
-#resources {
-  z-index: 15;
-}
-
-ul.resources {
-  position: fixed;
-  right: 0;
-  margin: .5em 1em 0 0;
-  padding: 0;
-  color: #4caf50;
-  filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
-  will-change: transform;
-  /* text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000; */
-  display: flex;
-  pointer-events: none;
-}
-
-.resources li {
-  display: inline-block;
-  list-style: none;
-  margin-right: 3em;
-  display: flex;
-  align-items: center;
-}
-
-.resources li::before {
-  content: '';
-  position: inherit;
-  display: inline-block;
-  --sprite-block-size: 16px;
-  width: var(--sprite-block-size);
-  height: var(--sprite-block-size);
-  background-repeat: no-repeat;
-  image-rendering: auto;
-  margin: 0 8px 0 0;
-  padding: 0px;
-  animation: none;
-  outline: 1px solid #303F9F;
-  background-color: #E8EAF6;
-}
-
-.resources .minerals:before {
-  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -3);
 }
 
 
@@ -289,8 +321,6 @@ ul.resources {
 
   cursor: default;
 
-  font-family: "GalmuriMono11", monospace;
-  font-size: 12px;
   /* font-family: 'DNFBitBitv2'; */
   pointer-events: none;
 
@@ -308,56 +338,75 @@ body.dev_mode #messages {
   box-shadow: inset 0 7px 10px -7px rgba(0, 0, 0, .5);
 }
 
-#messages .hide {}
+
 
 #messages:hover .hide {
   visibility: initial;
   opacity: 1;
 }
 
-#messages .message {
+#messages .message,
+.message.inline {
+  font-family: "GalmuriMono11", monospace;
+  font-size: 12px;
   filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
   will-change: transform;
   display: flex;
   margin: 0 8px;
+  pointer-events: none;
 }
 
-#messages .time,
-#messages .num,
+.message.inline {
+  display: block;
+  position: fixed;
+  animation: inline-message 2s forwards;
+  transform: translateX(-50%);
+  color: #ffffff;
+  z-index: 15;
+}
+
+@keyframes inline-message {
+  to {
+    margin-top: -32px;
+  }
+}
+
+.message .time,
+.message .num,
 .text.num {
   color: #76FF03;
 }
 
-#messages .row {
+.message .row {
   margin-right: 8px;
 }
 
-#messages .text {
+.message .text {
   color: #ffffff;
 }
 
-#messages .cat,
+.message .cat,
 .text.cat {
   color: #00E676;
 }
 
-#messages .pisces,
+.message .pisces,
 .text.pisces {
   color: #FFEA00;
 }
 
-#messages .villain,
+.message .villain,
 .text.villain {
   color: #FF5252;
 }
 
-#messages .var,
+.message .var,
 .text.var {
   color: #42A5F5;
 }
 
 .text.special,
-#messages .special {
+.message .special {
   color: rgba(148, 187, 233, 1);
   background: linear-gradient(to right, #eeaeca 50%, rgba(148, 187, 233, 1) 100%);
   background-clip: text;

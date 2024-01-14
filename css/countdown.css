@@ -14,7 +14,7 @@
   box-shadow: 0px 2px 5px rgba(0, 0, 0, .25);
   transition: box-shadow .25s;
   border-radius: .5em;
-  cursor: move;
+  cursor: pointer;
 }
 
 body.dev_mode #book,
@@ -38,6 +38,7 @@ body.dev_mode #book,
   /* opacity: 1; */
   padding: 1em 1.25em 0.7em;
   transition: box-shadow .25s, opacity .25s;
+  overflow: hidden;
 }
 
 .pages:hover {
@@ -161,10 +162,12 @@ body.dev_mode #book,
   visibility: visible;
 }
 
-#settings div {
+#settings ul {
   margin-top: 1em;
   display: flex;
-  justify-content: center;
+  margin: .55em 0 0 0;
+  padding: 0;
+  justify-content: space-around;
 }
 
 #settings .icon {
@@ -173,35 +176,13 @@ body.dev_mode #book,
   cursor: pointer;
 }
 
+#context .skill:before,
+#settings .icon:before {
+  margin-top: -32px;
+  margin-left: -32px;
+}
+
 #settings .icon.on {
   font-weight: bold;
   color: #FF5722;
-}
-
-#settings .icon:not(:last-child) {
-  margin-right: .5em;
-}
-
-#settings .icon.enf {
-  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -2);
-}
-
-#settings .icon.enf.on {
-  background-position-x: calc(var(--sprite-block-size) * -3);
-}
-
-#settings .icon.tk {
-  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -1);
-}
-
-#settings .icon.tk.on {
-  background-position-x: calc(var(--sprite-block-size) * -3);
-}
-
-#settings .icon.jw {
-  background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * 0);
-}
-
-#settings .icon.jw.on {
-  background-position-x: calc(var(--sprite-block-size) * -3);
 }

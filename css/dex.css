@@ -88,6 +88,9 @@
 
 #dex li {
     position: relative;
+    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
+    background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
+    background-repeat: no-repeat;
 }
 
 #dex ol li::before {
@@ -116,8 +119,9 @@
 #dex li figure {
     width: var(--cat-size);
     height: var(--cat-size);
-    /* background: url('../img/cat_skin_흰냥이.png'); */
-    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
+    /* background: inherit; */
+    /* background-position: 0 0; */
+    /* background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size)); */
     image-rendering: pixelated;
 }
 
@@ -131,7 +135,7 @@
 }
 
 #dex ol li.discovered {
-    background: rgba(148, 187, 233, .25);
+    background-color: rgba(148, 187, 233, .25);
 }
 
 #dex li dl {
@@ -143,17 +147,8 @@
     font-weight: bold;
 }
 
-#dex li dl.toast {
-    margin-top: -5em;
-    margin-left: 1em;
-}
-
 #dex li dl dd {
     margin: 0;
-}
-
-#dex li:hover dl.toast {
-    display: initial;
 }
 
 #dex .text {
@@ -199,12 +194,16 @@
 }
 
 /* 고양이 */
-#dex figure {
+#dex .cats figure,
+#dex .achievement figure {
     margin: 0;
     animation: cat 1s steps(8, jump-none) infinite;
+    background: var(--cat-skin-url);
+    background-position: 0 0;
+    background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
 }
 
-#dex figure::before {
+#dex figure::after {
     animation: inherit;
 }
 
@@ -223,8 +222,6 @@
     background-image: url('../img/fish.png');
     animation: none;
 }
-
-#dex ol li:not(.discovered) {}
 
 /* 잠긴 항목 자물쇠 */
 #dex ol li:not(.discovered) figure {
@@ -249,66 +246,9 @@
 }
 
 #dex .pisces .discovered:hover figure {
-    background-position-x: calc(-1 * var(--cat-size));
+    background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
 }
 
-
-#dex .fish figure {}
-
-#dex .fish_rich figure {}
-
-#dex .cucumber figure {
-    background-position-y: calc(-1 * var(--cat-size));
-}
-
-#dex .fish_rich figure,
-#dex .mineral_rich figure,
-#dex .mineral_richrare figure,
-#dex .potion_hp_rich figure,
-#dex .potion_mp_rich figure {
-    background-position-x: calc(-4 * var(--cat-size));
-}
-
-#dex .discovered.fish_rich:hover figure,
-#dex .discovered.mineral_rich:hover figure,
-#dex .discovered.mineral_richrare:hover figure,
-#dex .discovered.potion_hp_rich:hover figure,
-#dex .discovered.potion_mp_rich:hover figure {
-    background-position-x: calc(-5 * var(--cat-size));
-}
-
-#dex .mineral figure,
-#dex .mineral_rich figure {
-    background-position-y: calc(-2 * var(--cat-size));
-}
-
-
-#dex .mineral_rare figure,
-#dex .mineral_richrare figure {
-    background-position-y: calc(-3 * var(--cat-size));
-}
-
-#dex .yarnball figure {
-    background-position-y: calc(-4 * var(--cat-size));
-}
-
-#dex .potion_hp figure,
-#dex .potion_hp_rich figure {
-    background-position-y: calc(-5 * var(--cat-size));
-}
-
-#dex .potion_mp figure,
-#dex .potion_mp_rich figure {
-    background-position-y: calc(-6 * var(--cat-size));
-}
-
-#dex .waterbottle figure {
-    background-position-y: calc(-7 * var(--cat-size));
-}
-
-#dex .shavedice figure {
-    background-position-y: calc(-8 * var(--cat-size));
-}
 
 /* 도전 과제 */
 #dex .achievement figure {
@@ -342,25 +282,83 @@
 }
 
 /* 통계 */
-#dex #statistics {
+#dex .statistics {
     list-style: none;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
+    position: relative;
 }
 
-#dex #statistics li {
-    border-right: 1px dashed #ccc;
-    padding-right: 1em;
-    margin-right: 1em;
+#dex .statistics li {
     line-height: 1.5;
+    display: flex;
+    align-items: center;
+    width: calc(624px / 4 - 16px);
+    overflow: hidden;
+    justify-content: space-between;
 }
 
-#dex #statistics .desc {
-    /* color: #fff; */
+#dex .statistics li:not(:nth-of-type(4n)) {
+    margin-right: 16px;
+
 }
 
-#dex #statistics .val {
+#dex .statistics .name {
+    font-family: "Galmuri11Mono", monospace;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 8px;
+}
+
+#dex .statistics li:hover {
+    overflow: visible;
+    z-index: 10;
+}
+
+#dex .statistics li:hover .name {
+    background: #fff;
+    outline: 1px solid #aaa;
+    padding: .5em 1em;
+    margin: -.5em -1em;
+    overflow: visible;
+    width: fit-content;
+    z-index: 1;
+}
+
+#dex .statistics li:hover .val {
+    position: absolute;
+    right: 0;
+    z-index: 0;
+}
+
+#dex .statistics .val {
     color: #4caf50;
     filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
+    font-size: 16px;
+}
+
+
+
+/* pagination */
+#dex h3 {
+    display: inline-block;
+    border: 1px solid pink;
+    padding: .5em 1em;
+
+}
+
+#dex h3:before {
+    content: '👉 ';
+
+}
+
+#dex .tab_title {
+    cursor: pointer;
+}
+
+#dex .tab.hide {
+    display: none;
 }

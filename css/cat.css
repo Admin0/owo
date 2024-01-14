@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&display=swap');
 
-body {
+:root {
     --cat-size: 64px;
     --cat-background-size: calc(8 * var(--cat-size)) calc(9 * var(--cat-size));
 }
@@ -36,9 +36,6 @@ body.dev_mode .hp-bar,
     background-color: #ffffff60;
 }
 
-#cage .cat .info-window table th,
-#cage .cat .info-window table td {}
-
 #basket .pisces .info-window table th,
 #basket .pisces .info-window table td {
     border-color: #FFC107;
@@ -60,7 +57,7 @@ body.dev_mode .hp-bar,
 #cage .cat {
     width: var(--cat-size);
     height: var(--cat-size);
-    background: url('../img/cat_skin_우유.png');
+    background-image: var(--cat-skin-url);
     background-size: var(--cat-background-size);
     background-position: calc(1 * var(--cat-size)) calc(1 * var(--cat-size));
     image-rendering: pixelated;
@@ -118,56 +115,16 @@ body.dev_mode .hp-bar,
     }
 }
 
-#cage .우유 figure,
-#dex .우유 figure {
-    background-image: url('../img/cat_skin_우유.png');
+
+#cage .cat::after {
+    visibility: hidden;
+    position: absolute;
+    content: '';
 }
 
-#cage .흰냥이 figure,
-#dex .흰냥이 figure {
-    background-image: url('../img/cat_skin_흰냥이.png');
+#cage .cat.selected::after {
+    visibility: visible;
 }
-
-#cage .깜냥이 figure,
-#dex .깜냥이 figure {
-    background-image: url('../img/cat_skin_깜냥이.png');
-}
-
-#cage .턱시도 figure,
-#dex .턱시도 figure {
-    background-image: url('../img/cat_skin_턱시도.png');
-}
-
-#cage .젖소 figure,
-#dex .젖소 figure {
-    background-image: url('../img/cat_skin_젖소.png');
-}
-
-#cage .치즈 figure,
-#dex .치즈 figure {
-    background-image: url('../img/cat_skin_치즈.png');
-}
-
-#cage .고등어 figure,
-#dex .고등어 figure {
-    background-image: url('../img/cat_skin_고등어.png');
-}
-
-#cage .유령 figure,
-#dex .유령 figure {
-    background-image: url('../img/cat_skin_유령.png');
-}
-
-#cage .달빛냥이 figure,
-#dex .달빛냥이 figure {
-    background-image: url('../img/cat_skin_달빛냥이.png');
-}
-
-#cage .우주비행사 figure,
-#dex .우주비행사 figure {
-    background-image: url('../img/cat_skin_우주비행사.png');
-}
-
 
 body.dev_mode #cage .cat,
 body.dev_mode #cage .cat.유령,
@@ -370,8 +327,7 @@ body.dev_mode #basket .pisces.selected {
 }
 
 body.dev_mode #cage .cat.유령 {
-    background-color: transparent;
-    outline: none;
+    outline: dotted #2196F3;
 }
 
 body.dev_mode #cage .cat.유령 .info-window,

@@ -70,6 +70,62 @@ body.dev_mode .dev_mode {
   text-align: center;
 }
 
+/**
+ * RESOURCES
+ */
+
+
+#resources,
+.resources {
+  right: 0;
+  margin: .5em 1em 0 0;
+  padding: 0;
+  color: #4caf50;
+  filter: drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000) drop-shadow(0 1px #000) drop-shadow(0 -1px #000);
+  will-change: transform;
+  /* text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000; */
+  display: flex;
+  pointer-events: none;
+}
+
+#resources {
+  position: fixed;
+  z-index: 12;
+}
+
+#resources li,
+.resources li {
+  display: inline-block;
+  list-style: none;
+  width: fit-content;
+  margin-right: 3em;
+}
+
+#resources li::before,
+.resources li::before {
+  content: '';
+  position: inherit;
+  display: inline-block;
+  --sprite-block-size: 32px;
+  width: 16px;
+  height: 16px;
+  margin: 0 8px 0 0;
+  outline: 1px solid #303F9F;
+  background-color: #E8EAF6;
+  image-rendering: auto;
+}
+
+#resources .minerals:before,
+.resources .minerals:before {
+  background-position: -72px -104px;
+}
+
+#resources .supplies:before,
+.resources .supplies:before {
+  background-position: -8px -8px;
+}
+
+
 /* toast */
 
 #toast,
@@ -88,17 +144,115 @@ body.dev_mode .dev_mode {
   display: none;
 }
 
-#toast .resources {
+#toast ul.resources,
+.toast ul.resources {
   font-family: 'NeoDunggeunmo', sans-serif;
   position: relative;
   font-size: 16px;
   margin-top: 2px;
   margin-bottom: 6px;
+  border: none !important;
 }
 
-#toast.on {
+.toast {
+  width: fit-content;
+  white-space: nowrap;
+}
+
+#dex .toast {
+  margin-top: -5em;
+  margin-left: 1em;
+}
+
+#context .toast {
+  margin-top: 2em;
+  margin-left: 0em;
+}
+
+.toast ul {
+  padding: 0 !important;
+}
+
+.toast li {
+  padding: 0 !important;
+  margin: 2px 16px 6px 0 !important;
+}
+
+.toast dd {
+  margin: 0;
+}
+
+#toast.on,
+#dex li:hover dl.toast,
+#context li:hover dl.toast {
   display: initial;
 }
+
+/* highlight */
+
+.highlight {
+  position: absolute;
+  opacity: 0.5;
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 14;
+  animation: highlight 1s ease;
+  pointer-events: none;
+  background-color: #ffffff40;
+}
+
+@keyframes highlight {
+  0% {
+    width: 1280px;
+    height: 1280px;
+  }
+
+  70% {
+    width: 128px;
+    height: 128px;
+    backdrop-filter: brightness(1.34);
+  }
+
+  80% {
+    width: 128px;
+    height: 128px;
+    backdrop-filter: brightness(1.34);
+  }
+
+  100% {
+    width: 1280px;
+    height: 1280px;
+    backdrop-filter: brightness(1);
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 14;
+  animation: overlay 1s;
+  pointer-events: none;
+}
+
+@keyframes overlay {
+  70% {
+    backdrop-filter: brightness(.75);
+  }
+
+  80% {
+    backdrop-filter: brightness(.75);
+  }
+
+  100% {
+    backdrop-filter: brightness(1);
+  }
+}
+
 
 /* z-index position
 020   
@@ -106,10 +260,10 @@ body.dev_mode .dev_mode {
 018
 017   #toast
 016   #context
-015   #messages | #resources
-014   #context(mobile)
+015   #messages
+014   #context(mobile) | highlight
 013   #dex
-012   
+012   #resources
 011   #book | .cat.drag | .pisces.drag | .유령
 010   .cat | .dev_mode .pisces.selected
 009   .pisces

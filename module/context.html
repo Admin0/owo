@@ -15,29 +15,92 @@
     <!-- <span class="shortcut">D</span> -->
   </li>
   <ul class="skill_wrap">
-    <li class="skill icon cat" onclick="context.setSkill('cat')" title="<ul class=resources><li class='minerals'>50</li><li class='supplies'>1</li></ul>고양이를 입양합니다.">
-      <span>냥이</span>
+    <li class="skill icon cat" onclick="context.setSkill('cat')">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>50</li>
+          <li class='supplies'>1</li>
+        </ul>
+        <dd>고양이를 입양(납치)한다.</dd>
+      </dl>
     </li>
-    <li class="skill icon random" onclick="context.setSkill('random')" title="<ul class=resources><li class='minerals'>1</li></ul>아무거나 소환합니다.">
-      <span>랜덤</span>
+    <li class="skill icon random" onclick="context.setSkill('random')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>1</li>
+        </ul>아무거나 소환한다.
+      </dl>
     </li>
-    <li class="skill icon fish" onclick="context.setSkill('fish')" title="<ul class=resources><li class='minerals'>4</li></ul>생선을 소환합니다. 고양이 체력을 회복합니다.">
-      <span>생선</span>
+    <li class="skill icon fish" onclick="context.setSkill('fish')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>4</li>
+        </ul>생선을 소환한다. 먹으면 체력을 회복한다.
+      </dl>
     </li>
-    <li class="skill icon cucumber" onclick="context.setSkill('cucumber')" title="<ul class=resources><li class='minerals'>0</ul>오이를 소환합니다. 고양이가 싫어합니다.">
-      <span>오이</span>
+    <li class="skill icon cucumber" onclick="context.setSkill('cucumber')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>0</li>
+        </ul>오이를 소환한다. 고양이가 싫어한다.
+      </dl>
     </li>
-    <li class="skill icon mineral" onclick="context.setSkill('mineral')" title="<ul class=resources><li class='minerals'>0</ul>광물을 소환합니다.">
-      <span>미네랄</span>
+    <li class="skill icon mineral" onclick="context.setSkill('mineral')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>0</li>
+        </ul>광물을 소환한다.
+      </dl>
     </li>
-    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')" title="<ul class=resources><li class='minerals'>50</ul>털실공을 소환합니다. 고양이가 좋아합니다.">
-      <span>공</span>
+    <li class="skill icon mineral2" onclick="context.setSkill('mineral2')">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>0</li>
+        </ul>
+        <dd>운석을 떨어뜨린다. 운석이 떨어지는 이펙트는 생략한다.</dd>
+      </dl>
     </li>
-    <li class="skill icon waterbottle" onclick="context.setSkill('waterbottle')" title="<ul class=resources><li class='minerals'>2</ul>생수를 소환합니다.">
-      <span>생수</span>
+    <li class="skill icon yarnball" onclick="context.setSkill('yarnball')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>50</li>
+        </ul>털실공을 소환한다. 고양이가 좋아한다.
+      </dl>
     </li>
-    <li class="skill icon waterbottlebowling" onclick="context.setSkill('waterbottlebowling')" title="<ul class=resources><li class='minerals'>100</ul>생수를 10개 소환하고, 볼링핀 모양으로 배열합니다.">
-      <span>생수 볼링</span>
+    <li class="skill icon waterbottle" onclick="context.setSkill('waterbottle')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>2</li>
+        </ul>생수를 소환한다.
+      </dl>
+    </li>
+    <li class="skill icon waterbottle2" onclick="context.setSkill('waterbottle2')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>100</li>
+        </ul>생수를 10개 소환하고, 볼링핀 모양으로 배열한다.
+      </dl>
+    </li>
+    <li class="skill icon waterbottle3" onclick="context.setSkill('waterbottle3')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>100</li>
+        </ul>생수 20 개를 택배 주문한다. 로켓 배송으로 도착한다.
+      </dl>
+    </li>
+    <li class="skill icon potion_poison" onclick="context.setSkill('potion_poison')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>50</li>
+        </ul>독약을 소환한다. 왜 이런 사악한 행위를 시도하는 것이지?
+      </dl>
+    </li>
+    <li class="skill icon 동전" onclick="context.setSkill('동전')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>0</li>
+        </ul>돈은 소환하면 되는 것인데, 왜 버는 것이지?
+      </dl>
     </li>
   </ul>
 </ul>
@@ -53,6 +116,8 @@
     <section class="context">
       <ul>
         <li class="" onclick="skills.summonMassiveCats(10);"> <span class="icon cat"></span><span>길냥이들 납치해오기</span> </li>
+        <li class="disabled" onclick="skills.summonMassiveCats(10, options = { skin : ['스핑크스', '샴'] });"> <span class="icon"></span><span>품종묘 분양받기</span> </li>
+        <li class="disabled" onclick="skills.summonMassiveCats(10, options = { skin : ['달빛냥이', '우주비행사', '파라오', '냐옹'] });"> <span class="icon"></span><span>고유냥이 소환하기</span> </li>
         <li class="" onclick="skills.surpriseCats();"> <span class="icon"></span><span>야옹이 놀래키기</span> </li>
       </ul>
       <ul>
@@ -60,10 +125,12 @@
         <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div>
         <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
         <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
-        <li class="" onclick="skills.summonWaterbottleDelivery();"><span class="icon"></span><span class="text">생수 택배 주문</span> </li>
+        <li class="" onclick="skills.summonWaterbottleDelivery()"><span class="icon"></span><span class="text">생수 택배 주문</span> </li>
+        <li class="" onclick="pisces.push(new Fish(undefined, '택배'))"><span class="icon"></span><span class="text">아무거나 택배 주문</span> </li>
         <li class="" onclick="skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
       </ul>
       <ul>
+        <li class="" onclick="skills.highlight(pisces[pisces.length-1]);"><span class="icon"></span> <span>마지막으로 갖게 된 물건 하이라이트</span> </li>
         <li class="" onclick="skills.clearAllPisces();"><span class="icon"></span> <span>물건 치우기</span> </li>
       </ul>
       <ul>
@@ -78,12 +145,13 @@
   </li>
 </ul>
 <ul>
-  <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank');">
+  <li class="" onclick="window.open('//jinh.kr/bucket/#인디_게임_개발자', '_blank'); achievement.getAchievement('버킷리스트');">
     <span class="icon bucket"></span><span class="text">버킷리스트 바로가기 (외부 링크)</span>
   </li>
 </ul>
 <ul>
-  <li class="" onclick="localStorage.clear(); location.reload();" title="시간 설정, 모아놓은 광물 등 모든 것을 초기값으로 설정합니다.">
+  <li class="" onclick="localStorage.clear(); location.reload();" title="">
     <span class="icon"></span><span class="text">초기화</span>
+    <dl class="toast">시간 설정, 모아놓은 광물 등 모든 것을 초기값으로 설정합니다.</dl>
   </li>
 </ul>

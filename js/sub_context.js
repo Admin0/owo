@@ -2,8 +2,6 @@ class Context {
     constructor() {
         this.loadContextElement();
         this.loadMessagesElement();
-        this.loadToastElement();
-        this.setToasts();
         this.loadDexElement();
 
         this.setSelectCatOrSometing();
@@ -63,7 +61,7 @@ class Context {
         this.messages.count = 0;
     }
 
-    setMessage(somethingToSay) {
+    setMessage(somethingToSay, target) {
         // 이전 메시지와 다른 값인 경우 메시지 출력
         if (this.messages.textCheckVal !== somethingToSay) {
 
@@ -108,42 +106,32 @@ class Context {
                 message.classList.add('hide');
                 this.messages.textCheckVal = '10 초 뒤 메시지 삭제';
             }, 10000);
-        }
-        return this;
-    }
 
-    loadToastElement() {
-        this.toast = document.createElement('section');
-        this.toast.id = 'toast';
-        document.body.appendChild(this.toast);
-    }
-    setToasts() {
-        const toastLoadInterval = setInterval(() => {
-            if (document.querySelectorAll('[title]').length != 0) {
-                setToasts();
-                clearInterval(toastLoadInterval);
-            }
-        }, 100);
-        const setToasts = () => {
-            document.querySelectorAll('[title]').forEach(event => {
-                // console.log('2', event);
-                event.addEventListener('mouseenter', event2 => {
-                    // console.log('4');
-                    if (event.getAttribute('title') != null) {
-                        event.setAttribute('data-title', event.getAttribute('title'));
-                        event.removeAttribute("title");
-                        // console.log('3');
-                    }
-                    this.toast.style.left = `${event.getBoundingClientRect().x + 12}px`
-                    this.toast.style.top = `${event.getBoundingClientRect().y}px`
-                    this.toast.innerHTML = event.getAttribute('data-title');
-                    this.toast.classList.add('on');
-                });
-                event.addEventListener('mouseleave', event2 => {
-                    this.toast.classList.remove('on');
-                })
-            });
         }
+
+        if (target !== undefined) {
+            const position = target.position === undefined ? target : target.position;
+
+            const inlineMessage = document.createElement('div');
+            inlineMessage.className = 'message inline text';
+            inlineMessage.innerHTML = somethingToSay;
+
+            inlineMessage.style.left = position.x + 32 + 'px';
+            inlineMessage.style.top = position.y - 32 + 'px';
+            
+            document.body.appendChild(inlineMessage);
+
+            // 5 초 뒤 메시지 삭제
+            setTimeout(() => {
+                // message.remove();
+                inlineMessage.remove();
+            }, 5000);
+
+            return inlineMessage;
+
+        }
+
+        return this;
     }
 
     loadDexElement() {
@@ -177,6 +165,15 @@ class Context {
                 dl.appendChild(dd_off);
 
                 e.element = li;
+
+                // css 설정
+                if (target === 'cats') figure.style.setProperty("--cat-skin-url", `url('../img/cat_skin_${e.id}.png')`);
+            });
+
+            // 도감 탭 생성
+            document.querySelector(`#dex #tab_title__${target}`).addEventListener('click', () => {
+                document.querySelectorAll(`#dex .tab`).forEach(element => { element.classList.add('hide'); });
+                document.querySelector(`#dex .tab.${target}`).classList.remove('hide');
             });
         }
 
@@ -188,14 +185,20 @@ class Context {
 
                 const li = document.createElement('li');
                 li.className = key;
-                document.querySelector('#dex #statistics').appendChild(li);
+                document.querySelector('#dex .statistics').appendChild(li);
 
                 ['name', 'val'].forEach(each => {
                     const element = document.createElement('span');
                     element.className = each;
-                    document.querySelector(`#dex #statistics .${key}`).appendChild(element);
+                    document.querySelector(`#dex .statistics .${key}`).appendChild(element);
                 });
-                document.querySelector(`#dex #statistics .${key} .name`).textContent = `${key}: `;
+                document.querySelector(`#dex .statistics .${key} .name`).textContent = `${key}`;
+            });
+
+            // 도감 탭 생성 (통계)
+            document.querySelector(`#dex #tab_title__statistics`).addEventListener('click', () => {
+                document.querySelectorAll(`#dex .tab`).forEach(element => { element.classList.add('hide'); });
+                document.querySelector(`#dex .tab.statistics`).classList.remove('hide');
             });
         }
 
@@ -211,7 +214,7 @@ class Context {
 
     }
 
-    setDevMode(wannaToggle = false) {
+    setDevMode(wannaToggle) {
         // 현재 dev_mode 값을 확인
         let isDevMode = this.getDevMode();
 
@@ -342,7 +345,7 @@ class Settings {
     }
 
     initTimeSet() {
-        document.querySelector('#setting_bt').addEventListener("click", () => { settings.showSettings(); });
+        document.querySelector('#page_1').addEventListener("click", () => { this.showSettings(true) });
 
         // 설정창이 켜진 상태에서 외부를 클릭하면 설정 닫기
         document.addEventListener("click", (event) => {
@@ -362,10 +365,10 @@ class Settings {
                 // console.log(event);
                 event.addEventListener("change", (event) => {
                     console.log(event);
-                    p.data.work_start = document.querySelector('#settings input#work_start').value;
-                    p.data.work_final = document.querySelector('#settings input#work_final').value;
-                    // p.set('payday', $('#settings input#payday').value.substring(8, 10));
-                    p.setParaToURL();
+                    const ws = document.querySelector('#settings input#work_start').value;
+                    const wf = document.querySelector('#settings input#work_final').value;
+                    // const pd = document.querySelector('#settings input#payday').value.substring(8, 10);
+                    p.setParaToURL({ work_start: ws, work_final: wf });
                     p.updateParameterValues();
                 });
             });
@@ -384,14 +387,13 @@ class Settings {
         this.sub = { element: null }
     }
 
-    showSettings() {
-        this.element.style.height = !this.element.classList.contains('on') ? `${this.element.scrollHeight}px` : 0;
-        this.element.classList.toggle('on');
-        document.querySelector('#setting_bt').classList.toggle('on');
+    showSettings(wannaOn = undefined) {
+        this.element.style.height = wannaOn ? `${this.element.scrollHeight}px` : wannaOn === false ? 0 : this.element.classList.contains('on') ? 0 : `${this.element.scrollHeight}px`;
+        this.element.classList.toggle('on', wannaOn);
     }
 
     clickButtons(target) {
-        this.element.querySelectorAll('button').forEach((e) => {
+        this.element.querySelectorAll('.icon').forEach((e) => {
             e.classList.remove('on');
         });
         target.classList.add('on');

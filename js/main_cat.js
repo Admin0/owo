@@ -40,15 +40,23 @@ class Cat {
      * @param {*} skin 고양이 스킨을 지정합니다. 미지정 시 임의 스킨이 지정됩니다. 
      */
     setSkin(skin) {
-        this.element.classList.remove('흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도');
+
+        // 기존 스킨 제거
+        dex_cats.forEach(cat => { this.element.classList.remove(cat.id) });
+   
+        // Lv.0 스킨 랜덤 부여
         const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도'];
         // const skins = ['map'];
+
         const skin_index = Math.floor(Math.random() * skins.length);
         this.skin = skin == null ? skins[skin_index] : skin
         this.element.classList.add(this.skin);
         // this.element.style.backgroundImage = `url('./img/cat_skin_${skin == null ? skins[skin_index] : skin}.png')`;
 
         if (skin === '우유') this.element.classList.add('special');
+
+        // css 설정
+        this.element.style.setProperty("--cat-skin-url", `url('../img/cat_skin_${this.skin}.png')`);
 
         // 통계를 위해서 넣었습니다
         if (p !== null) {
