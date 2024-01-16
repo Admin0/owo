@@ -82,42 +82,19 @@ const leftClick = event => {
       y: event.pageY - 54
     }
     switch (p.data.skill) {
-      case 'cat':
-        skills.summonCat(pos);
-        break;
-      case 'fish':
-        skills.summonFish(pos);
-        break;
-      case 'cucumber':
-        skills.summonCucumber(pos);
-        break;
-      case 'mineral':
-        skills.summonMineral(pos);
-        break;
-      case 'mineral2':
-        skills.summonMassiveMineralsRich(8, pos);
-        break;
-      case 'random':
-        skills.summonRandom(pos);
-        break;
-      case 'yarnball':
-        skills.summonYarnball(pos);
-        break;
-      case 'waterbottle':
-        skills.summonWaterbottle(pos);
-        break;
-      case 'waterbottle2':
-        skills.summonWaterbottleBowlingpins(pos);
-        break;
-      case 'waterbottle3':
-        skills.summonWaterbottleDelivery(pos);
-        break;
-      case 'potion_poison':
-        skills.summonPotionPoison(pos);
-        break;
-      case '동전':
-        skills.summon동전(pos);
-        break;
+      case 'cat': skills.summonCat(pos); break;
+      case 'fish': skills.summonFish(pos); break;
+      case 'cucumber': skills.summonCucumber(pos); break;
+      case 'mineral': skills.summonMineral(pos); break;
+      case 'mineral2': skills.summonMassiveMineralsRich(8, pos); break;
+      case 'random': skills.summonRandom(pos); break;
+      case 'yarnball': skills.summonYarnball(pos); break;
+      case 'waterbottle': skills.summonWaterbottle(pos); break;
+      case 'waterbottle2': skills.summonWaterbottleBowlingpins(pos); break;
+      case 'waterbottle3': skills.summonWaterbottleDelivery(pos); break;
+      case 'potion_poison': skills.summonPotionPoison(pos); break;
+      case '동전': skills.summon동전(pos); break;
+      case '택배': skills.summon택배(pos); break;
       default:
         break;
     }
@@ -131,7 +108,7 @@ events.titleEvent();
 
 // 연속 이벤트 정의
 setInterval(() => {
-  function shouldSummonEvil() {
+  function shouldSummon택배() {
     const seconds = cd.getSecs();
     const validTimes = [45, 30, 15, '00'];  // 10 초 미만이면 앞에 0 붙이고 문자열로 바뀜
 
@@ -141,33 +118,40 @@ setInterval(() => {
   // 오늘의 한마디
   events.todaysHashtags('55', 3);
 
-  if (cd.isIgnited() || !shouldSummonEvil() || cats.length == 0) { return; }
+  if (cd.isIgnited() || !shouldSummon택배() || cats.length == 0) { return; }
 
   const evilList = [
-    '잼민이', '헤드헌터', '월급루팡', '생계형 월급 채굴꾼', '버즈도둑놈',
-    '카페인 중독자', '키보드 스매셔', '자료 제출 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
-    '부서폭파범(KDA 2/1/3)', '맑은 눈의 광인', '탕비실 독재자', '질문봇', '넵봇',
+    '버즈도둑놈', '키보드 스매셔', '자료 제출 독촉맨', '회신기한 ASAP 맨', '파티션 포스트잇 도배꾼',
+    '부서폭파범(KDA 2/1/3)', '탕비실 독재자',
     '물음표 살인마', '젊은 꼰대', '책상 위 서류탑 빌런'
   ];
   const evil = evilList[Math.floor(Math.random() * evilList.length)];
+  const goodList = [
+    '마니또', '헤드헌터', '월급루팡', '생계형 월급 채굴꾼', '카페인 중독자', '맑은 눈의 광인', '질문봇', '넵봇',
+  ];
+  const good = goodList[Math.floor(Math.random() * goodList.length)];
 
-  p.autoSummon = p.autoSummon == null ? true : p.autoSummon;
-  if (!p.autoSummon) {
-    context.setMessage(`급식기 전원이 꺼져있습니다.`);
+  if (localStorage.autoSummon === 'false') {
+    // context.setMessage(`도착한 택배를 반송했습니다.`);
     return;
   }
 
 
   // 예상되는 최대 개수 계산
-  const maxFish = skills.getReasonableNumbers(2) + 10;
+  const max택배 = skills.getReasonableNumbers(1 / 5) + 5;
   context.setMessage(``);
-  if (pisces.length <= maxFish) {
-    skills.summonMassiveRandoms(skills.getReasonableNumbers(1 / 3) + 3, { mute: true, free: true });
-    context.setMessage(`*** 자동 급식기 작동 완료 (${pisces.length}/${maxFish}) ***`);
-    context.setMessage(`(사악한 <span class="villain">${evil}</span>이(가) 다른 <span class="pisces">물건</span>들도 흩뿌렸습니다.)`);
+  let n택배 = 0;
+  pisces.forEach(e => { n택배 += e.type === '큰_택배' ? 1 : e.type === '택배' ? 1 : 0; });
+
+  const 소환개수 = () => { return skills.getReasonableNumbers(1 / 10) + 1 }
+
+  if (n택배 <= max택배) {
+    skills.summonMassive택배(소환개수(), { mute: true, free: true });
+    context.setMessage(`*** 택배 도착 (${n택배 + 소환개수()}/${max택배}) ***`);
+    context.setMessage(`(선량한 <span class="var">${good}</span>이(가) 당신의 <span class="pisces">택배</span>를 가져다 주었습니다.)`);
   } else {
-    context.setMessage(`*** 자동 급식기 작동 실패 (${pisces.length}/${maxFish}) ***`);
-    context.setMessage(`(선량한 <span class="villain">${evil}</span>이(가) 어질러진 꼴을 보고 급식기 작동을 막았습니다.)`);
+    context.setMessage(`*** 택배 분실 (${n택배}/${max택배}) ***`);
+    context.setMessage(`(사악한 <span class="villain">${evil}</span>이(가) 당신의 <span class="pisces">택배</span>를 닌자했습니다.)`);
   }
 }, 1000);
 

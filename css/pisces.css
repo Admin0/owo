@@ -1,6 +1,6 @@
 :root {
     --sprite-block-size: 64px;
-    --pisces-background-size: calc(12 * var(--sprite-block-size)) calc(14 * var(--sprite-block-size));
+    --pisces-background-size: calc(16 * var(--sprite-block-size)) calc(14 * var(--sprite-block-size));
 
     --sprite-position-x: 0px;
     --sprite-position-col-2: var(--sprite-block-size) * -4;
@@ -207,26 +207,37 @@
 }
 
 .동전.ghost figure {
+    --sprite-position-x: var(--sprite-position-col-4);
     animation: 동전 .375s steps(4, jump-none) infinite;
-    background-position-y: calc(var(--sprite-block-size) * -1);
 }
 
 .택배 figure {
     --sprite-position-x: var(--sprite-position-col-3);
+    background-position-y: calc(var(--sprite-block-size) * -1);
+}
+
+.택배상자 figure {
+    --sprite-position-x: var(--sprite-position-col-3);
     background-position-y: calc(var(--sprite-block-size) * -2);
 }
 
-.택배_상자 figure {
-    --sprite-position-x: calc(var(--sprite-position-col-3) - 128px);
+
+.큰_택배 figure {
+    --sprite-position-x: var(--sprite-position-col-4);
+    background-position-y: calc(var(--sprite-block-size) * -1);
+}
+
+.큰_택배상자 figure {
+    --sprite-position-x: var(--sprite-position-col-4);
     background-position-y: calc(var(--sprite-block-size) * -2);
 }
 
 @keyframes 동전 {
     from {
-        background-position-x: calc(var(--sprite-block-size) * -8);
+        background-position-x: calc(var(--sprite-block-size) * -12);
     }
 
     to {
-        background-position-x: calc(var(--sprite-block-size) * -11);
+        background-position-x: calc(var(--sprite-block-size) * -15);
     }
 }

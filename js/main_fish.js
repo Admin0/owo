@@ -68,7 +68,7 @@ class Fish {
             'cucumber',
             'mineral', 'mineral_rich', 'mineral_rare', 'mineral_richrare',
             'yarnball', 'waterbottle',
-            'stone_moon', '화석', 'yo-gi-puzzle',
+            'stone_moon', '화석', 'yo-gi-puzzle', '택배', '큰_택배',
             'potion_health', 'potion_vigor', 'potion_poison',
             'irochi',
         ]
@@ -102,16 +102,6 @@ class Fish {
 
         // 파라미터 전달 안 받았으면 랜덤값 지정
         this.type = type == null ? types_applied_prequency[type_index] : type;
-
-        // 생선은 낮은 확률로 금붕어가 된다
-        if (this.type == 'fish') { this.type = Math.floor(Math.random() * 32) != 0 ? 'fish' : 'fish_rich' }
-        // 광물은 낮은 확률로 풍부한광물 된다
-        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 16) != 0 ? 'mineral' : 'mineral_rich' }
-        // 광물은 낮은 확률로 희귀광물이 된다
-        if (this.type == 'mineral') { this.type = Math.floor(Math.random() * 16) != 0 ? 'mineral' : 'mineral_rare' }
-        // 희귀광물이 낮은 확률로 풍부한희귀광물이 된다
-        if (this.type == 'mineral_rare') { this.type = Math.floor(Math.random() * 16) != 0 ? 'mineral_rare' : 'mineral_richrare' }
-
 
         // 야생의 색이 다른 생선이 나타났다!
         if (Math.random() < 1 / 64) {
@@ -389,10 +379,18 @@ class Fish {
                     // this.startSliding({ v: v_new, a: a_target });
                     break;
 
-                case '택배':
-                    this.startSliding({ v: v_new, a: a_target });
-                    break;
+                case 'waterbottle':
+                case 'potion_health':
+                case 'potion_vigor':
+                case 'potion_poison':
+                case 'potion_health_bottle':
+                case 'potion_vigor_bottle':
+                case 'potion_poison_bottle':
+                    // 충돌 하고나서 일정 거리 안 떨어지면 다시 충돌 불가
+                    // 물병이 쓰러져 있는 상태에서는 충돌 불가
+                    if (fish.element.classList.contains('down')) { break; }
 
+                case '택배': case '큰_택배':
                 case 'yarnball':
                     // 이전에 충돌한 fish, position 정보 업데이트
                     this.prevCollidedfish = fish;
@@ -407,29 +405,7 @@ class Fish {
                     this.updateHp(-2 - this.speed / 2);
 
                     break;
-                case 'waterbottle':
-                case 'potion_health':
-                case 'potion_vigor':
-                case 'potion_poison':
-                case 'potion_health_bottle':
-                case 'potion_vigor_bottle':
-                case 'potion_poison_bottle':
-                    // 충돌 하고나서 일정 거리 안 떨어지면 다시 충돌 불가
-                    // 물병이 쓰러져 있는 상태에서는 충돌 불가
-                    if (fish.element.classList.contains('down')) { return; }
 
-                    // 이전에 충돌한 fish, position 정보 업데이트
-                    this.prevCollidedfish = fish;
-                    this.prevCollidedPosition = this.getPosition();
-
-                    // 움직임 시작
-                    fish.startSliding({ v: v_new, a: a_this });
-                    this.startSliding({ v: v_new, a: a_target });
-
-                    // 내구도 업데이트
-                    fish.updateHp(-5 - this.speed / 2);
-                    this.updateHp(-2 - this.speed / 2);
-                    break;
                 default:
                     break;
             }
@@ -503,11 +479,17 @@ class Fish {
             switch (this.type) {
                 case 'yarnball':
                     return 0.1;
+
                 case 'mineral_rich':
                 case 'mineral_richrare':
                     return 1.0;
+
                 case 'dex':
                     return 1.0;
+
+                case '큰_택배':
+                    return 2.0;
+
                 default:
                     return 0.5;
             }
@@ -607,7 +589,7 @@ class Fish {
         this.infoWindow.innerHTML = tableHTML;
     }
 
-    kill() {    // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
+    kill(cat) {    // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
         if (this.element.classList.contains('ghost')) { return }
         this.element.classList.add('ghost');
 
@@ -629,8 +611,17 @@ class Fish {
             }
         });
 
-        // 털실 공 빼고는 움직임 정지
-        // if (this.type !== 'yarnball') { this.stopMoving(); }
+
+        if (this.type === '택배' || this.type === '큰_택배') {
+            skills.splitMassiveFish(cat, this, { n: this.type === '택배' ? 3 : 12, breakup: false, type: [] });
+
+            if (Math.random() < .1) {
+                this.setType(this.type === '택배' ? '택배상자' : '큰_택배상자');
+                this.element.classList.remove('ghost');
+                return;
+            }
+        }
+
 
         setTimeout(() => {
             // 해당 객체 삭제
@@ -646,7 +637,6 @@ class Fish {
                     skills.splitMassiveFish(undefined, this, {
                         n: 3, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', 'yu-gi-puzzle'], chance: 1 / 8
                     });
-
                     break;
 
                 default:

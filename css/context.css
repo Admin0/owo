@@ -247,6 +247,11 @@ body:not(.dev_mode) #context ul li.disabled {
   background-position-y: calc(var(--sprite-block-size) * -4);
 }
 
+#context .icon.택배:before {
+  --sprite-position-x: var(--sprite-position-col-2);
+  background-position-y: calc(var(--sprite-block-size) * -6);
+}
+
 
 #settings .icon.enf:before {
   background-position: calc(var(--sprite-block-size) * -2)calc(var(--sprite-block-size) * -2);

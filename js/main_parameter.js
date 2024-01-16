@@ -134,6 +134,16 @@ const events = {
     },
 
     fishBuildUp: (fish) => {
+
+        // 생선은 낮은 확률로 금붕어가 된다
+        if (fish.type == 'fish') { fish.type = Math.floor(Math.random() * 32) != 0 ? 'fish' : 'fish_rich' }
+        // 광물은 낮은 확률로 풍부한광물 된다
+        if (fish.type == 'mineral') { fish.type = Math.floor(Math.random() * 16) != 0 ? 'mineral' : 'mineral_rich' }
+        // 광물은 낮은 확률로 희귀광물이 된다
+        if (fish.type == 'mineral') { fish.type = Math.floor(Math.random() * 16) != 0 ? 'mineral' : 'mineral_rare' }
+        // 희귀광물이 낮은 확률로 풍부한희귀광물이 된다
+        if (fish.type == 'mineral_rare') { fish.type = Math.floor(Math.random() * 16) != 0 ? 'mineral_rare' : 'mineral_richrare' }
+
         switch (fish.type) {
             case 'mineral_rich':
             case 'mineral_richrare':
@@ -174,13 +184,15 @@ const events = {
                 break;
 
             case '택배':
+                fish.type = Math.floor(Math.random() * 8) != 0 ? '택배' : '큰_택배';
+            case '큰_택배':
+                fish.hp = fish.hp_max = 10;
                 fish.element.addEventListener('click', (event) => {
                     const click_distance = fish.calculateDistance(
                         { x: fish.startDragX, y: fish.startDragY },
                         { x: fish.lastDragX, y: fish.lastDragY }
                     );
                     if (click_distance < 16) {
-                        skills.splitMassiveFish(undefined, fish, { n: 10, breakup: false, type: [] });
                         // fish.setType('택배_상자');
                         fish.kill();
                     }
@@ -217,6 +229,17 @@ const events = {
 
             if (fish.hp !== undefined) { fish.hp_max *= 2; fish.hp = fish.hp_max }
         }
+
+        // 사이즈 설정
+        switch (fish.type) {
+            case '큰_택배':
+                fish.element.classList.add('size_large');
+                break;
+
+            default:
+                break;
+        }
+
     },
     /**
      * 
@@ -344,6 +367,8 @@ const events = {
             case 'potion_poison_bottle':
                 // 누운채로 멈춰있으면 작동 안 함 --> 제거
                 if (fish.element.classList.contains('down') && fish.speed === 0) { fish.kill(); return; }
+
+            case '택배': case '큰_택배':
 
                 // 이전에 충돌한 cat, position 정보 업데이트
                 fish.prevCollidedCat = cat;
@@ -835,6 +860,31 @@ const skills = {
             context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
         }
         return this;
+    },
+    summon택배(pos, options = { mute: false, free: false }) {
+        const cost = options.free ? 0 : 50;
+        if (this.getMineralOk(cost)) {
+            this.setMineral(cost);
+            pisces.push(new Fish(pos, '택배'));
+            if (options == null || options.mute != true) context.setMessage(`${setClass('택배', 'pisces')}를 소환했습니다.`);
+            p.updateParameterValues();
+        } else {
+            context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
+        }
+        return this;
+    },
+    summonMassive택배(n, options) {
+        let i = 0;
+        for (i; i < n; i++) {
+            this.summon택배(undefined, options);
+        }
+
+        if (options !== null || options.mute === true) return;
+
+        if (i != 0) context.setMessage(`(x${i} 회 소환 성공)`);
+        context
+            .setMessage('')
+            .setMessage(`(그들의 연회에 저는 그만 정신을 잃고 말았습니다 (꼴까닥))`);
     },
     summonRandom(pos, options = { mute: false, free: false }) {
         const cost = options.free ? 0 : 1;

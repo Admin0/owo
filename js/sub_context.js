@@ -11,11 +11,13 @@ class Context {
             event.preventDefault();
 
             this.setDevMode();
+            this.setAutoSummon();
             this.getSkill();
             this.showContext(event);
         }
         document.querySelector('#context_bt').addEventListener("click", (event) => {
             this.setDevMode();
+            this.setAutoSummon();
             this.getSkill();
             this.showContext(event)
         });
@@ -118,7 +120,7 @@ class Context {
 
             inlineMessage.style.left = position.x + 32 + 'px';
             inlineMessage.style.top = position.y - 32 + 'px';
-            
+
             document.body.appendChild(inlineMessage);
 
             // 5 초 뒤 메시지 삭제
@@ -236,18 +238,17 @@ class Context {
     getDevMode() {
         return localStorage.getItem('dev_mode') == 'true' ? true : false;
     }
-    setAutoSummon() {
-        const isAutoSummon = p.autoSummon == null ? false : p.autoSummon ? false : true;
-
+    
+    setAutoSummon(toggle) {
+        const isAutoSummon = localStorage.autoSummon !== 'false';
         const contextAutoSummonElement = document.querySelector('#context .auto_summon');
-        if (isAutoSummon) {
-            contextAutoSummonElement != null ? contextAutoSummonElement.classList.remove('activated') : false;
-            // this.setMessage('급식기 전원을 켰습니다.');
+
+        if (!toggle) {
+            contextAutoSummonElement.classList.toggle('activated', isAutoSummon);
         } else {
-            contextAutoSummonElement != null ? contextAutoSummonElement.classList.add('activated') : false;
-            // this.setMessage('급식기 전원을 껐습니다.');
+            contextAutoSummonElement.classList.toggle('activated');
+            localStorage.autoSummon = !isAutoSummon;
         }
-        p.autoSummon = isAutoSummon;
     }
 
     setSkill(skill = p.data.skill) {

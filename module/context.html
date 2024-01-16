@@ -102,6 +102,13 @@
         </ul>돈은 소환하면 되는 것인데, 왜 버는 것이지?
       </dl>
     </li>
+    <li class="skill icon 택배" onclick="context.setSkill('택배')" title="">
+      <dl class="toast">
+        <ul class=resources>
+          <li class='minerals'>50</li>
+        </ul>택배로 물건을 주문한다. 상자는 고양이가 매우 좋아한다.
+      </dl>
+    </li>
   </ul>
 </ul>
 <ul>
@@ -122,11 +129,10 @@
       </ul>
       <ul>
         <li class="" onclick="skills.summonMassiveFishs(100);"> <span class="icon fish"></span><span>생선 대량 소환</span> </li>
-        <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div>
-        <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li>
+        <!-- <li class="" onclick="skills.summonMassiveCucumbers(100);"><span class="icon"></span> <span>오이 대량 소환</span> </div> -->
+        <!-- <li class="" onclick="skills.summonMassiveMinerals(100);"> <span class="icon"></span><span>광물 대량 소환</span> </li> -->
         <li class="" onclick="skills.summonMassiveYarnballs(10)"> <span class="icon"></span><span>털실 공 대량 소환</span> </li>
         <li class="" onclick="skills.summonWaterbottleDelivery()"><span class="icon"></span><span class="text">생수 택배 주문</span> </li>
-        <li class="" onclick="pisces.push(new Fish(undefined, '택배'))"><span class="icon"></span><span class="text">아무거나 택배 주문</span> </li>
         <li class="" onclick="skills.summonMassiveRandoms(100, { mute: true });"><span class="icon"></span><span class="text">"고마, 스까서 소환해 주이소."</span> </li>
       </ul>
       <ul>
@@ -139,8 +145,8 @@
       </ul>
     </section>
   </li>
-  <li class="auto_summon" onclick="context.setAutoSummon()">
-    <span class="icon"></span><span class="text">자동 급식기 끄기</span>
+  <li class="auto_summon" onclick="context.setAutoSummon(true)">
+    <span class="icon"></span><span class="text">정기 배송 신청</span>
     <!-- <span class="shortcut">D</span> -->
   </li>
 </ul>

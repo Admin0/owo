@@ -215,6 +215,12 @@ body.dev_mode #cage .cat {
     transform: translateZ(-1px);
 }
 
+#cage .cat.size_large.selected:before,
+#basket .pisces.size_large.selected:before {
+    --width: 64px;
+    top: calc(49px - var(--width)/4 - var(--border-width));
+}
+
 body.dev_mode #basket .pisces.selected {
     background-color: #ffffff60;
     z-index: 10;
