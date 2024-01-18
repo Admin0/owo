@@ -20,7 +20,7 @@ const dex_cats = [
     new Dex('달빛냥이', '달빛 냥이', '살며시 다가가 고백하고 싶어지는 야옹이.<br> 새끼 때는 종종 깜냥이로 오해한다.'),
     new Dex('스핑크스', '스핑크스', '60년대 캐나다에서 발생한 종으로, 고대 이집트와는 관련이 없다.'),
     new Dex('파라오', '파라오', '피라미드 모양을 좋아한다. 싫어하는 것은 페르시안 고양이.'),
-    new Dex('샴', '샴', '위엄있는 얼굴이지만 사실은 여린 고양이. (미구현)'),
+    new Dex('샴', '샴', '위엄있는 얼굴이지만 사실은 여린 고양이.'),
     new Dex('페르시안', '페르시안', '(미구현)'),
     new Dex('렉돌', '렉돌', '(미구현)'),
     new Dex('메인쿤', '메인쿤', '(미구현)'),
@@ -37,7 +37,7 @@ const dex_cats = [
     new Dex('아이언냥', '아이언냥 (Mk.2)', '(미구현)'),
     new Dex('스파르탄', '스파르탄', '(미구현)'),
     new Dex('배트냥', '배트냥', '"나는 복수다. 나는 밤이다. 나는 배트냥이다." (미구현)'),
-    new Dex('냐옹', '냐옹', '둥근 것을 발견하면 시간 흐르는 줄 모르고 논다. 그러다 지쳐 잠들어버린다. (미구현)'),
+    new Dex('냐옹', '냐옹', '동전같이 반짝이는 물건을 좋아한다. 100만 볼트의 전기를 견딜 수 있다.'),
     new Dex('랩터', '랩터', '백악기에 군림하던 폭군 야옹이. <br> 화석 속 유전자를 이용해 복원에 성공했다. (미구현)'),
 ];
 
@@ -67,7 +67,7 @@ const dex_pisces = [
     // new Dex('potion_vigor_rich', '대량 활력 회복 물약', '(미구현)'),
     new Dex('potion_poison', '독약', '마시면 아프다!'),
     // new Dex('potion_poison_rich', '대량 독약', '(미구현)'),
-    new Dex('yu-gi-puzzle', '천년 퍼즐', '선택받은 자만이 소유할 수 있는 고대 이집트의 황금 퍼즐. <br> 고양이 영혼을 봉인할 수 있다.'),
+    new Dex('천년퍼즐', '천년 퍼즐', '선택받은 자만이 소유할 수 있는 고대 이집트의 황금 퍼즐. <br> 고양이 영혼을 봉인할 수 있다.'),
 
     // new Dex('shavedice', '빙수', '(미구현)'),
 
@@ -106,34 +106,34 @@ const achievement = {
     // p.data.achievement
     data: {
         // version check (로딩시 값 다르면 초기화 혹은 값 추가하는 코드 삽입)
-        version: 2.3,
+        VERSION: 2.3,
 
         // 입양한 야옹이들
-        cat_summoned_우유: 0,
-        cat_summoned_흰냥이: 0,
-        cat_summoned_깜냥이: 0,
-        cat_summoned_치즈: 0,
-        cat_summoned_고등어: 0,
-        cat_summoned_턱시도: 0,
-        cat_summoned_젖소: 0,
-        cat_summoned_유령: 0,
-        cat_summoned_total: 0,
+        CATS__우유: 0,
+        CATS__흰냥이: 0,
+        CATS__깜냥이: 0,
+        CATS__치즈: 0,
+        CATS__고등어: 0,
+        CATS__턱시도: 0,
+        CATS__젖소: 0,
+        CATS__유령: 0,
+        CATS__total: 0,
 
         // 소환한 아이템들
-        pisces_summoned_dex: 0,
-        pisces_summoned_fish: 0,
-        pisces_summoned_fish_rich: 0,
-        pisces_summoned_cucumber: 0,
-        pisces_summoned_mineral: 0,
-        pisces_summoned_mineral_rich: 0,
-        pisces_summoned_mineral_rare: 0,
-        pisces_summoned_mineral_richrare: 0,
-        pisces_summoned_stone_moon: 0,
-        pisces_summoned_yarnball: 0,
-        pisces_summoned_waterbottle: 0,
-        pisces_summoned_total: 0,
+        PISCES__dex: 0,
+        PISCES__fish: 0,
+        PISCES__fish_rich: 0,
+        PISCES__cucumber: 0,
+        PISCES__mineral: 0,
+        PISCES__mineral_rich: 0,
+        PISCES__mineral_rare: 0,
+        PISCES__mineral_richrare: 0,
+        PISCES__stone_moon: 0,
+        PISCES__yarnball: 0,
+        PISCES__waterbottle: 0,
+        PISCES__total: 0,
 
-        pisces_summoned_irochi: 0,
+        PISCES__irochi: 0,
 
         // 고양이 별로 떠난 냥이
         // 망가뜨린 물건
@@ -191,7 +191,7 @@ const achievement = {
         p.data.achievement.discover_8_cat__completed = true;
         p.data.achievement.discover_all_cat__completed = true;
         dex_cats.forEach((cat, i) => {
-            if (cat.completed || this.getStatistic(`cat_summoned_${cat.id}`) > 0) {
+            if (cat.completed || this.getStatistic(`CATS__${cat.id}`) > 0) {
                 cat.element.classList.add('discovered');
                 cat.completed = true;
 
@@ -204,19 +204,19 @@ const achievement = {
         });
 
         // 고양이 말고 다른 거
-        p.data.achievement.discover_all_pisces__completed = true;
+        p.data.achievement.discover_all_PISCES__completed = true;
         dex_pisces.forEach(pisces => {
-            if (pisces.completed || this.getStatistic(`pisces_summoned_${pisces.id}`) > 0) {
+            if (pisces.completed || this.getStatistic(`PISCES__${pisces.id}`) > 0) {
                 pisces.element.classList.add('discovered');
                 pisces.completed = true;
             }
-            p.data.achievement.discover_all_pisces__completed *= pisces.completed;
+            p.data.achievement.discover_all_PISCES__completed *= pisces.completed;
         });
 
         // 도전 과제
-        // console.log(this.getStatistic('pisces_summoned_irochi'));
-        if (this.getStatistic('pisces_summoned_irochi') >= 10) this.getAchievement('샤이니');
-        if (this.getStatistic('pisces_summoned_irochi') >= 1000) this.getAchievement('이로치');
+        // console.log(this.getStatistic('PISCES__irochi'));
+        if (this.getStatistic('PISCES__irochi') >= 10) this.getAchievement('샤이니');
+        if (this.getStatistic('PISCES__irochi') >= 1000) this.getAchievement('이로치');
 
         this.updateAchievementsAll();
     },

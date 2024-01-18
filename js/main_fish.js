@@ -110,7 +110,7 @@ class Fish {
             this.irochi = true;
             this.element.classList.add('irochi');
 
-            p.data.achievement.pisces_summoned_irochi++ || 1;
+            p.data.achievement.PISCES__irochi = (p.data.achievement.PISCES__irochi || 0) + 1;
 
             // 도전 과제
             if (this.type === 'yarnball') { achievement.getAchievement('샤이니_이로치'); }
@@ -128,8 +128,8 @@ class Fish {
 
         // 통계를 위해서 넣었습니다
         if (p !== null) {
-            p.data.achievement[`pisces_summoned_${this.type}`]++ || 1;
-            p.data.achievement.pisces_summoned_total++ || 1;
+            p.data.achievement[`PISCES__${this.type}`] = (p.data.achievement[`PISCES__${this.type}`] || 0) + 1;
+            p.data.achievement.PISCES__total = (p.data.achievement.PISCES__total || 0) + 1;
         }
 
         return this;
@@ -598,7 +598,7 @@ class Fish {
             'yarnball',
             'mineral', 'mineral_rare',
             'waterbottle', 'potion_health_bottle', 'potion_vigor_bottle', 'potion_poison_bottle',
-            'stone_moon', '화석', 'yu-gi-puzzle',
+            'stone_moon', '화석', '천년퍼즐',
         ].forEach(e => {
             if (this.type === e) {
                 this.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
@@ -629,13 +629,13 @@ class Fish {
 
             switch (this.type) {
                 case 'mineral_richrare':
-                    skills.splitMassiveFish(undefined, this, { n: 2, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', 'yu-gi-puzzle'] });
+                    skills.splitMassiveFish(undefined, this, { n: 2, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', '천년퍼즐'] });
 
                 case 'mineral_rich':
                     p.data.achievement.pisces_break_mineral || 1;
                     achievement.getAchievement('마인크래프트');
                     skills.splitMassiveFish(undefined, this, {
-                        n: 3, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', 'yu-gi-puzzle'], chance: 1 / 8
+                        n: 3, length: 32, breakup: true, type: ['mineral', 'stone_moon', '화석', '천년퍼즐'], chance: 1 / 8
                     });
                     break;
 

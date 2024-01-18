@@ -43,9 +43,9 @@ class Cat {
 
         // 기존 스킨 제거
         dex_cats.forEach(cat => { this.element.classList.remove(cat.id) });
-   
+
         // Lv.0 스킨 랜덤 부여
-        const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도'];
+        const skins = ['흰냥이', '치즈', '고등어', '깜냥이', '젖소', '턱시도', '샴'];
         // const skins = ['map'];
 
         const skin_index = Math.floor(Math.random() * skins.length);
@@ -60,8 +60,8 @@ class Cat {
 
         // 통계를 위해서 넣었습니다
         if (p !== null) {
-            p.data.achievement[`cat_summoned_${this.skin}`]++ || 1;
-            p.data.achievement.cat_summoned_total++ || 1;
+            p.data.achievement[`CATS__${this.skin}`] = (p.data.achievement[`CATS__${this.skin}`] || 0) + 1;
+            p.data.achievement.CATS__total = (p.data.achievement.CATS__total || 0) + 1;
         }
 
         // 도전 과제 달성 확인

@@ -51,7 +51,9 @@ document.addEventListener('touchend', (e) => {
 
 
 // 고양이 객체 생성
-const cats = [new Cat().setSkin('우유'), new Cat(), new Cat()];
+const cats = [];
+// 배열 선언과 동시에 고양이를 생성하면, 고양이 생성 단계에서 cats 배열을 참조해서 오류 발생 --> 배열먼저 선언하고 고양이 생성
+cats.push(new Cat().setSkin('우유'), new Cat(), new Cat());
 for (let i = 0; i < skills.getReasonableNumbers(.1); i++) { cats.push(new Cat()); }
 
 cats.forEach(cat => {

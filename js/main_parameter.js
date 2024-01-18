@@ -68,12 +68,12 @@ class Parameter {
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고
         document.querySelector('#minerals').textContent = this.data.resources.minerals;
-        this.data.resources.supplies = cats.length;
+        this.data.resources.supplies = cats.length 
         document.querySelector('#supplies').textContent = `${this.data.resources.supplies}/${this.data.resources.suppliesMax}`;
 
         // 로컬 스토리지에 저장
         localStorage.setItem('data', JSON.stringify(this.data));
-        localStorage.setItem('cats', JSON.stringify(cats));
+        localStorage.setItem('cats', JSON.stringify(cats)); 
 
         // 도전 과제
         achievement.checkAchievement();
@@ -96,37 +96,26 @@ const events = {
         const messages = [
             ``,
             `*** ${setClass('퇴근 시간을 알려주는 고양이', 'special')} ***`,
-            `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.version}`,
+            `- Project ${setClass('OwO', 'special')} as Off Work On-time v.${p.data.achievement.VERSION}`,
         ];
 
         if (cd.isIgnited()) {
-            messages.push('')
-            messages.push('　')
-            messages.push('타이머가 00:00을 가르키고 있습니다. 정시퇴근 했을 리가 없는데...');
-            messages.push('야근 모드가 활성화됩니다. 타이머가 30 분 뒤로 설정됩니다.');
-            messages.push('')
-            messages.push('3');
-            messages.push('2');
-            messages.push('1');
-            messages.push('')
+            messages.push('', '　', '타이머가 00:00을 가르키고 있습니다. 정시퇴근 했을 리가 없는데...', '야근 모드가 활성화됩니다. 타이머가 30 분 뒤로 설정됩니다.', '', '3', '2', '1', '');
+            setTimeout(() => cd.isIgnited() && cd.setTime(`${('0' + (new Date().getHours()) % 24).slice(-2)}:${('0' + (new Date().getMinutes() + 30)).slice(-2)}`), messages.length * 1000);
         }
 
         let i = 0;
         showMessage = () => {
             context.setMessage(messages[i]);
             i++;
-            if (i < messages.length) {
-                setTimeout(showMessage, 1000);
-            } else {
-                cd.setTime(`${('0' + (new Date().getHours()) % 24).slice(-2)}:${('0' + (new Date().getMinutes() + 30)).slice(-2)}`);
-            }
-
-        }
+            if (i < messages.length) { setTimeout(showMessage, 1000); }
+        };
         showMessage();
-    },
+    }
+    ,
 
     todaysHashtags: (moment = '55', tagCount = 3) => {
-        if (cd.getSecs() != moment) { return }
+        if (cd.getSecs() !== moment) { return }
         context
             .setMessage(``)
             .setMessage(`*** 오늘의 해시태그 ***`)
@@ -284,6 +273,7 @@ const events = {
         const 동전 = () => {
             if (fish.element.classList.contains('massive')) {
                 skills.splitMassiveFish(cat, fish, { n: 9, length: 0, breakup: true });
+                cat.setMeow('🪙');
             } else {
                 fish.kill();
             }
@@ -294,7 +284,51 @@ const events = {
                     .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('색이 다른 동전', 'pisces')}의 힘으로 ${setClass('냐옹', 'cat')}이 되었다.`, cat);
                 cat.setSkin('냐옹');
                 skills.highlight(cat);
+                cat.setMeow('🪙');
             }
+        }
+
+        const 천년퍼즐 = () => {
+            if (fish.element.classList.contains('Lv3')) {
+
+                switch (cat.skin) {
+                    case '스핑크스':
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('파라오', 'cat')}가 되었다.`, cat);
+                        cat.setSkin('파라오');
+                        skills.highlight(cat);
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                return;
+            } else {
+                switch (cat.skin) {
+                    case '스핑크스':
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('체력', 'var')}이 늘어난 기분을 느꼈다.`, cat);
+                        break;
+
+                    default:
+                        context
+                            .setMessage('')
+                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('스핑크스', 'cat')}가 되었다.`, cat);
+                        cat.setSkin('스핑크스');
+                        skills.highlight(cat);
+                        break;
+                }
+
+            }
+
+            cat.hp_max += 30;
+            cat.hp = cat.hp_max;
+
+            fish.kill();
         }
 
         const 택배 = () => {
@@ -423,67 +457,9 @@ const events = {
 
                 break;
 
-            case '화석':
+            case '화석': break;
 
-                break;
-
-            case 'yu-gi-puzzle':
-
-                if (fish.element.classList.contains('Lv3')) {
-
-                    switch (cat.skin) {
-                        case '스핑크스':
-                            context
-                                .setMessage('')
-                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('파라오', 'cat')}가 되었다.`, cat);
-                            cat.setSkin('파라오');
-                            skills.highlight(cat);
-                            break;
-
-                        default:
-
-                            break;
-                    }
-
-                    cat.hp_max += 30;
-                    cat.hp = cat.hp_max;
-
-                    fish.kill();
-
-                    return;
-                } else {
-                    switch (cat.skin) {
-                        case '스핑크스':
-                            context
-                                .setMessage('')
-                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('체력', 'var')}이 늘어난 기분을 느꼈다.`, cat);
-                            break;
-
-                        default:
-                            context
-                                .setMessage('')
-                                .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('스핑크스', 'cat')}가 되었다.`, cat);
-                            cat.setSkin('스핑크스');
-                            skills.highlight(cat);
-                    }
-
-                    cat.hp_max += 30;
-                    cat.hp = cat.hp_max;
-
-                    fish.kill();
-                }
-
-                context
-                    .setMessage('')
-                    .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('체력', 'var')}이 늘어난 기분을 느꼈다.`, cat);
-
-                cat.hp_max += 30;
-                cat.hp = cat.hp_max;
-
-                fish.kill();
-
-                break;
-
+            case '천년퍼즐': 천년퍼즐(); break;
 
             case 'potion_health':
                 cat.updateHp(50);
@@ -511,7 +487,7 @@ const events = {
 
     fishActivateWithGhost: (fish, cat, catRect) => {
         switch (fish.type) {
-            case 'yu-gi-puzzle':
+            case '천년퍼즐':
 
                 fish.prevCollidedCat = cat;
                 fish.prevCollidedPosition = fish.getPosition();

@@ -102,6 +102,7 @@
     counter-increment: item;
     width: 2em;
     filter: drop-shadow(1px 0 #fff) drop-shadow(-1px 0 #fff) drop-shadow(0 1px #fff) drop-shadow(0 -1px #fff);
+    z-index: 1;
 }
 
 #dex ol li:nth-child(n+10)::before {

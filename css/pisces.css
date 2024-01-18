@@ -152,7 +152,7 @@
     background-position-y: calc(var(--sprite-block-size) * -10);
 }
 
-.yu-gi-puzzle figure {
+.천년퍼즐 figure {
     background-position-y: calc(var(--sprite-block-size) * -11);
 }
 
@@ -177,20 +177,20 @@
     --sprite-position-x: var(--sprite-block-size) * -2;
 }
 
-.pisces.yu-gi-puzzle.Lv1 figure {
+.pisces.천년퍼즐.Lv1 figure {
     background-position-x: calc(var(--sprite-block-size) * -2);
 }
 
-.pisces.yu-gi-puzzle.Lv2 figure {
+.pisces.천년퍼즐.Lv2 figure {
     background-position-x: calc(var(--sprite-block-size) * -3);
 }
 
-.pisces.yu-gi-puzzle.Lv3 figure {
+.pisces.천년퍼즐.Lv3 figure {
     background-position-x: calc(var(--sprite-block-size) * -3);
-    animation: yu-gi-puzzle .375s steps(4, jump-none) infinite;
+    animation: 천년퍼즐 .375s steps(4, jump-none) infinite;
 }
 
-@keyframes yu-gi-puzzle {
+@keyframes 천년퍼즐 {
     from {
         background-position-x: calc(var(--sprite-block-size) * -4);
     }
