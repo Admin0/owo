@@ -338,6 +338,33 @@ class Cat {
         return this;
     }
 
+    // 고양이 진화
+    evolution(fish, skinTo, options = { rename: undefined, meow: undefined, fishkill: true }) {
+        options.rename = options.rename || getFishName(fish.type);
+        options.meow = options.meow || false;
+        options.fishkill = options.fishkill || true;
+
+        // 우유면 중지
+        if (this.skin === '우유') { return }
+
+        // 이미 있는 타입이면 중지  / Lv.0 이면 무시
+        if (cats.some(e => e.skin === skinTo)) { return };
+
+        context
+            .setMessage('')
+            .setMessage(`${setClass(this.skin, 'cat')}이(가) ${setClass(options.rename, 'pisces')}의 힘으로 ${setClass(getCatName(skinTo), 'cat')}이(가) 되었다.`, this);
+
+        this.setSkin(skinTo);
+        skills.highlight(this);
+
+        this.hp_max += 30;
+        this.hp = this.hp_max;
+
+        if (options.meow) { this.setMeow(options.meow) }
+
+        if (options.fishkill) { fish.kill() }
+    }
+
     updateInfoWindow() {
         // 고양이 정보 창 위치 설정 (고양이 옆)
         // const catRect = this.element.getBoundingClientRect();

@@ -326,7 +326,6 @@
     margin: -.5em -1em;
     overflow: visible;
     width: fit-content;
-    z-index: 1;
 }
 
 #dex .statistics li:hover .val {

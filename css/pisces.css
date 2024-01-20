@@ -42,7 +42,8 @@
     width: inherit;
     height: inherit;
 
-    background: inherit;
+    background-image: inherit;
+    background-size: inherit;
 
     animation: pisces .125s steps(2, jump-none);
     background-position: calc(var(--sprite-position-x)) 0;

@@ -68,12 +68,12 @@ class Parameter {
     updateParameterValues() {
         // 화면에 자원 값 및 공급품 정보를 업데이트하고
         document.querySelector('#minerals').textContent = this.data.resources.minerals;
-        this.data.resources.supplies = cats.length 
+        this.data.resources.supplies = cats.length
         document.querySelector('#supplies').textContent = `${this.data.resources.supplies}/${this.data.resources.suppliesMax}`;
 
         // 로컬 스토리지에 저장
         localStorage.setItem('data', JSON.stringify(this.data));
-        localStorage.setItem('cats', JSON.stringify(cats)); 
+        localStorage.setItem('cats', JSON.stringify(cats));
 
         // 도전 과제
         achievement.checkAchievement();
@@ -248,7 +248,32 @@ const events = {
 
         const damage_for_cat = -(1 + (fish.speed || 0));
 
+        const knockover = (options = { meow: undefined }) => {
+            options.meow = options.meow || undefined;
+
+            // 이전에 충돌한 cat, position 정보 업데이트
+            fish.prevCollidedCat = cat;
+            fish.prevCollidedPosition = fish.getPosition();
+
+            // 고양이 움직임 정의
+            cat
+                .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 물병이랑 부딪히면 고양이는 멈춤
+                .updateHp(damage_for_cat);        // 체력 업데이트
+
+            if (options.meow !== undefined) cat.setMeow(options.meow);   // 야옹거리는 동작
+
+            // 생선 움직임 정의
+            fish
+                .startSliding({
+                    v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
+                    a: a_new
+                })              // 물병 움직임 시작
+                .updateHp(-5);  // 물병 내구도 업데이트
+        }
+
         const mineral_rich = () => {
+
+            knockover({ meow: 'Nyan!' });
             // 이전에 충돌한 cat, position 정보 업데이트
             fish.prevCollidedCat = cat;
             fish.prevCollidedPosition = fish.getPosition();
@@ -271,6 +296,7 @@ const events = {
         }
 
         const 동전 = () => {
+
             if (fish.element.classList.contains('massive')) {
                 skills.splitMassiveFish(cat, fish, { n: 9, length: 0, breakup: true });
                 cat.setMeow('🪙');
@@ -278,34 +304,15 @@ const events = {
                 fish.kill();
             }
 
+            // 이로치 동전 --> 냐옹
             if (fish.element.classList.contains('irochi')) {
-                context
-                    .setMessage('')
-                    .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('색이 다른 동전', 'pisces')}의 힘으로 ${setClass('냐옹', 'cat')}이 되었다.`, cat);
-                cat.setSkin('냐옹');
-                skills.highlight(cat);
-                cat.setMeow('🪙');
+                cat.evolution(fish, '냐옹', { rename: '색이 다른 동전', meow: '🪙🪙🪙' });
             }
         }
 
         const 천년퍼즐 = () => {
-            if (fish.element.classList.contains('Lv3')) {
-
-                switch (cat.skin) {
-                    case '스핑크스':
-                        context
-                            .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('파라오', 'cat')}가 되었다.`, cat);
-                        cat.setSkin('파라오');
-                        skills.highlight(cat);
-                        break;
-
-                    default:
-
-                        break;
-                }
-
-                return;
+            if (fish.element.classList.contains('Lv3') && cat.skin === '스핑크스') {
+                cat.evolution(fish, '파라오', { meow: '𓂀' });
             } else {
                 switch (cat.skin) {
                     case '스핑크스':
@@ -315,25 +322,13 @@ const events = {
                         break;
 
                     default:
-                        context
-                            .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('천년 퍼즐', 'pisces')}의 힘으로 ${setClass('스핑크스', 'cat')}가 되었다.`, cat);
-                        cat.setSkin('스핑크스');
-                        skills.highlight(cat);
+                        cat.evolution(fish, '스핑크스');
                         break;
                 }
 
             }
 
-            cat.hp_max += 30;
-            cat.hp = cat.hp_max;
-
             fish.kill();
-        }
-
-        const 택배 = () => {
-            // skills.splitMassiveFish(cat, fish, 10, true, []);
-            // fish.kill();
         }
 
         switch (fish.type) {
@@ -345,7 +340,7 @@ const events = {
                 // 고양이 움직임 정의
                 cat
                     .toggleMovement('lick')     // 셍선를 먹는 움직임
-                    .setMeow('Meow♥️')         // 야옹거리는 동작
+                    .setMeow('Meow❤️')         // 야옹거리는 동작
                     .updateHp(10);              // 체력 업데이트
 
                 // 생선 객체 삭제
@@ -367,12 +362,14 @@ const events = {
                 p.resources.setMinerals(8);
                 p.updateParameterValues();
 
+                cat.setMeow('💎');
+
                 // 객체 삭제
                 fish.kill();
                 break;
 
-            case 'mineral_richrare': p.resources.setMinerals(8);
-            case 'mineral_rich': p.resources.setMinerals(8); mineral_rich(); break;
+            case 'mineral_richrare': p.resources.setMinerals(8); cat.setMeow('💎');
+            case 'mineral_rich': p.resources.setMinerals(8); mineral_rich(); cat.setMeow('💎'); break;
 
             case 'yarnball':
                 // 이전에 충돌한 cat, position 정보 업데이트
@@ -396,86 +393,71 @@ const events = {
                 break;
 
             case 'waterbottle':
-            case 'potion_health_bottle':
-            case 'potion_vigor_bottle':
-            case 'potion_poison_bottle':
                 // 누운채로 멈춰있으면 작동 안 함 --> 제거
-                if (fish.element.classList.contains('down') && fish.speed === 0) { fish.kill(); return; }
+                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('💧'); fish.kill(); return; }
 
-            case '택배': case '큰_택배':
-
-                // 이전에 충돌한 cat, position 정보 업데이트
-                fish.prevCollidedCat = cat;
-                fish.prevCollidedPosition = fish.getPosition();
-
-                // 고양이 움직임 정의
-                cat
-                    .toggleMovement(fish.speed > 3 ? 'surprised' : null)     // 물병이랑 부딪히면 고양이는 멈춤
-                    .setMeow('Grrrr!')    // 야옹거리는 동작
-                    .updateHp(damage_for_cat);        // 체력 업데이트
-
-                // 생선 움직임 정의
-                fish
-                    .startSliding({
-                        v: fish.speed != 0 ? fish.speed * 3 / 4 + 3 : 5 * Math.random() + 3,
-                        a: a_new
-                    })              // 물병 움직임 시작
-                    .updateHp(-5);  // 물병 내구도 업데이트
+                knockover();
 
                 break;
 
+            case '택배': case '큰_택배': knockover({ meow: '📦' }); break;
+
             case 'stone_moon':
                 switch (cat.skin) {
-                    case '깜냥이':
-                        context
-                            .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('달빛 냥이', 'cat')}가 되었다.`, cat);
-                        cat.setSkin('달빛냥이');
-                        skills.highlight(cat);
-                        break;
+                    case '깜냥이': cat.evolution(fish, '달빛냥이'); break;
 
-                    case '흰냥이':
-                        context
-                            .setMessage('')
-                            .setMessage(`${setClass(cat.skin, 'cat')}가 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('우주비행사 냥이', 'cat')}가 되었다.`, cat);
-                        cat.setSkin('우주비행사');
-                        skills.highlight(cat);
-                        break;
+                    case '흰냥이': cat.evolution(fish, '우주비행사'); break;
 
                     default:
                         context
                             .setMessage('')
                             .setMessage(`${setClass(cat.skin, 'cat')}는 ${setClass('달맟이 돌', 'pisces')}의 힘으로 ${setClass('건강', 'var')}해진 기분을 느꼈다.`, cat);
 
+                        cat.hp_max += 30;
+                        cat.hp = cat.hp_max;
+
+                        fish.kill();
                         break;
                 }
 
-                cat.hp_max += 30;
-                cat.hp = cat.hp_max;
-
-                fish.kill();
-
                 break;
 
-            case '화석': break;
+            case '화석': cat.evolution(fish, '공룡'); break;
 
             case '천년퍼즐': 천년퍼즐(); break;
 
             case 'potion_health':
+                // 누운채로 멈춰있으면 작동 안 함 --> 제거
+                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
+                cat.setMeow('❤️');
                 cat.updateHp(50);
                 fish.setType('potion_health_bottle');
+
+                knockover();
+
                 break;
             case 'potion_vigor':
+                // 누운채로 멈춰있으면 작동 안 함 --> 제거
+                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
+                cat.setMeow('💜');
                 cat.updateHp(50);
                 fish.setType('potion_vigor_bottle');
+
+                knockover();
+
                 break;
             case 'potion_poison':
+                // 누운채로 멈춰있으면 작동 안 함 --> 제거
+                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
+                cat.setMeow('💚');
                 cat.updateHp(- 50);
                 fish.setType('potion_poison_bottle');
+
+                knockover();
+
                 break;
 
             case '동전': 동전(); break;
-            case '택배': 택배(); break;
 
             default: break;
         }

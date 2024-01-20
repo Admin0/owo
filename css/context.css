@@ -309,6 +309,10 @@ body:not(.dev_mode) #context ul li.disabled {
   display: none;
 }
 
+#context .auto_summon:not(.activated) .on,
+#context .auto_summon.activated .off {
+  display: none;
+}
 
 /* messages */
 

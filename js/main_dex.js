@@ -21,7 +21,11 @@ const dex_cats = [
     new Dex('스핑크스', '스핑크스', '60년대 캐나다에서 발생한 종으로, 고대 이집트와는 관련이 없다.'),
     new Dex('파라오', '파라오', '피라미드 모양을 좋아한다. 싫어하는 것은 페르시안 고양이.'),
     new Dex('샴', '샴', '위엄있는 얼굴이지만 사실은 여린 고양이.'),
-    new Dex('페르시안', '페르시안', '(미구현)'),
+    new Dex('냐옹', '냐옹', '동전같이 반짝이는 물건을 좋아한다. 100만 볼트의 전기를 견딜 수 있다.'),
+    new Dex('아이언냥', '아이언냥 (Mk.3)', '가슴 쪽에 금속 파편이 박히는 사고를 당한 경험이 있다. <br> (외과수슬 비급여 비용 150 만원은 집사가 지불)'),
+    new Dex('공룡', '공룡', '집사가 술에 취해 길에서 주워왔다. <br> 공룡... 맞겠지?'),
+    new Dex('스파르탄', '스파르탄', '300 마리 냥냥이가 모여 사는 마을 출신. 페르시안 고양이를 싫어한다.'),
+    new Dex('페르시안', '페르시안', '왜 다들 이 고양이를 무서워하는 거지?'),
     new Dex('렉돌', '렉돌', '(미구현)'),
     new Dex('메인쿤', '메인쿤', '(미구현)'),
     new Dex('벵갈', '벵갈', '(미구현)'),
@@ -34,10 +38,7 @@ const dex_cats = [
     new Dex('터키시앙고라', '터키시 앙고라', '(미구현)'),
     new Dex('사바나', '사바나', '(미구현)'),
     new Dex('파일럿', '파일럿 냥이', '(미구현)'),
-    new Dex('아이언냥', '아이언냥 (Mk.2)', '(미구현)'),
-    new Dex('스파르탄', '스파르탄', '(미구현)'),
-    new Dex('배트냥', '배트냥', '"나는 복수다. 나는 밤이다. 나는 배트냥이다." (미구현)'),
-    new Dex('냐옹', '냐옹', '동전같이 반짝이는 물건을 좋아한다. 100만 볼트의 전기를 견딜 수 있다.'),
+    new Dex('배트냥', '배트냥', '"나는 복수다. 나는 밤이다. 나는 배트냥이다."'),
     new Dex('랩터', '랩터', '백악기에 군림하던 폭군 야옹이. <br> 화석 속 유전자를 이용해 복원에 성공했다. (미구현)'),
 ];
 
@@ -48,18 +49,11 @@ const dex_pisces = [
     new Dex('fish_rich', '다금바리', '상상속의 생선.'),
 
     new Dex('cucumber', '오이', '고양이의 유전자에 도망가라는 명령이 각인되어있는 사악한 채소.<br>제압 후 냉국으로 요리하면 맛있다.'),
+    new Dex('yarnball', '털실 공', '둥글게 말려있는 게 마치 잠자는 고양이를 닮은 귀여운 장난감.'),
 
     new Dex('택배', '택배', '당신이 소중한 물건이 들어있다.'),
     new Dex('택배상자', '택배상자', '택배에서 물건을 빼면, 고양이가 매우 좋아하는 만능 숨숨집으로 변신한다.'),
-    new Dex('동전', '동전', '줍고싶어지는 동그란 반짝이. 고양이도 좋아한다.'),
-    new Dex('mineral', '광물', '우주에서 지구로 떨어진 운석에 섞여있던 광물. <br> 채굴하면 한덩이에 8 광물이 통장에 입금된다.'),
-    new Dex('mineral_rich', '풍부한 광물', ' 더 큰 광물 덩어리. 부수면 작은 광물로 쪼개진다.'),
-    new Dex('mineral_rare', '희귀한 광물', '낮은 확률로 발견되는 황금색 광물. <br> 색이 다른 광물과는 또다른 클래식한 느낌의 골-든 광물.'),
-    new Dex('mineral_richrare', '풍부한 희귀 광물', '수식어가 두 개나 붙은 초레어 광물. <br>여기에 색까지 다르다면? 당신의 로또 당첨 운, 색이 다른 풍부한 희귀 광물로 대체되었다.'),
-    new Dex('stone_moon', '달맞이 돌', '어느 특정 냥냥이를 진화시키는 이상한 돌. 하늘처럼 파랗다.'),
-    new Dex('화석', '화석', '돌 속에 갇혀있는 고대 생물의 유해. <br> 부수면 여러가지 물건들을 발견할 수 있다.'),
 
-    new Dex('yarnball', '털실 공', '둥글게 말려있는 게 마치 잠자는 고양이를 닮은 귀여운 장난감.'),
     new Dex('waterbottle', '물병', '세워놓으면 본능을 참지 못하고 냥냥펀치를 날린다.'),
     new Dex('potion_health', '체력 물약', '모험을 떠나기 전에 챙겨두는 것이 좋다. <br>빈 병을 책상 위에 올려놓으면, 심실궂은 냥냥이가 펀치로 떨어뜨리니 주의.'),
     // new Dex('potion_health_rich', '대량 체력 회복 물약', '(미구현)'),
@@ -69,6 +63,13 @@ const dex_pisces = [
     // new Dex('potion_poison_rich', '대량 독약', '(미구현)'),
     new Dex('천년퍼즐', '천년 퍼즐', '선택받은 자만이 소유할 수 있는 고대 이집트의 황금 퍼즐. <br> 고양이 영혼을 봉인할 수 있다.'),
 
+    new Dex('동전', '동전', '줍고싶어지는 동그란 반짝이. 고양이도 좋아한다.'),
+    new Dex('mineral', '광물', '우주에서 지구로 떨어진 운석에 섞여있던 광물. <br> 채굴하면 한덩이에 8 광물이 통장에 입금된다.'),
+    new Dex('mineral_rich', '풍부한 광물', ' 더 큰 광물 덩어리. 부수면 작은 광물로 쪼개진다.'),
+    new Dex('mineral_rare', '희귀한 광물', '낮은 확률로 발견되는 황금색 광물. <br> 색이 다른 광물과는 또다른 클래식한 느낌의 골-든 광물.'),
+    new Dex('mineral_richrare', '풍부한 희귀 광물', '수식어가 두 개나 붙은 초레어 광물. <br>여기에 색까지 다르다면? 당신의 로또 당첨 운, 색이 다른 풍부한 희귀 광물로 대체되었다.'),
+    new Dex('stone_moon', '달맞이 돌', '어느 특정 냥냥이를 진화시키는 이상한 돌. 하늘처럼 파랗다.'),
+    new Dex('화석', '화석', '돌 속에 갇혀있는 고대 생물의 유해. <br> 부수면 여러가지 물건들을 발견할 수 있다.'),
     // new Dex('shavedice', '빙수', '(미구현)'),
 
 ]
@@ -100,6 +101,15 @@ const dex_achievement = [
     new Dex('버킷리스트', '버킷리스트', '버킷리스트의 한 페이지를 멋지게 장식했다.'),
 
 ];
+
+// 아이디 입력하면 객체 이름 반환
+const getCatName = (id) => {
+    return dex_cats.find(cat => cat.id === id).name
+}
+
+const getFishName = (id) => {
+    return dex_pisces.find(fish => fish.id === id).name
+}
 
 // 도전과제를 위한 통계량 초기화
 const achievement = {
@@ -204,13 +214,13 @@ const achievement = {
         });
 
         // 고양이 말고 다른 거
-        p.data.achievement.discover_all_PISCES__completed = true;
+        p.data.achievement.discover_all_pisces__completed = true;
         dex_pisces.forEach(pisces => {
             if (pisces.completed || this.getStatistic(`PISCES__${pisces.id}`) > 0) {
                 pisces.element.classList.add('discovered');
                 pisces.completed = true;
             }
-            p.data.achievement.discover_all_PISCES__completed *= pisces.completed;
+            p.data.achievement.discover_all_pisces__completed *= pisces.completed;
         });
 
         // 도전 과제
