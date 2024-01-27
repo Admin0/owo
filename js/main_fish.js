@@ -64,16 +64,6 @@ class Fish {
     setType(type) {
 
         const types = [
-            'fish', 'fish_rich',
-            'cucumber',
-            'mineral', 'mineral_rich', 'mineral_rare', 'mineral_richrare',
-            'yarnball', 'waterbottle',
-            'stone_moon', '화석', 'yo-gi-puzzle', '택배', '큰_택배',
-            'potion_health', 'potion_vigor', 'potion_poison',
-            'irochi',
-        ]
-
-        const types_applied_prequency = [
             'fish', 'fish', 'fish', 'fish', 'fish',
             'cucumber', 'cucumber', 'cucumber', 'cucumber', 'cucumber',
             'mineral', 'mineral', 'mineral', 'mineral', 'mineral', 'mineral_rich', 'mineral_rich', 'mineral_rich',
@@ -82,12 +72,12 @@ class Fish {
             '동전',
             'potion_health', 'potion_vigor',
         ];
-        const type_index = Math.floor(Math.random() * types_applied_prequency.length);
+        const type_index = Math.floor(Math.random() * types.length);
 
         // type을 지정받은 경우 초기화
         const breakDown = () => {
-            // 기존 클래스 삭제 (겹치는 거 있으면 삭제)
-            types.forEach(type => { if (this.element.classList.contains(type)) { this.element.classList.remove(type) } });
+            // 기존 클래스 삭제
+            this.element.classList.remove(this.type, 'irochi');
 
             // 체력 바 삭제
             if (this.element.hpBar != null) { this.element.hpBar.remove(); }
@@ -101,7 +91,7 @@ class Fish {
         if (type != null) { breakDown(); }
 
         // 파라미터 전달 안 받았으면 랜덤값 지정
-        this.type = type == null ? types_applied_prequency[type_index] : type;
+        this.type = type == null ? types[type_index] : type;
 
         // 야생의 색이 다른 생선이 나타났다!
         if (Math.random() < 1 / 64) {
@@ -160,6 +150,10 @@ class Fish {
         this.startDragTime = performance.now();
         this.startDragX = event.clientX;
         this.startDragY = event.clientY;
+
+        // 이벤트 위치 말고 객체 위치도 필요해서
+        this.startX = this.position.x;
+        this.startY = this.position.y;
 
         // 드래그 이력 저장
         this.dragHistory = [];
@@ -245,6 +239,10 @@ class Fish {
                 this.lastDragY = event.clientY;
             }
 
+            // 이벤트 위치 말고 객체 위치도 필요해서
+            this.lastX = this.position.x;
+            this.lastY = this.position.y;
+
             // 드래그 종료되기 100ms 전의 위치에서 현재 위치까지의 거리 계산
             const deltaX = this.lastDragX - startPos.x;
             const deltaY = this.lastDragY - startPos.y;
@@ -257,6 +255,9 @@ class Fish {
 
             // 이동 시작
             this.startSliding({ v: speed, a: angle });
+
+            // 드롭 이벤트
+            this.dropToFish(pisces);
         }
     }
 
@@ -292,7 +293,7 @@ class Fish {
 
             const catRect = cat.element.getBoundingClientRect();
             const catPosition = { x: catRect.left, y: catRect.top }
-            const distance = this.calculateDistance(this.getPosition(), catPosition);
+            const distance = this.calculateDistance(catPosition);
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 고양이를 옮길때는 이벤트 제외 (생선을 옮길때는 이벤트 실행)
@@ -302,7 +303,7 @@ class Fish {
 
 
             // 충돌한 cat이 이전과 같을 때 충돌 지점에서 거리가 어느정도 떨어지지 않았다면 이벤트
-            const prevCollidedDistance = () => { return this.calculateDistance(this.getPosition(), this.prevCollidedPosition || { x: 0, y: 0 }); }
+            const prevCollidedDistance = () => { return this.calculateDistance(this.prevCollidedPosition || { x: 0, y: 0 }); }
             if (this.prevCollidedCat === cat && prevCollidedDistance() < 32) { return; }
 
             // 생선을 들고있는 경우(drag)에는 손에서 떨어뜨림
@@ -326,7 +327,7 @@ class Fish {
         pisces.forEach(fish => {
             const fishRect = fish.element.getBoundingClientRect();
             const fishPosition = { x: fishRect.left, y: fishRect.top }
-            const distance = this.calculateDistance(this.getPosition(), fishPosition);
+            const distance = this.calculateDistance(fishPosition);
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 생선을 옮길때는 이벤트 제외
@@ -337,7 +338,7 @@ class Fish {
                 || fish == this) { return; }
 
             // 충돌한 fish이 이전과 같을 때 충돌 지점에서 거리가 어느정도 떨어지지 않았다면 이벤트
-            const prevCollidedDistance = () => { return this.calculateDistance(this.getPosition(), this.prevCollidedPosition || { x: 0, y: 0 }); }
+            const prevCollidedDistance = () => { return this.calculateDistance(this.prevCollidedPosition || { x: 0, y: 0 }); }
             if (this.prevCollidedfish === fish && prevCollidedDistance() < 64) { return; }
 
             const v_new = this.speed * 4 / 5;
@@ -380,6 +381,7 @@ class Fish {
                     break;
 
                 case 'waterbottle':
+                    events.스트라이크(this);
                 case 'potion_health':
                 case 'potion_vigor':
                 case 'potion_poison':
@@ -413,11 +415,55 @@ class Fish {
         });
     }
 
+    dropToFish(pisces) {
+        pisces.forEach(fish => {
+            const fishPosition = { x: fish.lastX, y: fish.lastY }
+            const distance = this.calculateDistance(fishPosition);
+
+            // 생선과의 거리가 일정 이내일 경우 동작을 수행
+            // 본인일 경우 제외
+            if (distance > 16
+                || fish == this) { return; }
+
+            switch (fish.type) {
+
+                case '택배상자': case '큰_택배상자':
+                    const fishPos = { x: fish.lastX, y: fish.lastY }
+                    console.log(fishPos, this.calculateDistance(fishPos));
+                    if (this.calculateDistance(fishPos) < 16) {
+                        fish.element.classList.add('throw', 'down');
+                        this.remove();
+                        setTimeout(() => {
+                            fish.element.classList.remove('throw');
+                            fish.setType('택배상자_쓰레기통');
+                        }, 500);
+                    }
+                    break;
+
+                case '택배상자_쓰레기통': case '큰_택배상자_쓰레기통':
+                    fish.element.classList.add('throw');
+                    this.remove();
+                    setTimeout(() => {
+                        fish.element.classList.remove('throw');
+                    }, 500);
+                    break;
+
+                default:
+                    break;
+            }
+
+        });
+    }
     // 생선과의 거리를 계산하는 유틸리티 메서드
-    calculateDistance(point1, point2) {
-        const deltaX = point1.x - point2.x;
-        const deltaY = point1.y - point2.y;
-        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    // calculateDistance(point1, point2) {
+    //     const deltaX = point1.x - point2.x;
+    //     const deltaY = point1.y - point2.y;
+    //     return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    // }
+
+    // 생각해보니 본인은 넣을 필요가 없는데?
+    calculateDistance(position) {
+        return Math.sqrt((position.x - this.position.x) ** 2 + (position.y - this.position.y) ** 2);
     }
 
     moveFish(params = { f: 0 }) {
@@ -615,7 +661,7 @@ class Fish {
         if (this.type === '택배' || this.type === '큰_택배') {
             skills.splitMassiveFish(cat, this, { n: this.type === '택배' ? 3 : 12, breakup: false, type: [] });
 
-            if (Math.random() < .1) {
+            if (Math.random() < (context.getDevMode() ? 1 : .1)) {
                 this.setType(this.type === '택배' ? '택배상자' : '큰_택배상자');
                 this.element.classList.remove('ghost');
                 return;

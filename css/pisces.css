@@ -222,6 +222,15 @@
     background-position-y: calc(var(--sprite-block-size) * -2);
 }
 
+.택배상자.down figure {
+    --sprite-position-x: calc(var(--sprite-position-col-3) - 64*3px);
+}
+
+.택배상자_쓰레기통 figure {
+    --sprite-position-x: var(--sprite-position-col-3);
+    background-position-y: calc(var(--sprite-block-size) * -3);
+}
+
 
 .큰_택배 figure {
     --sprite-position-x: var(--sprite-position-col-4);

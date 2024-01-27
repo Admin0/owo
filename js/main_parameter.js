@@ -162,8 +162,7 @@ const events = {
                 fish.element.classList.add('special');
                 fish.element.addEventListener('click', (event) => {
                     const click_distance = fish.calculateDistance(
-                        { x: fish.startDragX, y: fish.startDragY },
-                        { x: fish.lastDragX, y: fish.lastDragY }
+                        { x: fish.startX, y: fish.startY }
                     );
                     if (click_distance < 16) {
                         fish.element.classList.add('down');
@@ -173,13 +172,12 @@ const events = {
                 break;
 
             case '택배':
-                fish.type = Math.floor(Math.random() * 8) != 0 ? '택배' : '큰_택배';
+                fish.type = Math.random() !== 1 / 8 ? '택배' : '큰_택배';
             case '큰_택배':
                 fish.hp = fish.hp_max = 10;
                 fish.element.addEventListener('click', (event) => {
                     const click_distance = fish.calculateDistance(
-                        { x: fish.startDragX, y: fish.startDragY },
-                        { x: fish.lastDragX, y: fish.lastDragY }
+                        { x: fish.startX, y: fish.startY }
                     );
                     if (click_distance < 16) {
                         // fish.setType('택배_상자');
@@ -210,12 +208,13 @@ const events = {
                 break;
         }
 
-        // 이로치 발생 시 이펙트 요소 추가
-        if (fish.irochi === true) {
-            fish.effect = document.createElement('div');
-            fish.effect.className = 'effect';
-            fish.element.appendChild(fish.effect);
+        // 효과 요소 추가
+        fish.effect = document.createElement('div');
+        fish.effect.className = 'effect';
+        fish.element.appendChild(fish.effect);
 
+        // 이로치 발생 시 
+        if (fish.irochi === true) {
             if (fish.hp !== undefined) { fish.hp_max *= 2; fish.hp = fish.hp_max }
         }
 
@@ -555,6 +554,19 @@ const events = {
         }
     },
 
+    스트라이크: (fish) => {
+        if (fish.type !== 'waterbottle' || p.data.achievement.스트라이크__completed === true) { return }
+        const pins = [];
+        pisces.forEach(e => { if (fish.calculateDistance(e.position) < 32) { pins.push(e); } });
+        if (pins.length >= 10) {
+            setTimeout(() => {
+                let count = 0;
+                pins.forEach(f => { if (f.element.classList.contains('down')) { count++; } });
+                if (count >= 10) { achievement.getAchievement('스트라이크'); }
+            }, 500)
+        }
+    },
+
     setDex: () => {
 
     },
@@ -748,7 +760,7 @@ const skills = {
             // ball
             .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
 
-        context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`, pos);
+        if (this.getMineralOk(20)) { context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`, pos); }
     },
     summonWaterbottleDelivery(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         const quarterViewFactor = .75;
@@ -788,7 +800,7 @@ const skills = {
             .summonWaterbottle({ x: this.pos.x + 1 * w, y: this.pos.y + h }, { mute: true })
             .summonWaterbottle({ x: this.pos.x + 2 * w, y: this.pos.y + h }, { mute: true });
 
-        context.setMessage(`[냥냥 택배] 고객님께서 주문하신 ${setClass('생수', 'pisces')} ${setClass('x20 개', 'num')} 상품을 배송완료 하였습니다.`, pos)
+        if (this.getMineralOk(20)) { context.setMessage(`[냥냥 택배] 고객님께서 주문하신 ${setClass('생수', 'pisces')} ${setClass('x20 개', 'num')} 상품을 배송완료 하였습니다.`, pos) }
     },
     summonMassiveYWaterbottle(n) {
         let i = 0; for (i; i < n; i++) { if (this.summonYarnball() == false) { context.setMessage('소환을 중지합니다.'); break; } }

@@ -372,6 +372,7 @@ body.dev_mode #messages {
   transform: translateX(-50%);
   color: #ffffff;
   z-index: 15;
+  white-space: nowrap;
 }
 
 @keyframes inline-message {

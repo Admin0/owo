@@ -118,10 +118,15 @@ class Context {
             inlineMessage.className = 'message inline text';
             inlineMessage.innerHTML = somethingToSay;
 
-            inlineMessage.style.left = position.x + 32 + 'px';
+            document.body.appendChild(inlineMessage);
+
+            const rect = inlineMessage.getBoundingClientRect();
+            let left = Math.min(position.x + 32, window.innerWidth - rect.width / 2 - 16);
+            left = Math.max(left, rect.width / 2);
+
+            inlineMessage.style.left = `${left}px`
             inlineMessage.style.top = position.y - 32 + 'px';
 
-            document.body.appendChild(inlineMessage);
 
             // 5 초 뒤 메시지 삭제
             setTimeout(() => {
@@ -238,7 +243,7 @@ class Context {
     getDevMode() {
         return localStorage.getItem('dev_mode') == 'true' ? true : false;
     }
-    
+
     setAutoSummon(toggle) {
         const isAutoSummon = localStorage.autoSummon !== 'false';
         const contextAutoSummonElement = document.querySelector('#context .auto_summon');
@@ -346,7 +351,8 @@ class Settings {
     }
 
     initTimeSet() {
-        document.querySelector('#page_1').addEventListener("click", () => { this.showSettings(true) });
+        // 클릭 이벤트 설정
+        document.querySelector('#page_1').addEventListener("click", () => { this.showSettings(true); });
 
         // 설정창이 켜진 상태에서 외부를 클릭하면 설정 닫기
         document.addEventListener("click", (event) => {

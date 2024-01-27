@@ -24,6 +24,7 @@
     from {
         background-position-x: 0;
     }
+
     to {
         background-position-x: calc(var(--cat-size) * -5);
     }
@@ -33,6 +34,25 @@
     from {
         background-position-x: 0;
     }
+
+    to {
+        background-position-x: calc(var(--cat-size) * -5);
+    }
+}
+
+
+.택배상자.throw .effect,
+.택배상자_쓰레기통.throw .effect {
+    background-position-y: calc(var(--cat-size) * -1);
+    animation: 쓰레기투척 .5s steps(6, jump-none);
+}
+
+
+@keyframes 쓰레기투척 {
+    from {
+        background-position-x: 0;
+    }
+
     to {
         background-position-x: calc(var(--cat-size) * -5);
     }
