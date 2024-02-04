@@ -329,13 +329,14 @@ class Context {
 
     setSelectCatOrSometing() {
         document.addEventListener('click', event => {
-            document.querySelectorAll('.cat, .cat figure, .pisces, .pisces figure').forEach(event => {
-                if (event.matches('.cat, .pisces')) event.classList.remove('selected');
-                if (event.parentElement.matches('.pisces')) event.classList.remove('selected');
+            document.querySelectorAll('.cat, .cat figure, .pisces, .pisces figure, .objet, .objet figure').forEach(event => {
+                if (event.matches('.cat, .pisces, .objet')) event.classList.remove('selected');
+                if (event.parentElement.matches('.pisces, .objet')) event.classList.remove('selected');
             });
-            if (event.target.matches('.cat, .pisces')) { event.target.classList.add('selected'); }
+            if (event.target.matches('.cat, .pisces, .objet')) { event.target.classList.add('selected'); }
             if (event.target.parentElement.matches('.cat')) { event.target.parentElement.classList.add('selected'); }
             if (event.target.parentElement.matches('.pisces')) { event.target.parentElement.classList.add('selected'); }
+            if (event.target.parentElement.matches('.objet')) { event.target.parentElement.classList.add('selected'); }
         });
 
     }

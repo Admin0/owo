@@ -172,7 +172,7 @@ const events = {
                 break;
 
             case '택배':
-                fish.type = Math.random() !== 1 / 8 ? '택배' : '큰_택배';
+                fish.type = Math.random() > .125 ? '택배' : '큰_택배';
             case '큰_택배':
                 fish.hp = fish.hp_max = 10;
                 fish.element.addEventListener('click', (event) => {

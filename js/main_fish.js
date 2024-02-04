@@ -20,7 +20,7 @@ class Fish {
         const maxY = window.innerHeight - rect.height;
         this.position = {
             x: Math.max(0, Math.min(pos.x, maxX)),
-            y: Math.max(0, Math.min(pos.y, maxY))
+            y: Math.max(128, Math.min(pos.y, maxY))
         };
 
         this.element.style.left = `${this.position.x}px`;
@@ -199,7 +199,7 @@ class Fish {
             const maxY = window.innerHeight - this.element.clientHeight;
 
             this.position.x = Math.max(0, Math.min(newX, maxX));
-            this.position.y = Math.max(0, Math.min(newY, maxY));
+            this.position.y = Math.max(128, Math.min(newY, maxY));
 
             this.element.style.left = `${this.position.x}px`;
             this.element.style.top = `${this.position.y}px`;
@@ -429,7 +429,7 @@ class Fish {
 
                 case '택배상자': case '큰_택배상자':
                     const fishPos = { x: fish.lastX, y: fish.lastY }
-                    console.log(fishPos, this.calculateDistance(fishPos));
+                    // console.log(fishPos, this.calculateDistance(fishPos));
                     if (this.calculateDistance(fishPos) < 16) {
                         fish.element.classList.add('throw', 'down');
                         this.remove();
@@ -502,7 +502,7 @@ class Fish {
             // 벽에 부딪히면 체력 감소
             this.updateHp(-3 - this.speed / 10);
         }
-        if (newY < 0 || newY + rect.height > window.innerHeight) {
+        if (newY < 128 || newY + rect.height > window.innerHeight) {
             this.angle = -this.angle;
             // 벽에 부딪히면 체력 감소
             this.updateHp(-3 - this.speed / 10);
@@ -658,16 +658,27 @@ class Fish {
         });
 
 
-        if (this.type === '택배' || this.type === '큰_택배') {
-            skills.splitMassiveFish(cat, this, { n: this.type === '택배' ? 3 : 12, breakup: false, type: [] });
+        if (this.type === '택배') {
+            skills.splitMassiveFish(cat, this, { n: 5, breakup: false, type: [] });
 
             if (Math.random() < (context.getDevMode() ? 1 : .1)) {
-                this.setType(this.type === '택배' ? '택배상자' : '큰_택배상자');
+                this.setType('택배상자');
                 this.element.classList.remove('ghost');
                 return;
             }
         }
 
+        if (this.type === '큰_택배') {
+            // 가구 추가
+            things.push(new Objet(this.position));
+
+            // 상자
+            if (Math.random() < (context.getDevMode() ? 1 : .1)) {
+                this.setType('큰_택배상자');
+                this.element.classList.remove('ghost');
+                return;
+            }
+        }
 
         setTimeout(() => {
             // 해당 객체 삭제

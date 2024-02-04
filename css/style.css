@@ -1,6 +1,7 @@
 @import url('countdown.css');
 @import url('cat.css');
 @import url('pisces.css');
+@import url('things.css');
 @import url('context.css');
 @import url('context_mobile.css');
 @import url('dex.css');
@@ -19,15 +20,26 @@
 }
 
 body {
-  --tile-size: 32px;
+  --tile-size: 128px;
   font-family: 'NeoDunggeunmo', sans-serif;
   /* font-family: "Galmuri11", sans-serif; */
   margin: 0;
   height: calc(100vh - 0em);
   overflow: hidden;
-  background: url('../img/background_autumn.png');
-  background-size: calc(var(--tile-size) * 2);
+  background: url('../img/background_office.png');
+  /* background: url('../img/background_autumn.png'); */
+  background-size: var(--tile-size);
 }
+
+#wall {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 128px;
+  background: url('../img/wallpaper_office.png');
+  background-size: var(--tile-size);
+}
+
 
 /* dev_mode */
 

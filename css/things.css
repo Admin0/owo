@@ -1,0 +1,100 @@
+:root {
+    --objet-background-size: calc(16 * var(--sprite-block-size)) calc(14 * var(--sprite-block-size));
+    --sprite-objet-size: 64px;
+    --sprite-objet-size-long: 128px;
+}
+
+#wall .objet {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: var(--sprite-block-size);
+    height: var(--sprite-block-size);
+    z-index: 9;
+    cursor: grab;
+
+    background-image: url('../img/objet.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    background-size: var(--objet-background-size);
+    background-position: calc(var(--sprite-block-size) * 1) calc(var(--sprite-block-size) * 1);
+}
+
+#wall .info-window {
+    left: 12px;
+    top: 0px;
+}
+
+.sell_btn:before {
+    cursor: pointer;
+    content: 'SELL';
+    background-color: #FF5722;
+    padding: .5em 1em;
+}
+
+#wall .objet::after {
+    visibility: hidden;
+    position: absolute;
+}
+
+#wall .objet.selected figure,
+#wall .objet.drag figure {
+    filter: drop-shadow(2px 0 #4caf50) drop-shadow(-2px 0 #4caf50) drop-shadow(0 2px #4caf50) drop-shadow(0 -2px #4caf50);
+}
+
+#wall .objet.selected::after {
+    visibility: visible;
+}
+
+#wall .objet::after {
+    content: var(--objet-type);
+}
+
+.objet figure {
+    margin: 0;
+    width: inherit;
+    height: inherit;
+
+    background-image: inherit;
+    background-size: inherit;
+
+    animation: objet .125s steps(2, jump-none);
+    background-position: calc(var(--sprite-position-x)) 0;
+
+    /* for selected class */
+    transform-style: preserve-3d;
+}
+
+
+@keyframes objet {
+    from {
+        background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
+    }
+}
+
+.objet.drag figure {
+    cursor: grabbing;
+}
+
+.objet.down figure {
+    background-position-x: calc(var(--sprite-position-x) + var(--sprite-block-size) * -1);
+}
+
+.시계_1 figure {
+    background-position-y: 0;
+}
+
+.시계_2 figure {
+    --sprite-position-x: calc(var(--sprite-objet-size) * -2);
+    background-position-y: 0;
+}
+
+.시계_3 figure {
+    --sprite-position-x: calc(var(--sprite-objet-size) * -4);
+    background-position-y: 0;
+}
+
+.문_1 figure {
+    height: calc(var(--sprite-block-size) * 2);
+    background-position-y: calc(var(--sprite-objet-size) * -2);
+}

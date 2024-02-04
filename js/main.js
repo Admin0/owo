@@ -63,6 +63,9 @@ cats.forEach(cat => {
 // 생선 객체 생성
 const pisces = [];
 
+// 가구 객체 생성
+const things = [];
+
 // 도감 생성
 pisces.push(new Fish(undefined, 'dex'));
 

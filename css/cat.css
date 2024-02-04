@@ -17,6 +17,7 @@
 
 body.dev_mode #basket .pisces.selected .info-window,
 body.dev_mode #cage .cat.selected .info-window,
+#wall .objet.selected .info-window,
 body.dev_mode .hp-bar,
 .selected .hp-bar {
     display: initial;

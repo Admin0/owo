@@ -103,7 +103,7 @@ class Cat {
         const maxY = window.innerHeight - rect.height;
         this.position = {
             x: Math.max(0, Math.min(pos.x, maxX)),
-            y: Math.max(0, Math.min(pos.y, maxY))
+            y: Math.max(128, Math.min(pos.y, maxY))
         };
 
         // 초기 위치 스타일 적용
@@ -148,7 +148,7 @@ class Cat {
         if (newX < 0 || newX + rect.width > window.innerWidth) {
             this.angle = Math.PI - this.angle;
         }
-        if (newY < 0 || newY + rect.height > window.innerHeight) {
+        if (newY < 128 || newY + rect.height > window.innerHeight) {
             this.angle = -this.angle;
         }
 
@@ -282,7 +282,7 @@ class Cat {
             const maxY = window.innerHeight - this.element.clientHeight;
 
             this.position.x = Math.max(0, Math.min(newX, maxX));
-            this.position.y = Math.max(0, Math.min(newY, maxY));
+            this.position.y = Math.max(128, Math.min(newY, maxY));
 
             this.element.style.left = `${this.position.x}px`;
             this.element.style.top = `${this.position.y}px`;
