@@ -94,6 +94,8 @@ body.dev_mode .hp-bar,
 #cage .cat:not(.유령, .달빛냥이) figure:after,
 #dex .cats li:not(.유령, .달빛냥이) figure:after {
     display: block;
+    position: absolute;
+    top: 0;
     content: '';
     background-image: url('../img/cat_skin_그림자.png');
     width: inherit;

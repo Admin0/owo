@@ -93,6 +93,7 @@
   }
 
   #context_bt {
+    z-index: 1;
     display: initial;
     margin: 0.5em;
     position: absolute;

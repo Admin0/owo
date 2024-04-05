@@ -426,8 +426,6 @@ const events = {
             case '천년퍼즐': 천년퍼즐(); break;
 
             case 'potion_health':
-                // 누운채로 멈춰있으면 작동 안 함 --> 제거
-                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
                 cat.setMeow('❤️');
                 cat.updateHp(50);
                 fish.setType('potion_health_bottle');
@@ -436,8 +434,6 @@ const events = {
 
                 break;
             case 'potion_vigor':
-                // 누운채로 멈춰있으면 작동 안 함 --> 제거
-                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
                 cat.setMeow('💜');
                 cat.updateHp(50);
                 fish.setType('potion_vigor_bottle');
@@ -446,14 +442,19 @@ const events = {
 
                 break;
             case 'potion_poison':
-                // 누운채로 멈춰있으면 작동 안 함 --> 제거
-                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
                 cat.setMeow('💚');
                 cat.updateHp(- 50);
                 fish.setType('potion_poison_bottle');
 
                 knockover();
 
+                break;
+            case 'potion_health_bottle':
+            case 'potion_vigor_bottle':
+            case 'potion_poison_bottle':
+                // 누운채로 멈춰있으면 작동 안 함 --> 제거
+                if (fish.element.classList.contains('down') && fish.speed === 0) { cat.setMeow('🧪'); fish.kill(); return; }
+                knockover();
                 break;
 
             case '동전': 동전(); break;
