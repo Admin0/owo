@@ -5,14 +5,14 @@
  * MIT License © JinH
  */
 
+/**
+ * Even when you're not looking at it, it stares over you.
+ * @param {string} target_selector Specify which element will stares upon you.
+ * @param {Object} options Provides some options. (recommended to use the default values)
+ * @param {number} options.perspective Distance from the perspective of looking at the target (unit: px, default value: 1000)
+ * @param {number} options.angle Angle of css rotate3d (unit: deg, default value: 15)
+ */
 class Stare {
-  /**
-   * Even when you're not looking at it, it stares over you.
-   * @param {string} target_selector Specify which element will stares upon you.
-   * @param {Object} options Provides some options. (recommended to use the default values)
-   * @param {number} options.perspective Distance from the perspective of looking at the target (unit: px, default value: 1000)
-   * @param {number} options.angle Angle of css rotate3d (unit: deg, default value: 15)
-   */
   constructor(target_selector, options = { perspective: 1000, angle: 15 }) {
     this.target = document.querySelectorAll(target_selector);
     this.options = options;

@@ -727,7 +727,7 @@ const skills = {
         if (this.getMineralOk(cost)) {
             this.setMineral(cost);
             pisces.push(new Fish(pos, 'waterbottle'));
-            if (options == null || options.mute != true) context.setMessage(`${setClass('물병', 'pisces')}을 소환했습니다.`);
+            if (options == null || options.mute != true) context.setMessage(`${setClass('물병', 'pisces')}을 소환했습니다. ${setClass('(§'+cost+')', 'cat')}`);
             p.updateParameterValues();
         } else {
             context.setMessage(`${setClass('광물', 'pisces')}이 부족합니다.`);
@@ -738,6 +738,8 @@ const skills = {
         const quarterViewFactor = .75;
         const w = 10;
         const h = Math.sqrt(16) / 3 * w * quarterViewFactor;
+
+        const cost = 20;
 
         this
             // line 4th
@@ -761,7 +763,7 @@ const skills = {
             // ball
             .summonYarnball({ x: pos.x, y: pos.y + 20 * h }, { mute: true });
 
-        if (this.getMineralOk(20)) { context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다.`, pos); }
+        if (this.getMineralOk(cost)) { context.setMessage(`${setClass('물병', 'pisces')}들을 넘어뜨리기 적당한 위치로 세웠습니다. ${setClass('(§'+cost+')', 'cat')}`, pos); }
     },
     summonWaterbottleDelivery(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }) {
         const quarterViewFactor = .75;
@@ -971,8 +973,9 @@ const loadElement = (element, module, callback = () => { }) => {
 }
 
 
-// 이벤트 메시지의 색을 쉽게 설정해주는 서브 이벤트 
 /**
+ * 이벤트 메시지의 색을 쉽게 설정해주는 서브 이벤트 
+ * @param {string} cls 개체에 클래스를 부여하고 css에서 글자 색 지정
  * cat: green
  * pisces: yellow
  * vaillan: red

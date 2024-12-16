@@ -269,20 +269,11 @@ class Fish {
         };
     }
 
-    remove() {
-        this.element.remove();
-        clearInterval(this.activateInterval);
-
-        // 물고기 배열에서 생선 객체 제거
-        const i = pisces.findIndex(fish => fish == this);
-        pisces.splice(i, 1);
-
-        // 객체를 삭제할 때 메모리에서도 해제하려고 넣었는데 작동하는지는 몰?루 --> 에러 생기네;;
-        // for (var key in this) {
-        //     if (this.hasOwnProperty(key)) {
-        //         this[key] = null;
-        //     }
-        // }
+    clean() {
+        this.element.remove();                                          // DOM 제거
+        clearInterval(this.activateInterval);                           // interval 제거
+        pisces.splice(pisces.findIndex(fish => fish == this), 1);       // 물고기 배열에서 생선 객체 제거
+        delete this;                                                    // 객체 속성 삭제
     }
 
     // Cat 객체를 전달받아 activate 메서드 호출
@@ -415,6 +406,7 @@ class Fish {
         });
     }
 
+    // 생선 객체 간의 상호작용을 정의한다.
     dropToFish(pisces) {
         pisces.forEach(fish => {
             const fishPosition = { x: fish.lastX, y: fish.lastY }
@@ -422,17 +414,17 @@ class Fish {
 
             // 생선과의 거리가 일정 이내일 경우 동작을 수행
             // 본인일 경우 제외
-            if (distance > 16
-                || fish == this) { return; }
+            // this: 들었다 놓은 거, fish: 생선들 전부
+            if (isNaN(distance) || distance > 16 || fish == this) { return; }
 
             switch (fish.type) {
+                case 'fish':
 
                 case '택배상자': case '큰_택배상자':
-                    const fishPos = { x: fish.lastX, y: fish.lastY }
-                    // console.log(fishPos, this.calculateDistance(fishPos));
-                    if (this.calculateDistance(fishPos) < 16) {
-                        fish.element.classList.add('throw', 'down');
-                        this.remove();
+                    if (distance < 16) {                                    // 일정 거리 이내에서 생선을 놓으면 
+                        fish.element.classList.add('throw', 'down');        // 상자가 쓰레기통으로 변신 / down 클래스 부여: 클래스 삭제시 쓰봉으로 변신
+                        this.clean();                                      // 쓰레기통에 넣은 생선은 사라진다
+                        this.position = { x: undefined, y: undefined }
                         setTimeout(() => {
                             fish.element.classList.remove('throw');
                             fish.setType('택배상자_쓰레기통');
@@ -442,7 +434,7 @@ class Fish {
 
                 case '택배상자_쓰레기통': case '큰_택배상자_쓰레기통':
                     fish.element.classList.add('throw');
-                    this.remove();
+                    this.clean();
                     setTimeout(() => {
                         fish.element.classList.remove('throw');
                     }, 500);
@@ -451,7 +443,8 @@ class Fish {
                 default:
                     break;
             }
-
+            // console.log(pisces);
+            // if (!isNaN(distance)) console.log(this);
         });
     }
     // 생선과의 거리를 계산하는 유틸리티 메서드
@@ -635,7 +628,12 @@ class Fish {
         this.infoWindow.innerHTML = tableHTML;
     }
 
-    kill(cat) {    // remove는 바로 삭제, kill은 이벤트 발생 후 삭제
+    /**
+     * 블링크 효과 등 이벤트를 발생 시킨 뒤 삭제합니다. 이벤트 없이 바로 삭제하는 clean() 함수와 차이가 있습니다. 
+     * @param {Object} cat 어떤 고양이가 생선과 부딛혔는지를 알려주세요.
+     * @returns 
+     */
+    kill(cat) {
         if (this.element.classList.contains('ghost')) { return }
         this.element.classList.add('ghost');
 
@@ -647,21 +645,16 @@ class Fish {
             'stone_moon', '화석', '천년퍼즐',
         ].forEach(e => {
             if (this.type === e) {
-                this.figure.animate({ filter: ['brightness(1)', 'brightness(5)'] }, {
-                    duration: 200,
-                    animationDirection: 'alternate',
-                    iterations: Infinity,
-                    composite: 'add',
-                });
+                this.element.classList.add('blink');
                 return;
             }
         });
 
-
+        // 택배 객체일 경우 일정 확률로 상자가 남습니다. (고양이가 좋아합니다.)
         if (this.type === '택배') {
             skills.splitMassiveFish(cat, this, { n: 5, breakup: false, type: [] });
 
-            if (Math.random() < (context.getDevMode() ? 1 : .1)) {
+            if (Math.random() < (context.getDevMode() ? 1 : .1)) {      // 개발자 모드일 때는 항상 상자를 남깁니다.
                 this.setType('택배상자');
                 this.element.classList.remove('ghost');
                 return;
@@ -682,7 +675,7 @@ class Fish {
 
         setTimeout(() => {
             // 해당 객체 삭제
-            this.remove();
+            this.clean();
 
             switch (this.type) {
                 case 'mineral_richrare':

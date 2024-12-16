@@ -1,10 +1,10 @@
+/**
+ * 고양이 객체를 생성합니다.
+ * @param {*} position 고양이의 위치를 지정합니다. 미지정 시 임의 위치에 고양이가 생성됩니다.
+ * @param {*} skin 고양이 스킨을 지정합니다. 미지정 시 임의 스킨이 지정됩니다.
+ * @returns 
+*/
 class Cat {
-    /**
-     * 
-     * @param {*} position 고양이의 위치를 지정합니다. 미지정 시 임의 위치에 고양이가 생성됩니다.
-     * @param {*} skin 고양이 스킨을 지정합니다. 미지정 시 임의 스킨이 지정됩니다.
-     * @returns 
-     */
     constructor(position, skin) {
         // 초기화 메서드 호출
         this.initialize(position, skin);
@@ -36,8 +36,8 @@ class Cat {
     }
 
     /**
-     * 
-     * @param {*} skin 고양이 스킨을 지정합니다. 미지정 시 임의 스킨이 지정됩니다. 
+     * 고양이 스킨을 지정합니다. 미지정 시 임의 스킨이 지정됩니다.
+     * @param {*} skin 흰냥이, 치즈, 고등어, 깜냥이, 젖소, 턱시도, 샴 등 
      */
     setSkin(skin) {
 

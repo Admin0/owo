@@ -40,6 +40,22 @@
     }
 }
 
+/* 아이템 삭제 등에 사용하는 반짝이는 효과 */
+.blink {
+    animation: blink-animation 0.2s infinite alternate;
+    animation-composition: add;
+}
+
+@keyframes blink-animation {
+    0% {
+        filter: brightness(1);
+    }
+
+    100% {
+        filter: brightness(5);
+    }
+}
+
 
 .택배상자.throw .effect,
 .택배상자_쓰레기통.throw .effect {

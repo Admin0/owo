@@ -1,7 +1,9 @@
 class Objet {
     constructor(pos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }, type) {
         this.element = document.createElement('div');
-        this.element.className = 'objet down';
+        this.element.className = 'objet down'; // down 클래스 부여
+        this.startRemoveTimer(); // 오랫동안 방치된 물건은 사라지도록 타이머 시작
+
         document.getElementById('wall').appendChild(this.element);
         // document.body.appendChild(this.element);
 
@@ -81,7 +83,21 @@ class Objet {
 
     startDragging(event) {
 
-        if (this.element.classList.contains('down')) { this.element.classList.remove('down') }
+        // 물건을 수령했습니다
+        if (this.element.classList.contains('down')) {
+            this.element.classList.remove('down')
+
+            if (this.removeTimer) {                         // 입고된 물건은 사라지지 않음
+                clearTimeout(this.removeTimer);
+                this.removeTimer = null;
+            } 
+            if (this.blinkTimer) {
+                this.element.classList.remove('blink');     // blink 클래스 제거
+                // removeTimer가 없고 blinkTimer가 있다면 반짝임 중에 호출된 경우
+                clearTimeout(this.blinkTimer);              // blinkTimer 제거
+                this.blinkTimer = null;
+            }
+        }
 
         // 드래그 시작 시 위치 오프셋 설정
         this.isDragging = true;
@@ -155,10 +171,22 @@ class Objet {
         this.element.remove();
         clearInterval(this.activateInterval);
 
-        // 물고기 배열에서 사물 객체 제거
+        // 사물 배열에서 객체 제거
         const i = things.findIndex(Objet => Objet == this);
         things.splice(i, 1);
 
+    }
+
+    /**
+     * 사물을 오랫동안 방치하면 사라지도록 처리
+     */
+    startRemoveTimer() {
+        this.removeTimer = setTimeout(() => {
+            this.element.classList.add('blink'); // 3초간 반짝이는 애니메이션 추가
+            this.blinkTimer = setTimeout(() => {
+                this.remove();
+            }, 3000); // 3초 후 삭제
+        }, 7000);  // 10초 - 3초 = 7초 후 반짝임 시작
     }
 
 }
